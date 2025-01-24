@@ -37,5 +37,7 @@ public class Customer {
     @Column(name = "house_number")
     private Integer houseNumber;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role")
     private UserRole userRole;
 }
