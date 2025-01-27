@@ -31,11 +31,8 @@ public class Customer {
     @Column(name = "city")
     private String city;
 
-    @Column(name = "street")
-    private String street;
-
-    @Column(name = "house_number")
-    private Integer houseNumber;
+    @Column(name = "address")
+    private String address;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "role")
