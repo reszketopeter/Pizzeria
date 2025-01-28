@@ -12,6 +12,8 @@ import tutorial.pizzeria.dto.outgoing.CustomerDetails;
 import tutorial.pizzeria.exception.EmailAlreadyExistsException;
 import tutorial.pizzeria.repository.CustomerRepository;
 
+import java.sql.Array;
+
 @Service
 @Transactional
 public class CustomerService {
