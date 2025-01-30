@@ -31,14 +31,14 @@ public class CustomerService {
     }
 
     public CustomerDetails register(RegisterCommand command) {
-        String byEmail = customerRepository.findByEmail(command.getEmail());
-        if (byEmail != null) {
+        Customer customer = customerRepository.findByEmail(command.getEmail());
+        if (customer != null) {
             throw new EmailAlreadyExistsException("This email is already exist");
         }
         String hashedPassword = passwordEncoder.encode(command.getPassword());
-        Customer customer = customerMapper.dtoToEntity(command, hashedPassword);
+        Customer newCustomer = customerMapper.dtoToEntity(command, hashedPassword);
         customer.setUserRole(UserRole.GUEST);
-        customerRepository.save(customer);
-        return customerMapper.entityToDto(customer);
+        customerRepository.save(newCustomer);
+        return customerMapper.entityToDto(newCustomer);
     }
 }

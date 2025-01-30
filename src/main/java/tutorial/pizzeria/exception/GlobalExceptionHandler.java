@@ -103,4 +103,14 @@ public class GlobalExceptionHandler {
 
         return new ResponseEntity<>(body, status);
     }
+
+    @ExceptionHandler(CustomerNotRegisteredYetException.class)
+    public ResponseEntity<ApiException> handleCustomerNotRegisteredYet(CustomerNotRegisteredYetException exception) {
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+        return new ResponseEntity<>(apiExceptionMake(exception, status), HttpStatus.BAD_REQUEST);
+    }
+
+    private <T extends RuntimeException> ApiException apiExceptionMake(T exception, HttpStatus status) {
+        return new ApiException(exception.getMessage(), status, ZonedDateTime.now().toString());
+    }
 }

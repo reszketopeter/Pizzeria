@@ -10,5 +10,5 @@ import tutorial.pizzeria.domain.Customer;
 public interface CustomerRepository extends JpaRepository<Customer, Long> {
 
     @Query("SELECT c.email FROM Customer c WHERE c.email = :email")
-    String findByEmail(@Param("email") String email);
+    Customer findByEmail(@Param("email") String email);
 }
