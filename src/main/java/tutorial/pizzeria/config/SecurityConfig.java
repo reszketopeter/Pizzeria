@@ -4,7 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -14,6 +16,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import tutorial.pizzeria.exception.CustomerNotFoundException;
 import tutorial.pizzeria.service.CustomerService;
 
 import static tutorial.pizzeria.domain.UserRole.ADMIN;
@@ -27,7 +30,6 @@ public class SecurityConfig {
     private final CustomAuthenticationSuccessHandler successHandler;
 
     @Autowired
-    @Lazy
     public SecurityConfig(CustomerService customerService, PasswordEncoder passwordencoder,
                           CustomAuthenticationSuccessHandler successHandler) {
         this.customerService = customerService;
@@ -51,12 +53,14 @@ public class SecurityConfig {
 
                 )
                 .exceptionHandling(exception -> exception
-                        .accessDeniedHandler((request, response, customAccessDeniedException) -> {
+                        .accessDeniedHandler((request, response,
+                                              customAccessDeniedException) -> {
                             response.setStatus(403);
                             response.getWriter().write("Access denied! Sorry, you haven't got permission " +
                                     "to access this page!");
                         })
-                        .authenticationEntryPoint((request, response, authException) -> {
+                        .authenticationEntryPoint((request, response,
+                                                   authException) -> {
                             response.setStatus(401);
                             response.getWriter().write("Unauthorized access! Please register first!");
                         })
@@ -69,42 +73,41 @@ public class SecurityConfig {
 
     @Bean
     public AuthenticationManager authManager(HttpSecurity http, CustomerService customerService) throws Exception {
-//        AuthenticationManagerBuilder authenticationManagerBuilder =
-//                http.getSharedObject(AuthenticationManagerBuilder.class);
-//        authenticationManagerBuilder
-//                .userDetailsService(customerService)
-//                .passwordEncoder(passwordencoder);
-//        return authenticationManagerBuilder.build();
-        return null;
+        AuthenticationManagerBuilder authenticationManagerBuilder =
+                http.getSharedObject(AuthenticationManagerBuilder.class);
+        authenticationManagerBuilder
+                .authenticationProvider(customAuthenticationProvider())
+                .userDetailsService(customerService)
+                .passwordEncoder(passwordencoder);
+        return authenticationManagerBuilder.build();
     }
+
 
     @Bean
     public CustomAuthenticationProvider customAuthenticationProvider() {
-        return null;
-//        return new CustomAuthenticationProvider(customerService, passwordencoder);
+        return new CustomAuthenticationProvider(passwordencoder, customerService);
     }
 
 
     @Bean
     public AuthenticationFailureHandler customAuthenticationFailureHandler() {
-//        return (request, response, exception) -> {
-//            response.setContentType("application/json");
-//            response.setCharacterEncoding("UTF-8");
-//
-//            if (exception instanceof CustomerNotRegisteredYetException) {
-//                response.setStatus(HttpStatus.BAD_REQUEST.value());
-//                response.getWriter().write("{\"error\": \"User not found with email: " +
-//                        request.getParameter("email") + "\"}");
-//            } else if (exception instanceof BadCredentialsException) {
-//                response.setStatus(HttpStatus.UNAUTHORIZED.value());
-//                response.getWriter().write("{\"error\": \"Invalid username or password\"}");
-//            } else {
-//                response.setStatus(HttpStatus.UNAUTHORIZED.value());
-//                response.getWriter().write("{\"error\": \"Unauthorized access! Please register first!\"}");
-//            }
-//        };
-//
-//    }
-        return null;
+        return (request, response, exception) -> {
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+
+            if (exception.getCause() instanceof CustomerNotFoundException) {
+                response.setStatus(HttpStatus.BAD_REQUEST.value());
+                response.getWriter().write("{\"error\": \"User not found with email: " +
+                        request.getParameter("email") + "\"}");
+            } else if (exception instanceof BadCredentialsException) {
+                response.setStatus(HttpStatus.UNAUTHORIZED.value());
+                response.getWriter().write("{\"error\": \"Invalid username or password\"}");
+            } else {
+                response.setStatus(HttpStatus.UNAUTHORIZED.value());
+                response.getWriter().write("{\"error\": \"Unauthorized access! Please register first!\"}");
+            }
+        };
+
     }
+
 }

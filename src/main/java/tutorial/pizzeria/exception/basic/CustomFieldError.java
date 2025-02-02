@@ -1,4 +1,4 @@
-package tutorial.pizzeria.exception;
+package tutorial.pizzeria.exception.basic;
 
 public class CustomFieldError {
 

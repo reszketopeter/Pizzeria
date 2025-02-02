@@ -1,4 +1,4 @@
-package tutorial.pizzeria.exception;
+package tutorial.pizzeria.exception.basic;
 
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.MDC;
@@ -11,6 +11,9 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import tutorial.pizzeria.exception.CustomerNotFoundException;
+import tutorial.pizzeria.exception.EmailAlreadyExistsException;
+import tutorial.pizzeria.exception.InvalidPasswordException;
 
 import java.time.ZonedDateTime;
 import java.util.List;
@@ -104,8 +107,20 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(body, status);
     }
 
-    @ExceptionHandler(CustomerNotRegisteredYetException.class)
-    public ResponseEntity<ApiException> handleCustomerNotRegisteredYet(CustomerNotRegisteredYetException exception) {
+    @ExceptionHandler(CustomerNotFoundException.class)
+    public ResponseEntity<ApiException> handleCustomerNotRegisteredYet(CustomerNotFoundException exception) {
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+        return new ResponseEntity<>(apiExceptionMake(exception, status), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(EmailAlreadyExistsException.class)
+    public ResponseEntity<ApiException> handleEmailAlreadyExists(EmailAlreadyExistsException exception) {
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+        return new ResponseEntity<>(apiExceptionMake(exception, status), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(InvalidPasswordException.class)
+    public ResponseEntity<ApiException> handleInvalidPassword(InvalidPasswordException exception) {
         HttpStatus status = HttpStatus.BAD_REQUEST;
         return new ResponseEntity<>(apiExceptionMake(exception, status), HttpStatus.BAD_REQUEST);
     }
