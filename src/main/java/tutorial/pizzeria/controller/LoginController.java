@@ -47,7 +47,6 @@ public class LoginController {
         authentication.getAuthorities().
                 forEach(auth -> response.append(auth.getAuthority()).append("\n"));
         response.append(session.getAttribute("customerId"));
-
         return ResponseEntity.ok(response.toString());
     }
 }
