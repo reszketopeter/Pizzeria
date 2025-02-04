@@ -3,20 +3,13 @@ package tutorial.pizzeria.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Lazy;
-import org.springframework.http.HttpStatus;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.config.Customizer;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.AuthenticationFailureHandler;
-import tutorial.pizzeria.exception.CustomerNotFoundException;
 import tutorial.pizzeria.service.CustomerService;
 
 import static tutorial.pizzeria.domain.UserRole.ADMIN;
@@ -27,14 +20,11 @@ public class SecurityConfig {
 
     private final CustomerService customerService;
     private final PasswordEncoder passwordencoder;
-    private final CustomAuthenticationSuccessHandler successHandler;
 
     @Autowired
-    public SecurityConfig(CustomerService customerService, PasswordEncoder passwordencoder,
-                          CustomAuthenticationSuccessHandler successHandler) {
+    public SecurityConfig(CustomerService customerService, PasswordEncoder passwordencoder) {
         this.customerService = customerService;
         this.passwordencoder = passwordencoder;
-        this.successHandler = successHandler;
     }
 
     @Bean
@@ -42,11 +32,6 @@ public class SecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .httpBasic(Customizer.withDefaults())
-                .formLogin(form -> form
-                        .loginPage("/api/login")
-                        .successHandler(successHandler)
-                        .failureHandler(customAuthenticationFailureHandler())
-                )
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("api/debug/auth").hasAuthority(ADMIN.name())
                         .anyRequest().permitAll()
@@ -69,45 +54,6 @@ public class SecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
                 );
         return http.build();
-    }
-
-    @Bean
-    public AuthenticationManager authManager(HttpSecurity http, CustomerService customerService) throws Exception {
-        AuthenticationManagerBuilder authenticationManagerBuilder =
-                http.getSharedObject(AuthenticationManagerBuilder.class);
-        authenticationManagerBuilder
-                .authenticationProvider(customAuthenticationProvider())
-                .userDetailsService(customerService)
-                .passwordEncoder(passwordencoder);
-        return authenticationManagerBuilder.build();
-    }
-
-
-    @Bean
-    public CustomAuthenticationProvider customAuthenticationProvider() {
-        return new CustomAuthenticationProvider(passwordencoder, customerService);
-    }
-
-
-    @Bean
-    public AuthenticationFailureHandler customAuthenticationFailureHandler() {
-        return (request, response, exception) -> {
-            response.setContentType("application/json");
-            response.setCharacterEncoding("UTF-8");
-
-            if (exception.getCause() instanceof CustomerNotFoundException) {
-                response.setStatus(HttpStatus.BAD_REQUEST.value());
-                response.getWriter().write("{\"error\": \"User not found with email: " +
-                        request.getParameter("email") + "\"}");
-            } else if (exception instanceof BadCredentialsException) {
-                response.setStatus(HttpStatus.UNAUTHORIZED.value());
-                response.getWriter().write("{\"error\": \"Invalid username or password\"}");
-            } else {
-                response.setStatus(HttpStatus.UNAUTHORIZED.value());
-                response.getWriter().write("{\"error\": \"Unauthorized access! Please register first!\"}");
-            }
-        };
-
     }
 
 }

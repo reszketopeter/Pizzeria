@@ -25,10 +25,16 @@ public class LoginController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody LoginCommand command) {
+    public ResponseEntity<String> login(@RequestBody LoginCommand command, HttpServletRequest request) {
         log.info("Post login customer with {}", command);
-        loginService.login(command);
-        return new ResponseEntity<>("You have successfully logged in!", HttpStatus.OK);
+        try {
+            Long customerId = loginService.login(command);
+            HttpSession session = request.getSession();
+            session.setAttribute("customerId", customerId);
+            return new ResponseEntity<>("You have successfully logged in!", HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.UNAUTHORIZED);
+        }
     }
 
     @PostMapping
@@ -36,6 +42,7 @@ public class LoginController {
         log.info("Post logout customer");
         HttpSession session = request.getSession();
         session.invalidate();
+        SecurityContextHolder.clearContext();
         return new ResponseEntity<>("You have successfully logged out", HttpStatus.OK);
     }
 
