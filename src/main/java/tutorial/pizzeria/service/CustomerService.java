@@ -20,6 +20,7 @@ import tutorial.pizzeria.exception.EmailAlreadyExistsException;
 import tutorial.pizzeria.repository.CustomerRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional(isolation = Isolation.SERIALIZABLE)
@@ -73,5 +74,11 @@ public class CustomerService implements UserDetailsService {
             throw new CustomerNotFoundException("User not found with email: " + username);
         }
         return customerByEmail.getId();
+    }
+
+    public CustomerDetails getCustomer(Long id) {
+        Customer customer = customerRepository.findById(id)
+                .orElseThrow(() -> new CustomerNotFoundException("Customer not found with this id: " + id));
+        return customerMapper.entityToDto(customer);
     }
 }
