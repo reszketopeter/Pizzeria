@@ -15,12 +15,14 @@ import tutorial.pizzeria.domain.UserRole;
 import tutorial.pizzeria.dto.incoming.RegisterCommand;
 import tutorial.pizzeria.dto.mapper.CustomerMapper;
 import tutorial.pizzeria.dto.outgoing.CustomerDetails;
+import tutorial.pizzeria.dto.outgoing.CustomerListItem;
 import tutorial.pizzeria.exception.CustomerNotFoundException;
 import tutorial.pizzeria.exception.EmailAlreadyExistsException;
 import tutorial.pizzeria.repository.CustomerRepository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional(isolation = Isolation.SERIALIZABLE)
@@ -80,5 +82,19 @@ public class CustomerService implements UserDetailsService {
         Customer customer = customerRepository.findById(id)
                 .orElseThrow(() -> new CustomerNotFoundException("Customer not found with this id: " + id));
         return customerMapper.entityToDto(customer);
+    }
+
+    public List<CustomerListItem> findAll() {
+        List<Customer> customers = customerRepository.findAll();
+
+        return customers.stream()
+                .map(customerMapper::entitiesToDto)
+                .toList();
+    }
+
+    public void deleteCustomerById(Long id) {
+        Customer customer = customerRepository.findById(id)
+                .orElseThrow(() -> new CustomerNotFoundException("Customer not found with this id: " + id));
+        customerRepository.delete(customer);
     }
 }

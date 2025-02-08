@@ -1,10 +1,15 @@
 package tutorial.pizzeria.controller;
 
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import tutorial.pizzeria.domain.Category;
+import tutorial.pizzeria.dto.incoming.CategoryCommand;
 import tutorial.pizzeria.dto.mapper.CategoryMapper;
+import tutorial.pizzeria.dto.outgoing.CategoryDetails;
 import tutorial.pizzeria.service.CategoryService;
 
 @RestController
@@ -19,5 +24,19 @@ public class CategoryController {
     public CategoryController(CategoryService categoryService, CategoryMapper categoryMapper) {
         this.categoryService = categoryService;
         this.categoryMapper = categoryMapper;
+    }
+
+    @PostMapping("/create")
+    public ResponseEntity<CategoryDetails> create(@Valid @RequestBody CategoryCommand command) {
+        log.info("Create New Category");
+        CategoryDetails response = categoryService.create(command);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @GetMapping("/{name}")
+    public ResponseEntity<CategoryDetails> getCategory(@PathVariable String name) {
+        log.info("Get Category By Name: {}", name);
+        CategoryDetails response = categoryService.getCategory(name);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

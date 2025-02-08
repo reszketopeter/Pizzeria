@@ -11,6 +11,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import tutorial.pizzeria.exception.CategoryAlreadyExistsException;
 import tutorial.pizzeria.exception.CustomerNotFoundException;
 import tutorial.pizzeria.exception.EmailAlreadyExistsException;
 import tutorial.pizzeria.exception.InvalidPasswordException;
@@ -127,5 +128,12 @@ public class GlobalExceptionHandler {
 
     private <T extends RuntimeException> ApiException apiExceptionMake(T exception, HttpStatus status) {
         return new ApiException(exception.getMessage(), status, ZonedDateTime.now().toString());
+    }
+
+    //Handle category
+    @ExceptionHandler(CategoryAlreadyExistsException.class)
+    public ResponseEntity<ApiException> handleCategories(CategoryAlreadyExistsException exception) {
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+        return new ResponseEntity<>(apiExceptionMake(exception, status), HttpStatus.BAD_REQUEST);
     }
 }

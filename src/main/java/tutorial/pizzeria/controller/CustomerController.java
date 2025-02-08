@@ -8,7 +8,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import tutorial.pizzeria.dto.incoming.RegisterCommand;
 import tutorial.pizzeria.dto.outgoing.CustomerDetails;
+import tutorial.pizzeria.dto.outgoing.CustomerListItem;
 import tutorial.pizzeria.service.CustomerService;
+
+import java.util.List;
 
 @RestController
 @Slf4j
@@ -34,6 +37,20 @@ public class CustomerController {
         log.info("Get Customer by id: {}", id);
         CustomerDetails response = customerService.getCustomer(id);
         return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<CustomerListItem>> getAllCustomer() {
+        log.info("Get All Customers");
+        List<CustomerListItem> customers = customerService.findAll();
+        return new ResponseEntity<>(customers, HttpStatus.OK);
+    }
+
+    @DeleteMapping("{id}")
+    public ResponseEntity<String> deleteCustomerById(@PathVariable Long id) {
+        log.info("Delete Customer By Id: {}", id);
+        customerService.deleteCustomerById(id);
+        return new ResponseEntity<>("You deleted the customer with " + id, HttpStatus.OK);
     }
 
 

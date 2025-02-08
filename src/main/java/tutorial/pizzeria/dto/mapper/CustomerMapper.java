@@ -4,6 +4,7 @@ import org.springframework.stereotype.Component;
 import tutorial.pizzeria.domain.Customer;
 import tutorial.pizzeria.dto.incoming.RegisterCommand;
 import tutorial.pizzeria.dto.outgoing.CustomerDetails;
+import tutorial.pizzeria.dto.outgoing.CustomerListItem;
 
 @Component
 public class CustomerMapper {
@@ -33,5 +34,15 @@ public class CustomerMapper {
         customerDetails.setPhone(customer.getPhone());
 
         return customerDetails;
+    }
+
+    public CustomerListItem entitiesToDto(Customer customer) {
+
+        CustomerListItem customerListItem = new CustomerListItem();
+
+        customerListItem.setName(customer.getName());
+        customerListItem.setEmail(customer.getEmail());
+
+        return customerListItem;
     }
 }
