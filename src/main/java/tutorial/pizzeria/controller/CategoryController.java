@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import tutorial.pizzeria.domain.Category;
 import tutorial.pizzeria.dto.incoming.CategoryCommand;
 import tutorial.pizzeria.dto.mapper.CategoryMapper;
 import tutorial.pizzeria.dto.outgoing.CategoryDetails;
@@ -38,5 +37,12 @@ public class CategoryController {
         log.info("Get Category By Name: {}", name);
         CategoryDetails response = categoryService.getCategory(name);
         return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{name}")
+    public ResponseEntity<String> deleteCategory(@PathVariable String name) {
+        log.info("Delete Category With Name: {}", name);
+        categoryService.deleteCategory(name);
+        return new ResponseEntity<>("You succesfully deleted the category!", HttpStatus.OK);
     }
 }

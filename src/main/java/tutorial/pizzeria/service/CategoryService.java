@@ -37,4 +37,10 @@ public class CategoryService {
                 .orElseThrow(() -> new CategoryAlreadyExistsException("There is a category with this name in the system"));
         return categoryMapper.entityToDto(category);
     }
+
+    public void deleteCategory(String name) {
+        Category category = categoryRepository.findByName(name)
+                .orElseThrow(() -> new CategoryAlreadyExistsException("There is a category with this name in the system"));
+        categoryRepository.delete(category);
+    }
 }
