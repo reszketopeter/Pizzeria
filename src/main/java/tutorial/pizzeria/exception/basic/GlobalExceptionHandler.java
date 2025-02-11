@@ -11,10 +11,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import tutorial.pizzeria.exception.CategoryAlreadyExistsException;
-import tutorial.pizzeria.exception.CustomerNotFoundException;
-import tutorial.pizzeria.exception.EmailAlreadyExistsException;
-import tutorial.pizzeria.exception.InvalidPasswordException;
+import tutorial.pizzeria.exception.*;
 
 import java.time.ZonedDateTime;
 import java.util.List;
@@ -132,8 +129,21 @@ public class GlobalExceptionHandler {
 
     //Handle category
     @ExceptionHandler(CategoryAlreadyExistsException.class)
-    public ResponseEntity<ApiException> handleCategories(CategoryAlreadyExistsException exception) {
+    public ResponseEntity<ApiException> handleCategoriesWithName(CategoryAlreadyExistsException exception) {
         HttpStatus status = HttpStatus.BAD_REQUEST;
         return new ResponseEntity<>(apiExceptionMake(exception, status), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(CategoryNotFoundException.class)
+    public ResponseEntity<ApiException> handleCategoriesWithId(CategoryNotFoundException exception) {
+        HttpStatus status = HttpStatus.NOT_FOUND;
+        return new ResponseEntity<>(apiExceptionMake(exception, status), HttpStatus.NOT_FOUND);
+    }
+
+    //Handle reviews
+    @ExceptionHandler(ReviewNotFoundException.class)
+    public ResponseEntity<ApiException> handleReviewWithId(ReviewNotFoundException exception) {
+        HttpStatus status = HttpStatus.NOT_FOUND;
+        return new ResponseEntity<>(apiExceptionMake(exception, status), HttpStatus.NOT_FOUND);
     }
 }

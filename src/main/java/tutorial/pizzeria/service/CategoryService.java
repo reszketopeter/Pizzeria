@@ -8,6 +8,7 @@ import tutorial.pizzeria.dto.incoming.CategoryCommand;
 import tutorial.pizzeria.dto.mapper.CategoryMapper;
 import tutorial.pizzeria.dto.outgoing.CategoryDetails;
 import tutorial.pizzeria.exception.CategoryAlreadyExistsException;
+import tutorial.pizzeria.exception.CategoryNotFoundException;
 import tutorial.pizzeria.repository.CategoryRepository;
 
 @Service
@@ -42,5 +43,14 @@ public class CategoryService {
         Category category = categoryRepository.findByName(name)
                 .orElseThrow(() -> new CategoryAlreadyExistsException("There is a category with this name in the system"));
         categoryRepository.delete(category);
+    }
+
+    public CategoryDetails changeCategory(Long id, CategoryCommand command) {
+        Category category = categoryRepository.findById(id)
+                .orElseThrow(() -> new CategoryNotFoundException
+                        ("Sorry, the category with this id " + id + "does not exist"));
+        category.setName(command.getName());
+        category.setDescription(command.getDescription());
+        return categoryMapper.entityToDto(category);
     }
 }

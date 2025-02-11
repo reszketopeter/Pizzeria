@@ -46,6 +46,8 @@ public class CustomerController {
         return new ResponseEntity<>(customers, HttpStatus.OK);
     }
 
+    // PutMapping - Which data should be changed (password? username?...)?
+
     @DeleteMapping("{id}")
     public ResponseEntity<String> deleteCustomerById(@PathVariable Long id) {
         log.info("Delete Customer By Id: {}", id);

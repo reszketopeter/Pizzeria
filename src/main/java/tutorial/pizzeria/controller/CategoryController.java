@@ -39,6 +39,13 @@ public class CategoryController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @PutMapping("{id}")
+    public ResponseEntity<CategoryDetails> changeCategory(@PathVariable Long id, CategoryCommand command) {
+        log.info("Change Categorydetails with id: {}", id);
+        CategoryDetails response = categoryService.changeCategory(id, command);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
     @DeleteMapping("/{name}")
     public ResponseEntity<String> deleteCategory(@PathVariable String name) {
         log.info("Delete Category With Name: {}", name);
