@@ -3,6 +3,8 @@ package tutorial.pizzeria.domain;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.List;
+
 @Entity
 @Data
 @Table(name = "customer")
@@ -37,4 +39,7 @@ public class Customer {
     @Enumerated(EnumType.STRING)
     @Column(name = "role")
     private UserRole userRole;
+
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
+    private List<Review> reviews;
 }

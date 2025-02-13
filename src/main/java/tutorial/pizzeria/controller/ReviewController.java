@@ -7,7 +7,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import tutorial.pizzeria.dto.incoming.ReviewCommand;
 import tutorial.pizzeria.dto.outgoing.ReviewDetails;
+import tutorial.pizzeria.dto.outgoing.ReviewListItem;
 import tutorial.pizzeria.service.ReviewService;
+
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -29,6 +32,12 @@ public class ReviewController {
     }
 
     // Get method isRecommend Yes/NO
+//    @GetMapping("/{isRecommend}")
+//    public ResponseEntity<List<ReviewListItem>> getReviews(@PathVariable Boolean isRecommend) {
+//        log.info("Get Reviews: {}", isRecommend);
+//        reviewService.getReviews(isRecommend);
+//    }
+
     //Get method Timestamp
 
     @DeleteMapping("/{id}")

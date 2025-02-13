@@ -19,10 +19,14 @@ public class Review {
     private String content;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "isRecommend")
+    @Column(name = "is_Recommend")
     private Recommendation isRecommend;
 
     @Column(name = "timestamp")
     private LocalDateTime timestamp;
+
+    @ManyToOne
+    @JoinColumn(name = "customer_id")
+    private Customer customer;
 
 }

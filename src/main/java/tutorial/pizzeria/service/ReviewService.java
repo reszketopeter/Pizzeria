@@ -7,8 +7,11 @@ import tutorial.pizzeria.domain.Review;
 import tutorial.pizzeria.dto.incoming.ReviewCommand;
 import tutorial.pizzeria.dto.mapper.ReviewMapper;
 import tutorial.pizzeria.dto.outgoing.ReviewDetails;
+import tutorial.pizzeria.dto.outgoing.ReviewListItem;
 import tutorial.pizzeria.exception.ReviewNotFoundException;
 import tutorial.pizzeria.repository.ReviewRepository;
+
+import java.util.List;
 
 @Service
 @Transactional
@@ -34,4 +37,12 @@ public class ReviewService {
                 .orElseThrow(() -> new ReviewNotFoundException("Sorry, the review with this id " + id + "does not exist."));
         reviewRepository.delete(review);
     }
+
+//    public List<ReviewListItem> getReviews(Boolean isRecommend) {
+//        List<Review> reviewsByIsRecommend = reviewRepository.findReviewsByIsRecommend(isRecommend);
+//        if (reviewsByIsRecommend.isEmpty()) {
+//            throw new ReviewNotFoundException("Not found any review with this condition: " + isRecommend);
+//        }
+//        return reviewMapper.entitiesToDto(reviewsByIsRecommend);
+//    }
 }
