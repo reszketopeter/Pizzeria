@@ -39,10 +39,10 @@ public class ReviewService {
     }
 
 //    public List<ReviewListItem> getReviews(Boolean isRecommend) {
-//        List<Review> reviewsByIsRecommend = reviewRepository.findReviewsByIsRecommend(isRecommend);
-//        if (reviewsByIsRecommend.isEmpty()) {
+//        List<Review> reviews = reviewRepository.findReviewsByIsRecommend(isRecommend);
+//        if (reviews.isEmpty()) {
 //            throw new ReviewNotFoundException("Not found any review with this condition: " + isRecommend);
 //        }
-//        return reviewMapper.entitiesToDto(reviewsByIsRecommend);
+//        return reviewMapper.entitiesToDto(reviews);
 //    }
 }

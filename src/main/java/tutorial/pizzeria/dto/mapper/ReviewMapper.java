@@ -4,8 +4,10 @@ import org.springframework.stereotype.Component;
 import tutorial.pizzeria.domain.Review;
 import tutorial.pizzeria.dto.incoming.ReviewCommand;
 import tutorial.pizzeria.dto.outgoing.ReviewDetails;
+import tutorial.pizzeria.dto.outgoing.ReviewListItem;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Component
 public class ReviewMapper {
@@ -14,6 +16,7 @@ public class ReviewMapper {
 
         Review review = new Review();
 
+        review.setCustomer(command.getCustomer());
         review.setContent(command.getContent());
         review.setIsRecommend(command.getIsRecommend());
         review.setTimestamp(LocalDateTime.now());
@@ -31,4 +34,9 @@ public class ReviewMapper {
 
         return new ReviewDetails();
     }
+
+//    public List<ReviewListItem> entitiesToDto(List<Review> reviews) {
+//
+//        ReviewListItem reviewListItem = new ReviewListItem();
+//    }
 }

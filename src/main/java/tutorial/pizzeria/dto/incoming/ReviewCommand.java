@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import tutorial.pizzeria.domain.Customer;
 import tutorial.pizzeria.domain.Recommendation;
 
 @Getter
@@ -12,6 +13,8 @@ import tutorial.pizzeria.domain.Recommendation;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ReviewCommand {
+
+    private Customer customer;
 
     private String content;
 
