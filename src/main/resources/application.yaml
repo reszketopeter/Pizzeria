@@ -9,8 +9,8 @@ server:
 spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/pizzeria
-    username: peter
-    password: test1234
+    username: postgres
+    password: root
     driver-class-name: org.postgresql.Driver
 
   jpa:

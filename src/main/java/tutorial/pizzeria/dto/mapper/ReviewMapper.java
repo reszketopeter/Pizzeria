@@ -8,6 +8,7 @@ import tutorial.pizzeria.dto.outgoing.ReviewListItem;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class ReviewMapper {
@@ -34,9 +35,4 @@ public class ReviewMapper {
 
         return new ReviewDetails();
     }
-
-//    public List<ReviewListItem> entitiesToDto(List<Review> reviews) {
-//
-//        ReviewListItem reviewListItem = new ReviewListItem();
-//    }
 }

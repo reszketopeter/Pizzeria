@@ -32,11 +32,12 @@ public class ReviewController {
     }
 
     // Get method isRecommend Yes/NO
-//    @GetMapping("/{isRecommend}")
-//    public ResponseEntity<List<ReviewListItem>> getReviews(@PathVariable Boolean isRecommend) {
-//        log.info("Get Reviews: {}", isRecommend);
-//        reviewService.getReviews(isRecommend);
-//    }
+    @GetMapping("/{isRecommend}")
+    public ResponseEntity<List<ReviewListItem>> getReviews(@PathVariable Boolean isRecommend) {
+        log.info("Get Reviews: {}", isRecommend);
+        List<ReviewListItem> reviews = reviewService.getReviews(isRecommend);
+        return new ResponseEntity<>(reviews, HttpStatus.OK);
+    }
 
     //Get method Timestamp
 

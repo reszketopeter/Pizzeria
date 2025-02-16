@@ -38,11 +38,13 @@ public class ReviewService {
         reviewRepository.delete(review);
     }
 
-//    public List<ReviewListItem> getReviews(Boolean isRecommend) {
-//        List<Review> reviews = reviewRepository.findReviewsByIsRecommend(isRecommend);
-//        if (reviews.isEmpty()) {
-//            throw new ReviewNotFoundException("Not found any review with this condition: " + isRecommend);
-//        }
-//        return reviewMapper.entitiesToDto(reviews);
-//    }
+    public List<ReviewListItem> getReviews(Boolean isRecommend) {
+
+        List<ReviewListItem> reviews = reviewRepository.findReviewsByIsRecommend(isRecommend);
+        if (reviews.isEmpty()) {
+            throw new ReviewNotFoundException("Not found any review with this condition: " + isRecommend);
+        } else {
+            return reviews;
+        }
+    }
 }
