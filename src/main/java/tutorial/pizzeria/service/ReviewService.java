@@ -8,9 +8,11 @@ import tutorial.pizzeria.dto.incoming.ReviewCommand;
 import tutorial.pizzeria.dto.mapper.ReviewMapper;
 import tutorial.pizzeria.dto.outgoing.ReviewDetails;
 import tutorial.pizzeria.dto.outgoing.ReviewListItem;
+import tutorial.pizzeria.dto.outgoing.ReviewListItemWithTime;
 import tutorial.pizzeria.exception.ReviewNotFoundException;
 import tutorial.pizzeria.repository.ReviewRepository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -39,7 +41,6 @@ public class ReviewService {
     }
 
     public List<ReviewListItem> getReviews(Boolean isRecommend) {
-
         List<ReviewListItem> reviews = reviewRepository.findReviewsByIsRecommend(isRecommend);
         if (reviews.isEmpty()) {
             throw new ReviewNotFoundException("Not found any review with this condition: " + isRecommend);
@@ -47,4 +48,12 @@ public class ReviewService {
             return reviews;
         }
     }
+
+//    public List<ReviewListItemWithTime> getReviewsWithTime(LocalDateTime timestamp, LocalDateTime timestamp2) {
+//        List<Review> reviews = reviewRepository.findAll();
+//        reviews.stream()
+//                .map(Review::getTimestamp)
+//                .toList();
+//
+//    }
 }
