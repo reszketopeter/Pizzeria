@@ -14,6 +14,9 @@ public class Product {
     @Column(name = "id")
     private Long id;
 
+    @Column(name = "name")
+    private String name;
+
     @Column(name = "description")
     @Size(message = "The description of the category cannot exceed 1000 characters!")
     private String description;

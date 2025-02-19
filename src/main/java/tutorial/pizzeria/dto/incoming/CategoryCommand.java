@@ -13,6 +13,6 @@ public class CategoryCommand {
     @NotBlank(message = "Name must be not empty!")
     private String name;
 
-    @NotBlank(message = "Name must be not empty!")
+    @NotBlank(message = "Description must be not empty!")
     private String description;
 }

@@ -146,4 +146,11 @@ public class GlobalExceptionHandler {
         HttpStatus status = HttpStatus.NOT_FOUND;
         return new ResponseEntity<>(apiExceptionMake(exception, status), HttpStatus.NOT_FOUND);
     }
+
+    //Handle products
+    @ExceptionHandler(ProductAlreadyExistException.class)
+    public ResponseEntity<ApiException> handleProductByName(ProductAlreadyExistException exception) {
+        HttpStatus status = HttpStatus.ALREADY_REPORTED;
+        return new ResponseEntity<>(apiExceptionMake(exception, status), HttpStatus.ALREADY_REPORTED);
+    }
 }
