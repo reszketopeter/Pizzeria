@@ -8,10 +8,8 @@ import org.springframework.web.bind.annotation.*;
 import tutorial.pizzeria.dto.incoming.ReviewCommand;
 import tutorial.pizzeria.dto.outgoing.ReviewDetails;
 import tutorial.pizzeria.dto.outgoing.ReviewListItem;
-import tutorial.pizzeria.dto.outgoing.ReviewListItemWithTime;
 import tutorial.pizzeria.service.ReviewService;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Slf4j
