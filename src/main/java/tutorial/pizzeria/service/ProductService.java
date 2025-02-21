@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tutorial.pizzeria.domain.Product;
 import tutorial.pizzeria.dto.incoming.ProductCommand;
+import tutorial.pizzeria.dto.incoming.ProductModificationCommand;
 import tutorial.pizzeria.dto.mapper.ProductMapper;
 import tutorial.pizzeria.dto.outgoing.ProductDetails;
 import tutorial.pizzeria.dto.outgoing.ProductListItem;
@@ -40,7 +41,6 @@ public class ProductService {
         Product product = productRepository.findByName(name)
                 .orElseThrow(() -> new ProductNotFoundException("No product with this name in the database!"));
         return productMapper.entityToDto(product);
-
     }
 
     public ProductListItem getAllProducts() {
@@ -49,6 +49,15 @@ public class ProductService {
             throw new ProductNotFoundException("Sorry, we didn't find any product in the database");
         }
         return productMapper.entitiesToDto(products);
+    }
 
+    public ProductDetails changeProductDetails(String name, ProductModificationCommand command) {
+        Product product = productRepository.findByName(name)
+                .orElseThrow(() -> new ProductNotFoundException("Sorry, we didn't find any product in the database"));
+        product.setName(command.getName());
+        product.setDescription(command.getDescription());
+        product.setPrice(command.getPrice());
+        productRepository.save(product);
+        return productMapper.entityToDto(product);
     }
 }

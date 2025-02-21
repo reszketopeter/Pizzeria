@@ -5,13 +5,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import tutorial.pizzeria.domain.Product;
 import tutorial.pizzeria.dto.incoming.ProductCommand;
+import tutorial.pizzeria.dto.incoming.ProductModificationCommand;
 import tutorial.pizzeria.dto.outgoing.ProductDetails;
 import tutorial.pizzeria.dto.outgoing.ProductListItem;
 import tutorial.pizzeria.service.ProductService;
-
-import java.util.List;
 
 @Slf4j
 @RestController
@@ -43,6 +41,14 @@ public class ProductController {
     public ResponseEntity<ProductListItem> getAllProducts() {
         log.info("Get All Products");
         ProductListItem response = productService.getAllProducts();
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @PutMapping("/{name}")
+    public ResponseEntity<ProductDetails> changeProductDetails(@PathVariable String name,
+                                                               ProductModificationCommand command) {
+        log.info("Change ProductDetails By Name: {}", name);
+        ProductDetails response = productService.changeProductDetails(name, command);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }
