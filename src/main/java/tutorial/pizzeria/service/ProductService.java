@@ -60,4 +60,10 @@ public class ProductService {
         productRepository.save(product);
         return productMapper.entityToDto(product);
     }
+
+    public void deleteProductById(Long id) {
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new ProductNotFoundException("No product with this id in the database!"));
+        productRepository.delete(product);
+    }
 }
