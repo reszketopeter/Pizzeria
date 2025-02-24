@@ -25,6 +25,10 @@ public class Product {
     private Integer price;
 
     @ManyToOne
+    @JoinColumn(name = "order_id")
+    private Order order;
+
+    @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
 }

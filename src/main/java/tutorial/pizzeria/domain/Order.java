@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -21,6 +22,9 @@ public class Order {
 
     @Column(name = "totalPrice")
     private Integer totalPrice;
+
+    @OneToMany(mappedBy = "order")
+    private List<Product> products;
 
     @ManyToOne
     @JoinColumn(name = "customer_id")
