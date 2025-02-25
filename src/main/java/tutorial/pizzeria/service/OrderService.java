@@ -3,7 +3,10 @@ package tutorial.pizzeria.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import tutorial.pizzeria.domain.Order;
 import tutorial.pizzeria.dto.mapper.OrderMapper;
+import tutorial.pizzeria.dto.outgoing.OrderDetails;
+import tutorial.pizzeria.exception.OrderNotFoundException;
 import tutorial.pizzeria.repository.OrderRepository;
 
 @Service
@@ -17,5 +20,11 @@ public class OrderService {
     public OrderService(OrderRepository orderRepository, OrderMapper orderMapper) {
         this.orderRepository = orderRepository;
         this.orderMapper = orderMapper;
+    }
+
+    public OrderDetails getOrderById(Long id) {
+        Order order = orderRepository.findById(id)
+                .orElseThrow(() -> new OrderNotFoundException("Sorry, ther is not any Order with this id: " + id));
+        return orderMapper.entityToDto(order);
     }
 }

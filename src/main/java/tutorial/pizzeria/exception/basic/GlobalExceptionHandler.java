@@ -159,4 +159,12 @@ public class GlobalExceptionHandler {
         HttpStatus status = HttpStatus.NOT_FOUND;
         return new ResponseEntity<>(apiExceptionMake(exception, status), HttpStatus.NOT_FOUND);
     }
+
+
+    //Handle orders
+    @ExceptionHandler(OrderNotFoundException.class)
+    public ResponseEntity<ApiException> handleNotFoundOrder(OrderNotFoundException exception) {
+        HttpStatus status = HttpStatus.NOT_FOUND;
+        return new ResponseEntity<>(apiExceptionMake(exception, status), HttpStatus.NOT_FOUND);
+    }
 }

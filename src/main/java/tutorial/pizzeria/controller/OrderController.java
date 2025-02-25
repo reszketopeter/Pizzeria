@@ -2,11 +2,10 @@ package tutorial.pizzeria.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import tutorial.pizzeria.dto.incoming.OrderCommand;
 import tutorial.pizzeria.dto.outgoing.OrderDetails;
 import tutorial.pizzeria.service.OrderService;
@@ -28,4 +27,11 @@ public class OrderController {
 //      log.info("Create New Order");
 //      orderService.createNewOrder(command);
 //    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<OrderDetails> getOrderById(@PathVariable Long id) {
+        log.info("Get Order By Id");
+        OrderDetails response = orderService.getOrderById(id);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
 }
