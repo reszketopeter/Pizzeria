@@ -27,4 +27,10 @@ public class OrderService {
                 .orElseThrow(() -> new OrderNotFoundException("Sorry, ther is not any Order with this id: " + id));
         return orderMapper.entityToDto(order);
     }
+
+    public void deleteOrderById(Long id) {
+        Order order = orderRepository.findById(id)
+                .orElseThrow(() -> new OrderNotFoundException("Sorry, ther is not any Order with this id: " + id));
+        orderRepository.delete(order);
+    }
 }
