@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import tutorial.pizzeria.dto.incoming.OrderCommand;
 import tutorial.pizzeria.dto.outgoing.OrderDetails;
 import tutorial.pizzeria.service.OrderService;
 
@@ -20,11 +21,13 @@ public class OrderController {
         this.orderService = orderService;
     }
 
-//    @PostMapping
-//    public ResponseEntity<OrderDetails> createNewOrder (@RequestBody OrderCommand command){
-//      log.info("Create New Order");
-//      orderService.createNewOrder(command);
-//    }
+    // This is not the best...Modify!
+    @PostMapping
+    public ResponseEntity<OrderDetails> createNewOrder(@RequestBody OrderCommand command) {
+        log.info("Create New Order");
+        OrderDetails response = orderService.createNewOrder(command);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
+    }
 
     @GetMapping("/{id}")
     public ResponseEntity<OrderDetails> getOrderById(@PathVariable Long id) {
