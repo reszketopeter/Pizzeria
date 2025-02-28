@@ -23,8 +23,9 @@ public class OrderService {
         this.orderMapper = orderMapper;
     }
 
-//    public OrderDetails createNewOrder(OrderCommand command) {
-//    }
+    public OrderDetails createNewOrder(OrderCommand command) {
+        return null;
+    }
 
     public OrderDetails getOrderById(Long id) {
         Order order = orderRepository.findById(id)

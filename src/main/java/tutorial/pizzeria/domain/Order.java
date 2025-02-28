@@ -17,10 +17,10 @@ public class Order {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "timeStamp")
+    @Column(name = "time_stamp")
     private LocalDateTime timeStamp;
 
-    @Column(name = "totalPrice")
+    @Column(name = "total_price")
     private Integer totalPrice;
 
     @OneToMany(mappedBy = "order")
