@@ -1,5 +1,6 @@
 package tutorial.pizzeria.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,9 +24,9 @@ public class OrderController {
 
     // This is not the best...Modify!
     @PostMapping
-    public ResponseEntity<OrderDetails> createNewOrder(@RequestBody OrderCommand command) {
+    public ResponseEntity<OrderDetails> createNewOrder(@RequestBody OrderCommand command, HttpServletRequest request) {
         log.info("Create New Order");
-        OrderDetails response = orderService.createNewOrder(command);
+        OrderDetails response = orderService.createNewOrder(command, request);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 

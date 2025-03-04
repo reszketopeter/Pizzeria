@@ -111,6 +111,12 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(apiExceptionMake(exception, status), HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(CustomerIdIsNullException.class)
+    public ResponseEntity<ApiException> handleCustomerIdIsNullException(CustomerIdIsNullException exception) {
+        HttpStatus status = HttpStatus.NO_CONTENT;
+        return new ResponseEntity<>(apiExceptionMake(exception, status), HttpStatus.NO_CONTENT);
+    }
+
     @ExceptionHandler(EmailAlreadyExistsException.class)
     public ResponseEntity<ApiException> handleEmailAlreadyExists(EmailAlreadyExistsException exception) {
         HttpStatus status = HttpStatus.BAD_REQUEST;

@@ -1,5 +1,7 @@
 package tutorial.pizzeria.service;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -7,6 +9,7 @@ import tutorial.pizzeria.domain.Order;
 import tutorial.pizzeria.dto.incoming.OrderCommand;
 import tutorial.pizzeria.dto.mapper.OrderMapper;
 import tutorial.pizzeria.dto.outgoing.OrderDetails;
+import tutorial.pizzeria.exception.CustomerIdIsNullException;
 import tutorial.pizzeria.exception.OrderNotFoundException;
 import tutorial.pizzeria.repository.OrderRepository;
 
@@ -23,7 +26,12 @@ public class OrderService {
         this.orderMapper = orderMapper;
     }
 
-    public OrderDetails createNewOrder(OrderCommand command) {
+    public OrderDetails createNewOrder(OrderCommand command, HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        Long customerId = (Long) session.getAttribute("customerId");
+        if (customerId == null) {
+            throw new CustomerIdIsNullException("The customer id is null you have to login first!");
+        }
         return null;
     }
 
