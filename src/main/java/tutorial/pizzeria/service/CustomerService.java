@@ -79,9 +79,14 @@ public class CustomerService implements UserDetailsService {
     }
 
     public CustomerDetails getCustomer(Long id) {
+        Customer customer = findCustomerById(id);
+        return customerMapper.entityToDto(customer);
+    }
+
+    protected Customer findCustomerById(Long id) {
         Customer customer = customerRepository.findById(id)
                 .orElseThrow(() -> new CustomerNotFoundException("Customer not found with this id: " + id));
-        return customerMapper.entityToDto(customer);
+        return customer;
     }
 
     public List<CustomerListItem> findAll() {
@@ -93,8 +98,7 @@ public class CustomerService implements UserDetailsService {
     }
 
     public void deleteCustomerById(Long id) {
-        Customer customer = customerRepository.findById(id)
-                .orElseThrow(() -> new CustomerNotFoundException("Customer not found with this id: " + id));
+        Customer customer = findCustomerById(id);
         customerRepository.delete(customer);
     }
 }

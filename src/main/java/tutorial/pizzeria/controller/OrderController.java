@@ -22,11 +22,11 @@ public class OrderController {
         this.orderService = orderService;
     }
 
-    // This is not the best...Modify!
-    @PostMapping
-    public ResponseEntity<OrderDetails> createNewOrder(@RequestBody OrderCommand command, HttpServletRequest request) {
+    @PostMapping("product/{productId}")
+    public ResponseEntity<OrderDetails> createNewOrder(@RequestBody OrderCommand command, @PathVariable Long productId,
+                                                       HttpServletRequest request) {
         log.info("Create New Order");
-        OrderDetails response = orderService.createNewOrder(command, request);
+        OrderDetails response = orderService.createNewOrder(command, productId, request);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 

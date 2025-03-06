@@ -12,6 +12,8 @@ import tutorial.pizzeria.domain.Category;
 @AllArgsConstructor
 public class ProductDetails {
 
+    private Long productId;
+
     private String name;
 
     private String description;

@@ -23,6 +23,9 @@ public class Order {
     @Column(name = "total_price")
     private Integer totalPrice;
 
+    @Column(name = "city_of_order")
+    private String city;
+
     @OneToMany(mappedBy = "order")
     private List<Product> products;
 

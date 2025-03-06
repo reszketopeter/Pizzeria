@@ -11,6 +11,8 @@ import lombok.Setter;
 @Setter
 public class ProductListItem {
 
+    private Long productId;
+
     private String name;
 
 //    private String description;
