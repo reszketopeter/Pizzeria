@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tutorial.pizzeria.domain.Customer;
 import tutorial.pizzeria.domain.Order;
+import tutorial.pizzeria.domain.OrderStatus;
 import tutorial.pizzeria.domain.Product;
 import tutorial.pizzeria.dto.incoming.OrderCommand;
 import tutorial.pizzeria.dto.mapper.OrderMapper;
@@ -82,5 +83,16 @@ public class OrderService {
         Order order = orderRepository.findById(id)
                 .orElseThrow(() -> new OrderNotFoundException("Sorry, there is not any Order with this id: " + id));
         orderRepository.delete(order);
+    }
+
+    public String cancelingOrder(HttpServletRequest req) {
+        HttpSession session = req.getSession();
+        Long customerId = (Long) session.getAttribute("customerId");
+        Order order = orderRepository.findByCustomerId(customerId);
+        if (order == null) {
+            throw new OrderNotFoundException(customerId);
+        }
+        order.setOrderStatus(OrderStatus.CANCELLED);
+        return "Your order has cancelled";
     }
 }

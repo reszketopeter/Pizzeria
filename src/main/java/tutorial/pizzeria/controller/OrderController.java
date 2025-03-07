@@ -30,6 +30,14 @@ public class OrderController {
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
+    @PutMapping("/cancel")
+    public ResponseEntity<String> cancelOrder(HttpServletRequest req) {
+        log.info("Cancel order from customer with id: {}", req.getSession().getAttribute("customerId"));
+        String response = orderService.cancelingOrder(req);
+        log.debug("Order was canceled: {}", response);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<OrderDetails> getOrderById(@PathVariable Long id) {
         log.info("Get Order By Id");
