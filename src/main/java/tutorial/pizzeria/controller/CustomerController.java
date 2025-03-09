@@ -29,7 +29,7 @@ public class CustomerController {
     public ResponseEntity<String> register(@Valid @RequestBody RegisterCommand command) {
         log.info("Post register customer {}", command);
         customerService.register(command);
-        return new ResponseEntity<>("You have successfully registered", HttpStatus.CREATED);
+        return new ResponseEntity<>("You have successfully registered!", HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")

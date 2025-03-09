@@ -33,7 +33,7 @@ public class RegisterCommand {
             message = "Please provide a valid phone number in international format (e.g.: +1234567890)! " +
                     "Don't use spaces, hyphen or dashes!"
     )
-    private Integer phone;
+    private String phone;
 
     @NotBlank(message = "Postal code must be not empty")
     private Integer postalCode;
