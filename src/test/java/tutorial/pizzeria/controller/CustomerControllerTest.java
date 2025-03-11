@@ -1,5 +1,6 @@
 package tutorial.pizzeria.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -28,8 +29,11 @@ public class CustomerControllerTest {
     @Autowired
     private EntityManager entityManager;
 
+    private ObjectMapper objectMapper;
+
     @BeforeEach
     void init() {
+        objectMapper = new ObjectMapper();
     }
 
     @Test
@@ -45,7 +49,8 @@ public class CustomerControllerTest {
         command.setAddress("Test Address");
 
         mockMvc.perform(post("/api/customers/register")
-                        .contentType(MediaType.APPLICATION_JSON))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(command)))
                 .andExpect(result -> assertEquals(
                         "You have successfully registered!",
                         result.getResponse().getContentAsString()))
