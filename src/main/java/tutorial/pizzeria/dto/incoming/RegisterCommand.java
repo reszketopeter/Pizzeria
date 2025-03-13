@@ -2,6 +2,7 @@ package tutorial.pizzeria.dto.incoming;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -35,7 +36,7 @@ public class RegisterCommand {
     )
     private String phone;
 
-    @NotBlank(message = "Postal code must be not empty")
+    @NotNull(message = "Postal code must be not null")
     private Integer postalCode;
 
     @NotBlank(message = "City must be not empty")
