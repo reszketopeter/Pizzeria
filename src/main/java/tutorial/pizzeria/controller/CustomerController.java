@@ -26,7 +26,7 @@ public class CustomerController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<String> register(@Valid @RequestBody RegisterCommand command) {
+    public ResponseEntity<String> register(@RequestBody @Valid RegisterCommand command) {
         log.info("Post register customer {}", command);
         customerService.register(command);
         return new ResponseEntity<>("You have successfully registered!", HttpStatus.CREATED);

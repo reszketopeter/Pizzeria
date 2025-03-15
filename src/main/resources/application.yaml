@@ -8,12 +8,22 @@ server:
 
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/pizzeria
+    url: jdbc:postgresql://localhost:5432/pizzeria?createDatabaseIfNotExist=true&useUnicode=true&serverTimezone=UTC&characterEncoding=utf8&autoReconnect=true
     username: postgres
     password: root
     driver-class-name: org.postgresql.Driver
+    hikari:
+      minimum-idle: 5
+      maximum-pool-size: 10
+      auto-commit: false
+      pool-name: HikariPool-1
+      idle-timeout: 30000
+      max-lifetime: 600000
+      connection-timeout: 30000
 
   jpa:
     hibernate:
       ddl-auto: update
     database-platform: org.hibernate.dialect.PostgreSQLDialect
+
+base-url: http://localhost:8080
