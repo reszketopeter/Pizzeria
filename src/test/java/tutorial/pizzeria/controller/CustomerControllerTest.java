@@ -284,7 +284,7 @@ public class CustomerControllerTest {
         command.setName("Test Name");
         command.setPassword("Test2password");
         command.setEmail("test@test.com");
-        command.setPhone("+36_123_45678");
+        command.setPhone("+36–123–45678");
         command.setPostalCode(1234);
         command.setCity("Test City");
         command.setAddress("Test Address");
