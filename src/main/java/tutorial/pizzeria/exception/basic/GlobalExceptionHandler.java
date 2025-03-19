@@ -107,8 +107,8 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(CustomerNotFoundException.class)
     public ResponseEntity<ApiException> handleCustomerNotRegisteredYet(CustomerNotFoundException exception) {
-        HttpStatus status = HttpStatus.BAD_REQUEST;
-        return new ResponseEntity<>(apiExceptionMake(exception, status), HttpStatus.BAD_REQUEST);
+        HttpStatus status = HttpStatus.NOT_FOUND;
+        return new ResponseEntity<>(apiExceptionMake(exception, status), HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(CustomerIdIsNullException.class)

@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import tutorial.pizzeria.dto.incoming.RegisterCommand;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -362,6 +363,35 @@ public class CustomerControllerTest {
                 .andExpect(result -> Assertions.assertTrue(result.getResolvedException().getMessage().contains(
                         "Address must be not empty!")))
                 .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void givenAnInvalidCustomerId_whenGetCustomerById_thenReturnNotFoundStatus() throws Exception {
+
+        saveCustomer();
+
+        mockMvc.perform(get("/api/customers/{id}", 6)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(result -> Assertions.assertTrue(result.getResolvedException().getMessage().contains(
+                        "Customer not found with this id: 6")))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    public void givenAValidCustomerId_whenGetCustomerById_thenReturnOkStatus() throws Exception {
+
+        saveCustomer();
+
+        mockMvc.perform(get("/api/customers/{id}", 1)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+    }
+
+    private void saveCustomer() {
+        entityManager.createNativeQuery("INSERT INTO customer" +
+                        "(id, name, password, email, phone, postal_code, city, address)" +
+                        "VALUES (1, 'Test Elek', 'test1Password', 'test@email.com','+36123456',1234,'Test city','Test street 22')")
+                .executeUpdate();
     }
 
 
