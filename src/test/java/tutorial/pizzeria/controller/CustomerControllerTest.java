@@ -15,8 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import tutorial.pizzeria.dto.incoming.RegisterCommand;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -385,6 +384,19 @@ public class CustomerControllerTest {
         mockMvc.perform(get("/api/customers/{id}", 1)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
+    }
+
+    @Test
+    public void givenAValidCustomerId_whenDeleteCustomerById_thenReturnTheResponse() throws Exception {
+
+        saveCustomer();
+
+        mockMvc.perform(delete("/api/customers/{id}", 1)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(result -> assertEquals(
+                        "You deleted the customer with id: 1",
+                        result.getResponse().getContentAsString()));
     }
 
     private void saveCustomer() {

@@ -52,7 +52,7 @@ public class CustomerController {
     public ResponseEntity<String> deleteCustomerById(@PathVariable Long id) {
         log.info("Delete Customer By Id: {}", id);
         customerService.deleteCustomerById(id);
-        return new ResponseEntity<>("You deleted the customer with " + id, HttpStatus.OK);
+        return new ResponseEntity<>("You deleted the customer with id: " + id, HttpStatus.OK);
     }
 
 
