@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import tutorial.pizzeria.dto.incoming.CustomerUpdateCommand;
 import tutorial.pizzeria.dto.incoming.RegisterCommand;
 import tutorial.pizzeria.dto.outgoing.CustomerDetails;
 import tutorial.pizzeria.dto.outgoing.CustomerListItem;
@@ -33,7 +34,7 @@ public class CustomerController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<CustomerDetails> getCustomer(@PathVariable Long id) {
+    public ResponseEntity<CustomerDetails> getCustomer(@PathVariable("id") Long id) {
         log.info("Get Customer by id: {}", id);
         CustomerDetails response = customerService.getCustomer(id);
         return new ResponseEntity<>(response, HttpStatus.OK);
@@ -46,7 +47,13 @@ public class CustomerController {
         return new ResponseEntity<>(customers, HttpStatus.OK);
     }
 
-    // PutMapping - Which data should be changed (password? username?...)?
+    @PutMapping("/{id}")
+    public ResponseEntity<CustomerDetails> updateCustomer(@PathVariable("id") Long id,
+                                                          @Valid @RequestBody CustomerUpdateCommand command) {
+        log.info("Change Customer's email");
+        CustomerDetails response = customerService.upgradeEmail(id, command);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
 
     @DeleteMapping("{id}")
     public ResponseEntity<String> deleteCustomerById(@PathVariable Long id) {

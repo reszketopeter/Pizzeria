@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 import tutorial.pizzeria.domain.Customer;
 import tutorial.pizzeria.domain.UserRole;
+import tutorial.pizzeria.dto.incoming.CustomerUpdateCommand;
 import tutorial.pizzeria.dto.incoming.RegisterCommand;
 import tutorial.pizzeria.dto.mapper.CustomerMapper;
 import tutorial.pizzeria.dto.outgoing.CustomerDetails;
@@ -21,8 +22,6 @@ import tutorial.pizzeria.exception.EmailAlreadyExistsException;
 import tutorial.pizzeria.repository.CustomerRepository;
 
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @Transactional(isolation = Isolation.SERIALIZABLE)
@@ -100,5 +99,26 @@ public class CustomerService implements UserDetailsService {
     public void deleteCustomerById(Long id) {
         Customer customer = findCustomerById(id);
         customerRepository.delete(customer);
+    }
+
+    public CustomerDetails upgradeEmail(Long id, CustomerUpdateCommand command) {
+        Customer customer = findCustomerById(id);
+        if (command.getEmail() != null) {
+            customer.setEmail(command.getEmail());
+        }
+        if (command.getPhone() != null) {
+            customer.setPhone(command.getPhone());
+        }
+        if (command.getCity() != null) {
+            customer.setCity(command.getCity());
+        }
+        if (command.getPostalCode() != null) {
+            customer.setPostalCode(command.getPostalCode());
+        }
+        if (command.getAddress() != null) {
+            customer.setAddress(command.getAddress());
+        }
+        customerRepository.save(customer);
+        return customerMapper.entityToDto(customer);
     }
 }

@@ -21,7 +21,7 @@ public class CustomerMapper {
         customer.setCity(command.getCity());
         customer.setAddress(command.getAddress());
 
-        return new Customer();
+        return customer;
     }
 
     public CustomerDetails entityToDto(Customer customer) {
