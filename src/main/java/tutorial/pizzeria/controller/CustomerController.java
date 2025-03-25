@@ -27,7 +27,7 @@ public class CustomerController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<String> register(@RequestBody @Valid RegisterCommand command) {
+    public ResponseEntity<String> register(@Valid @RequestBody RegisterCommand command) {
         log.info("Post register customer {}", command);
         customerService.register(command);
         return new ResponseEntity<>("You have successfully registered!", HttpStatus.CREATED);
@@ -49,7 +49,7 @@ public class CustomerController {
 
     @PutMapping("/{id}")
     public ResponseEntity<CustomerDetails> updateCustomer(@PathVariable("id") Long id,
-                                                          @Valid @RequestBody CustomerUpdateCommand command) {
+                                                          @RequestBody @Valid CustomerUpdateCommand command) {
         log.info("Change Customer's email");
         CustomerDetails response = customerService.upgradeEmail(id, command);
         return new ResponseEntity<>(response, HttpStatus.OK);

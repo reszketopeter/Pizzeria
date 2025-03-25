@@ -400,16 +400,24 @@ public class CustomerControllerTest {
                         result.getResponse().getContentAsString()));
     }
 
-//    @Test
-//    public void givenAValidCustomerId_whenUpdateEmail_thenReturnTheResponseWithTheNewEmail() throws Exception {
-//
-//        saveCustomer();
-//
-//        mockMvc.perform(put("/api/customers/{id}", 1)
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .content("{\"email\":\"testy@email.com\"}"))
-//                .andExpect(status().isOk());
-//    }
+    @Test
+    public void givenAValidCustomerId_whenUpdateEmail_thenReturnTheResponseWithTheNewEmail() throws Exception {
+
+        saveCustomer();
+
+        String jsonContent = "{"
+                + "\"email\":\"testy@email.com\","
+                + "\"phone\":\"+36123456\","
+                + "\"city\":\"Test city\","
+                + "\"postalCode\":\"1234\","
+                + "\"address\":\"Test street 22\""
+                + "}";
+
+        mockMvc.perform(put("/api/customers/{id}", 1)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(jsonContent))
+                .andExpect(status().isOk());
+    }
 //
 //    @Test
 //    public void givenAValidCustomerId_whenUpdatePhone_thenReturnTheResponseWithTheNewPhone() throws Exception {
