@@ -30,8 +30,10 @@ public class CustomerMapper {
 
         customerDetails.setName(customer.getName());
         customerDetails.setEmail(customer.getEmail());
-        customerDetails.setAddress(customer.getAddress());
         customerDetails.setPhone(customer.getPhone());
+        customerDetails.setPostalCode(customer.getPostalCode());
+        customerDetails.setCity(customer.getCity());
+        customerDetails.setAddress(customer.getAddress());
 
         return customerDetails;
     }

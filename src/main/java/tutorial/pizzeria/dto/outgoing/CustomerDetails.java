@@ -13,5 +13,9 @@ public class CustomerDetails {
 
     private String phone;
 
+    private Integer postalCode;
+
+    private String city;
+
     private String address;
 }

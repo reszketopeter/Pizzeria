@@ -416,54 +416,90 @@ public class CustomerControllerTest {
         mockMvc.perform(put("/api/customers/{id}", 1)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonContent))
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andExpect(result ->
+                        assertTrue(result.getResponse().getContentAsString().contains("testy@email.com")));
     }
-//
-//    @Test
-//    public void givenAValidCustomerId_whenUpdatePhone_thenReturnTheResponseWithTheNewPhone() throws Exception {
-//
-//        saveCustomer();
-//
-//        mockMvc.perform(put("/api/customers/{id}", 1)
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .content("{\"phone\":\"+36124356\"}"))
-//                .andExpect(status().isOk());
-//    }
-//
-//    @Test
-//    public void givenAValidCustomerId_whenUpdateCity_thenReturnTheResponseWithTheNewCity() throws Exception {
-//
-//        saveCustomer();
-//
-//        mockMvc.perform(put("/api/customers/{id}", 1)
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .content("{\"city\":\"New city\"}"))
-//                .andExpect(status().isOk())
-//                .andExpect(result -> assertTrue(result.getResponse().getContentAsString().contains("New city")));
-//    }
-//
-//    @Test
-//    public void givenAValidCustomerId_whenUpdatePostalCode_thenReturnTheResponseWithTheNewPostalCode() throws Exception {
-//
-//        saveCustomer();
-//
-//        mockMvc.perform(put("/api/customers/{id}", 1)
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .content("{\"postalCode\":\"2600\"}"))
-//                .andExpect(status().isOk())
-//                .andExpect(result -> assertTrue(result.getResponse().getContentAsString().contains("2600")));
-//    }
-//
-//    @Test
-//    public void givenAValidCustomerId_whenUpdateAddress_thenReturnTheResponseWithTheNewAddress() throws Exception {
-//
-//        saveCustomer();
-//
-//        mockMvc.perform(put("/api/customers/{id}", 1)
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .content("{\"address\":\"Test street 23\"}"))
-//                .andExpect(status().isOk());
-//    }
+
+    @Test
+    public void givenAValidCustomerId_whenUpdatePhone_thenReturnTheResponseWithTheNewPhone() throws Exception {
+
+        saveCustomer();
+
+        String jsonContent = "{"
+                + "\"email\":\"testy@email.com\","
+                + "\"phone\":\"+36345678\","
+                + "\"city\":\"Test city\","
+                + "\"postalCode\":\"1234\","
+                + "\"address\":\"Test street 22\""
+                + "}";
+
+        mockMvc.perform(put("/api/customers/{id}", 1)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(jsonContent))
+                .andExpect(status().isOk())
+                .andExpect(result -> assertTrue(result.getResponse().getContentAsString().contains("+36345678")));
+    }
+
+    @Test
+    public void givenAValidCustomerId_whenUpdateCity_thenReturnTheResponseWithTheNewCity() throws Exception {
+
+        saveCustomer();
+
+        String jsonContent = "{"
+                + "\"email\":\"test@email.com\","
+                + "\"phone\":\"+36123456\","
+                + "\"city\":\"New city\","
+                + "\"postalCode\":1234,"
+                + "\"address\":\"Test street 22\""
+                + "}";
+        mockMvc.perform(put("/api/customers/{id}", 1)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(jsonContent))
+                .andExpect(status().isOk())
+                .andExpect(result -> assertTrue(result.getResponse().getContentAsString().contains("New city")));
+    }
+
+    @Test
+    public void givenAValidCustomerId_whenUpdatePostalCode_thenReturnTheResponseWithTheNewPostalCode() throws Exception {
+
+        saveCustomer();
+
+        String jsonContent = "{"
+                + "\"email\":\"test@email.com\","
+                + "\"phone\":\"+36123456\","
+                + "\"city\":\"Test city\","
+                + "\"postalCode\":2600,"
+                + "\"address\":\"Test street 22\""
+                + "}";
+
+        mockMvc.perform(put("/api/customers/{id}", 1)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(jsonContent))
+                .andExpect(status().isOk())
+                .andExpect(result -> assertTrue(result.getResponse().getContentAsString().contains("2600")));
+    }
+
+    @Test
+    public void givenAValidCustomerId_whenUpdateAddress_thenReturnTheResponseWithTheNewAddress() throws Exception {
+
+        saveCustomer();
+
+        String jsonContent = "{"
+                + "\"email\":\"testy@email.com\","
+                + "\"phone\":\"+36123456\","
+                + "\"city\":\"New city\","
+                + "\"postalCode\":\"1234\","
+                + "\"address\":\"Test street 22\""
+                + "}";
+
+        mockMvc.perform(put("/api/customers/{id}", 1)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(jsonContent))
+                .andExpect(status().isOk())
+                .andExpect(result ->
+                        assertTrue(result.getResponse().getContentAsString().contains("Test street 22")));
+    }
 
     private void saveCustomer() {
         entityManager.createNativeQuery("INSERT INTO customer" +
@@ -472,6 +508,4 @@ public class CustomerControllerTest {
                         "'Test city','Test street 22')")
                 .executeUpdate();
     }
-
-
 }
