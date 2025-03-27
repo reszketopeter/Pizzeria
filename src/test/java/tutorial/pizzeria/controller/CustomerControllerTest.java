@@ -388,6 +388,22 @@ public class CustomerControllerTest {
     }
 
     @Test
+    public void givenCustomers_whenGetAllCustomers_thenReturnResponseAndOkStatus() throws Exception {
+
+        saveCustomer();
+        saveAnotherCustomer();
+
+        mockMvc.perform(get("/api/customers")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(result -> {
+                    String responseContent = result.getResponse().getContentAsString();
+                    assertTrue(responseContent.contains("Test Elek"));
+                    assertTrue(responseContent.contains("Test Emese"));
+                });
+    }
+
+    @Test
     public void givenAValidCustomerId_whenDeleteCustomerById_thenReturnTheResponse() throws Exception {
 
         saveCustomer();
@@ -506,6 +522,14 @@ public class CustomerControllerTest {
                         "(id, name, password, email, phone, postal_code, city, address)" +
                         "VALUES (1, 'Test Elek', 'test1Password', 'test@email.com','+36123456',1234," +
                         "'Test city','Test street 22')")
+                .executeUpdate();
+    }
+
+    private void saveAnotherCustomer() {
+        entityManager.createNativeQuery("INSERT INTO customer" +
+                        "(id, name, password, email, phone, postal_code, city, address)" +
+                        "VALUES (2, 'Test Emese', 'test2Password', 'test2@email.com','+36234567',1234," +
+                        "'Test city','Test street 25')")
                 .executeUpdate();
     }
 }
