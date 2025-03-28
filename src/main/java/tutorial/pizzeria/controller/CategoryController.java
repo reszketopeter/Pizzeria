@@ -26,10 +26,10 @@ public class CategoryController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<CategoryDetails> create(@Valid @RequestBody CategoryCommand command) {
+    public ResponseEntity<String> create(@Valid @RequestBody CategoryCommand command) {
         log.info("Create New Category");
-        CategoryDetails response = categoryService.create(command);
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        categoryService.create(command);
+        return new ResponseEntity<>("You have successfully created a new category", HttpStatus.CREATED);
     }
 
     @GetMapping("/{name}")

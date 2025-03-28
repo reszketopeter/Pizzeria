@@ -11,6 +11,8 @@ import tutorial.pizzeria.exception.CategoryAlreadyExistsException;
 import tutorial.pizzeria.exception.CategoryNotFoundException;
 import tutorial.pizzeria.repository.CategoryRepository;
 
+import java.util.Optional;
+
 @Service
 @Transactional
 public class CategoryService {
@@ -25,9 +27,10 @@ public class CategoryService {
     }
 
     public CategoryDetails create(CategoryCommand command) {
-        categoryRepository.findByName(command.getName())
-                .orElseThrow(() -> new CategoryAlreadyExistsException("There is a category with this name in the system"));
-
+        Optional<Category> category = categoryRepository.findByName(command.getName());
+        if (category.isPresent()) {
+            throw new CategoryAlreadyExistsException("There is a category with this name in the system");
+        }
         Category newCategory = categoryMapper.dtoToEntity(command);
         categoryRepository.save(newCategory);
         return categoryMapper.entityToDto(newCategory);
