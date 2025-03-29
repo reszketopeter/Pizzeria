@@ -45,7 +45,7 @@ public class GlobalExceptionHandler {
         BindingResult bindingResult = ex.getBindingResult();
         List<FieldError> fieldErrors = bindingResult.getFieldErrors();
 
-        return new ResponseEntity<>(makeValidationError(fieldErrors), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(makeValidationError(fieldErrors), HttpStatus.UNPROCESSABLE_ENTITY);
     }
 
     private ValidationError makeValidationError(List<FieldError> fieldErrors) {
@@ -119,13 +119,13 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(EmailAlreadyExistsException.class)
     public ResponseEntity<ApiException> handleEmailAlreadyExists(EmailAlreadyExistsException exception) {
-        HttpStatus status = HttpStatus.BAD_REQUEST;
-        return new ResponseEntity<>(apiExceptionMake(exception, status), HttpStatus.BAD_REQUEST);
+        HttpStatus status = HttpStatus.CONFLICT;
+        return new ResponseEntity<>(apiExceptionMake(exception, status), HttpStatus.CONFLICT);
     }
 
     @ExceptionHandler(InvalidPasswordException.class)
     public ResponseEntity<ApiException> handleInvalidPassword(InvalidPasswordException exception) {
-        HttpStatus status = HttpStatus.BAD_REQUEST;
+        HttpStatus status = HttpStatus.UNPROCESSABLE_ENTITY;
         return new ResponseEntity<>(apiExceptionMake(exception, status), HttpStatus.BAD_REQUEST);
     }
 
@@ -136,8 +136,8 @@ public class GlobalExceptionHandler {
     //Handle category
     @ExceptionHandler(CategoryAlreadyExistsException.class)
     public ResponseEntity<ApiException> handleCategoriesWithName(CategoryAlreadyExistsException exception) {
-        HttpStatus status = HttpStatus.BAD_REQUEST;
-        return new ResponseEntity<>(apiExceptionMake(exception, status), HttpStatus.BAD_REQUEST);
+        HttpStatus status = HttpStatus.CONFLICT;
+        return new ResponseEntity<>(apiExceptionMake(exception, status), HttpStatus.CONFLICT);
     }
 
     @ExceptionHandler(CategoryNotFoundException.class)
@@ -156,8 +156,8 @@ public class GlobalExceptionHandler {
     //Handle products
     @ExceptionHandler(ProductAlreadyExistException.class)
     public ResponseEntity<ApiException> handleProductByName(ProductAlreadyExistException exception) {
-        HttpStatus status = HttpStatus.ALREADY_REPORTED;
-        return new ResponseEntity<>(apiExceptionMake(exception, status), HttpStatus.ALREADY_REPORTED);
+        HttpStatus status = HttpStatus.CONFLICT;
+        return new ResponseEntity<>(apiExceptionMake(exception, status), HttpStatus.CONFLICT);
     }
 
     @ExceptionHandler(ProductNotFoundException.class)

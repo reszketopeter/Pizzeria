@@ -51,7 +51,29 @@ public class CategoryControllerTest {
                 .andExpect(result -> assertEquals("You have successfully created a new category",
                         result.getResponse().getContentAsString()))
                 .andExpect(status().isCreated());
+    }
 
+    @Test
+    void givenNewCategoryCommandWithAnAlreadyExistCategory_whenCreate_thenReturnConflictException()
+            throws Exception {
+
+        saveCategory();
+
+        CategoryCommand command = new CategoryCommand();
+        command.setName("Pizza");
+        command.setDescription("Delicious pizza");
+
+        mockMvc.perform(post("/api/category/create")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(command)))
+                .andExpect(status().isConflict());
+    }
+
+    private void saveCategory() {
+
+        entityManager.createNativeQuery("INSERT INTO category (id, name, description) VALUES " +
+                        "(1, 'Pizza','delicious pizza')")
+                .executeUpdate();
 
     }
 }

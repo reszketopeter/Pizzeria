@@ -38,7 +38,8 @@ public class CategoryService {
 
     public CategoryDetails getCategory(String name) {
         Category category = categoryRepository.findByName(name)
-                .orElseThrow(() -> new CategoryAlreadyExistsException("There is a category with this name in the system"));
+                .orElseThrow(() -> new CategoryNotFoundException
+                        ("Sorry, the category with this name" + name + "does not exist"));
         return categoryMapper.entityToDto(category);
     }
 

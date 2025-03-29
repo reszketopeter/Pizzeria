@@ -77,7 +77,7 @@ public class CustomerControllerTest {
                         .content(objectMapper.writeValueAsString(command)))
                 .andExpect(result -> Assertions.assertTrue(result.getResolvedException().getMessage().contains(
                         "Name must be not empty!")))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isUnprocessableEntity());
     }
 
     @Test
@@ -99,7 +99,7 @@ public class CustomerControllerTest {
                 .andExpect(result -> Assertions.assertTrue(result.getResolvedException().getMessage().contains(
                         "The password must contain at least one lowercase letter, one uppercase letter, " +
                                 "one number and must be at least 8 characters long!")))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isUnprocessableEntity());
     }
 
     @Test
@@ -120,7 +120,7 @@ public class CustomerControllerTest {
                         .content(objectMapper.writeValueAsString(command)))
                 .andExpect(result -> Assertions.assertTrue(result.getResolvedException().getMessage().contains(
                         "Password must be not empty!")))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isUnprocessableEntity());
     }
 
     @Test
@@ -141,11 +141,11 @@ public class CustomerControllerTest {
                         .content(objectMapper.writeValueAsString(command)))
                 .andExpect(result -> Assertions.assertTrue(result.getResolvedException().getMessage().contains(
                         "Email must be not empty!")))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isUnprocessableEntity());
     }
 
     @Test
-    public void givenInvalidValidRegisterCommandWithInvalidEmailFormatWithoutAtSig_whenRegister_thenReturnsBadRequestStatus()
+    public void givenInvalidValidRegisterCommandWithInvalidEmailFormatWithoutAtSign_whenRegister_thenReturnsBadRequestStatus()
             throws Exception {
 
         RegisterCommand command = new RegisterCommand();
@@ -162,7 +162,7 @@ public class CustomerControllerTest {
                         .content(objectMapper.writeValueAsString(command)))
                 .andExpect(result -> Assertions.assertTrue(result.getResolvedException().getMessage().contains(
                         "Invalid email format!")))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isUnprocessableEntity());
     }
 
     @Test
@@ -183,7 +183,7 @@ public class CustomerControllerTest {
                         .content(objectMapper.writeValueAsString(command)))
                 .andExpect(result -> Assertions.assertTrue(result.getResolvedException().getMessage().contains(
                         "Invalid email format!")))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isUnprocessableEntity());
     }
 
     @Test
@@ -204,7 +204,7 @@ public class CustomerControllerTest {
                         .content(objectMapper.writeValueAsString(command)))
                 .andExpect(result -> Assertions.assertTrue(result.getResolvedException().getMessage().contains(
                         "Phone must be not empty!")))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isUnprocessableEntity());
     }
 
     @Test
@@ -227,7 +227,7 @@ public class CustomerControllerTest {
                 .andExpect(result -> Assertions.assertTrue(result.getResolvedException().getMessage().contains(
                         "Please provide a valid phone number in international format (e.g.: +1234567890)! " +
                                 "Don't use spaces, hyphen or dashes!")))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isUnprocessableEntity());
     }
 
     @Test
@@ -250,7 +250,7 @@ public class CustomerControllerTest {
                 .andExpect(result -> Assertions.assertTrue(result.getResolvedException().getMessage().contains(
                         "Please provide a valid phone number in international format (e.g.: +1234567890)! " +
                                 "Don't use spaces, hyphen or dashes!")))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isUnprocessableEntity());
     }
 
     @Test
@@ -273,7 +273,7 @@ public class CustomerControllerTest {
                 .andExpect(result -> Assertions.assertTrue(result.getResolvedException().getMessage().contains(
                         "Please provide a valid phone number in international format (e.g.: +1234567890)! " +
                                 "Don't use spaces, hyphen or dashes!")))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isUnprocessableEntity());
     }
 
     @Test
@@ -296,7 +296,7 @@ public class CustomerControllerTest {
                 .andExpect(result -> Assertions.assertTrue(result.getResolvedException().getMessage().contains(
                         "Please provide a valid phone number in international format (e.g.: +1234567890)! " +
                                 "Don't use spaces, hyphen or dashes!")))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isUnprocessableEntity());
     }
 
     @Test
@@ -318,7 +318,7 @@ public class CustomerControllerTest {
                         .content(objectMapper.writeValueAsString(command)))
                 .andExpect(result -> Assertions.assertTrue(result.getResolvedException().getMessage().contains(
                         "Postal code must be not null!")))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isUnprocessableEntity());
     }
 
     @Test
@@ -340,7 +340,7 @@ public class CustomerControllerTest {
                         .content(objectMapper.writeValueAsString(command)))
                 .andExpect(result -> Assertions.assertTrue(result.getResolvedException().getMessage().contains(
                         "City must be not empty!")))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isUnprocessableEntity());
     }
 
     @Test
@@ -362,7 +362,7 @@ public class CustomerControllerTest {
                         .content(objectMapper.writeValueAsString(command)))
                 .andExpect(result -> Assertions.assertTrue(result.getResolvedException().getMessage().contains(
                         "Address must be not empty!")))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isUnprocessableEntity());
     }
 
     @Test
