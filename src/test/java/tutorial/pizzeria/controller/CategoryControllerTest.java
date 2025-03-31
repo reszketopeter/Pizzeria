@@ -69,6 +69,58 @@ public class CategoryControllerTest {
                 .andExpect(status().isConflict());
     }
 
+    @Test
+    void givenAnExistingCategoryName_whenGetCategory_thenReturnTheResponseAndOkStatus() throws Exception {
+
+        saveCategory();
+
+        mockMvc.perform(get("/api/category/{name}", "Pizza")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(result -> result.getResponse().getContentAsString().contains("delicious pizza"));
+    }
+
+    @Test
+    void givenANonExistingCategoryName_whenGetCategory_thenReturnNotFoundStatus() throws Exception {
+
+        mockMvc.perform(get("/api/category/{name}", "Pizza")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void givenAnExistingCategoryIdAndCategoryCommand_whenChangeCategory_thenReturnTheResponseAndOkStatus()
+            throws Exception {
+
+        saveCategory();
+
+        CategoryCommand command = new CategoryCommand();
+        command.setName("Pizza");
+        command.setDescription("Very delicious pizza");
+
+        mockMvc.perform(put("/api/category/{id}", 1)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(command)))
+                .andExpect(status().isOk())
+                .andExpect(result ->
+                        result.getResponse().getContentAsString().contains("Very delicious pizza"));
+    }
+
+    @Test
+    void givenANonExistingCategoryIdAndCategoryCommand_whenChangeCategory_thenReturnNotFoundStatus()
+            throws Exception {
+
+        CategoryCommand command = new CategoryCommand();
+        command.setName("Pizza");
+        command.setDescription("Very delicious pizza");
+
+        mockMvc.perform(put("/api/category/{id}", 1)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(command)))
+                .andExpect(status().isNotFound());
+    }
+
+
     private void saveCategory() {
 
         entityManager.createNativeQuery("INSERT INTO category (id, name, description) VALUES " +

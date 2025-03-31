@@ -40,7 +40,7 @@ public class CategoryController {
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<CategoryDetails> changeCategory(@PathVariable Long id, CategoryCommand command) {
+    public ResponseEntity<CategoryDetails> changeCategory(@PathVariable Long id, @Valid CategoryCommand command) {
         log.info("Change Categorydetails with id: {}", id);
         CategoryDetails response = categoryService.changeCategory(id, command);
         return new ResponseEntity<>(response, HttpStatus.OK);
