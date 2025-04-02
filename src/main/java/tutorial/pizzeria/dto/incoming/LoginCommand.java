@@ -1,10 +1,13 @@
 package tutorial.pizzeria.dto.incoming;
 
 import jakarta.validation.constraints.NotBlank;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @NoArgsConstructor
+@AllArgsConstructor
 @Getter
 public class LoginCommand {
 

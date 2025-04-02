@@ -1,5 +1,6 @@
 package tutorial.pizzeria.controller;
 
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,7 +25,7 @@ public class ProductController {
     }
 
     @PostMapping
-    public ResponseEntity<ProductDetails> createProduct(@RequestBody ProductCommand command) {
+    public ResponseEntity<ProductDetails> createProduct(@Valid @RequestBody ProductCommand command) {
         log.info("Create New Product: {}", command);
         ProductDetails response = productService.createProduct(command);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
@@ -46,7 +47,7 @@ public class ProductController {
 
     @PutMapping("/{name}")
     public ResponseEntity<ProductDetails> changeProductDetails(@PathVariable String name,
-                                                               ProductModificationCommand command) {
+                                                               @Valid @RequestBody ProductModificationCommand command) {
         log.info("Change ProductDetails By Name: {}", name);
         ProductDetails response = productService.changeProductDetails(name, command);
         return new ResponseEntity<>(response, HttpStatus.OK);

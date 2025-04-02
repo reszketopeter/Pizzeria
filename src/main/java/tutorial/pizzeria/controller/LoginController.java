@@ -37,20 +37,20 @@ public class LoginController {
         }
     }
 
-    @PostMapping
+    @PostMapping("/logout")
     public ResponseEntity<String> logout(HttpServletRequest request) {
         log.info("Post logout customer");
         HttpSession session = request.getSession();
         session.invalidate();
         SecurityContextHolder.clearContext();
-        return new ResponseEntity<>("You have successfully logged out", HttpStatus.OK);
+        return new ResponseEntity<>("You have successfully logged out!", HttpStatus.OK);
     }
 
     @GetMapping("/debug/auth")
     public ResponseEntity<String> debugAuth(HttpSession session) {
         log.info("Debugging authentication");
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        StringBuilder response = new StringBuilder("User: " + authentication.getName() + "\nAuthorities: ");
+        StringBuilder response = new StringBuilder("User: " + authentication.getName() + "Authorities: ");
         authentication.getAuthorities().
                 forEach(auth -> response.append(auth.getAuthority()).append("\n"));
         response.append(session.getAttribute("customerId"));

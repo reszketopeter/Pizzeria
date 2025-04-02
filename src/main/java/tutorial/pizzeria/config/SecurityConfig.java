@@ -33,7 +33,7 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .httpBasic(Customizer.withDefaults())
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("api/debug/auth").hasAuthority(ADMIN.name())
+                        .requestMatchers("/api/debug/auth").hasAuthority(ADMIN.name())
                         .anyRequest().permitAll()
 
                 )
@@ -47,7 +47,8 @@ public class SecurityConfig {
                         .authenticationEntryPoint((request, response,
                                                    authException) -> {
                             response.setStatus(401);
-                            response.getWriter().write("Unauthorized access! Please register first!");
+                            response.getWriter().write("Unauthorized access! Please register first! " +
+                                    authException.getMessage());
                         })
                 )
                 .sessionManagement(session -> session
