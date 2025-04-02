@@ -40,7 +40,8 @@ public class CategoryController {
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<CategoryDetails> changeCategory(@PathVariable Long id, @Valid CategoryCommand command) {
+    public ResponseEntity<CategoryDetails> changeCategory(@PathVariable Long id,
+                                                          @Valid @RequestBody CategoryCommand command) {
         log.info("Change Categorydetails with id: {}", id);
         CategoryDetails response = categoryService.changeCategory(id, command);
         return new ResponseEntity<>(response, HttpStatus.OK);
@@ -50,6 +51,6 @@ public class CategoryController {
     public ResponseEntity<String> deleteCategory(@PathVariable String name) {
         log.info("Delete Category With Name: {}", name);
         categoryService.deleteCategory(name);
-        return new ResponseEntity<>("You succesfully deleted the category!", HttpStatus.OK);
+        return new ResponseEntity<>("You successfully deleted the category!", HttpStatus.OK);
     }
 }

@@ -14,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 import tutorial.pizzeria.dto.incoming.CategoryCommand;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -51,6 +50,32 @@ public class CategoryControllerTest {
                 .andExpect(result -> assertEquals("You have successfully created a new category",
                         result.getResponse().getContentAsString()))
                 .andExpect(status().isCreated());
+    }
+
+    @Test
+    void givenNewCategoryCommandWithAnEmptyName_whenCreate_thenReturnUnprocessableEntityException() throws Exception {
+
+        CategoryCommand command = new CategoryCommand();
+        command.setName("");
+        command.setDescription("Delicious pizza");
+
+        mockMvc.perform(post("/api/category/create")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(command)))
+                .andExpect(status().isUnprocessableEntity());
+    }
+
+    @Test
+    void givenNewCategoryCommandWithEmptyDescription_whenCreate_thenReturnUnprocessableEntityException() throws Exception {
+
+        CategoryCommand command = new CategoryCommand();
+        command.setName("Pizza");
+        command.setDescription("");
+
+        mockMvc.perform(post("/api/category/create")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(command)))
+                .andExpect(status().isUnprocessableEntity());
     }
 
     @Test
@@ -118,6 +143,18 @@ public class CategoryControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(command)))
                 .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void givenAnExistingCategoryName_whenDeleteCategory_thenReturnTheResponseAndOkStatus() throws Exception {
+
+        saveCategory();
+
+        mockMvc.perform(delete("/api/category/{name}", "Pizza")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(result -> result.getResponse().getContentAsString()
+                        .contains("You successfully deleted the category!"))
+                .andExpect(status().isOk());
     }
 
 
