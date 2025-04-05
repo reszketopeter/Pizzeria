@@ -2,6 +2,7 @@ package tutorial.pizzeria.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,7 +26,7 @@ public class LoginController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody LoginCommand command, HttpServletRequest request) {
+    public ResponseEntity<String> login(@Valid @RequestBody LoginCommand command, HttpServletRequest request) {
         log.info("Post login customer with {}", command);
         try {
             Long customerId = loginService.login(command);
