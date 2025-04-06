@@ -126,7 +126,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(InvalidPasswordException.class)
     public ResponseEntity<ApiException> handleInvalidPassword(InvalidPasswordException exception) {
         HttpStatus status = HttpStatus.UNPROCESSABLE_ENTITY;
-        return new ResponseEntity<>(apiExceptionMake(exception, status), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(apiExceptionMake(exception, status), HttpStatus.UNPROCESSABLE_ENTITY);
     }
 
     private <T extends RuntimeException> ApiException apiExceptionMake(T exception, HttpStatus status) {

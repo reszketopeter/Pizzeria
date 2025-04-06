@@ -43,7 +43,7 @@ public class LoginControllerTest {
     }
 
     @Test
-    void givenARegisteredCustomerAndAValidLoginCommand_WhenLogin_thenReturnTheResponseAndOkStatus() throws Exception {
+    void givenARegisteredCustomerAndAValidLoginCommand_whenLogin_thenReturnTheResponseAndOkStatus() throws Exception {
 
         saveCustomer();
 
@@ -57,7 +57,72 @@ public class LoginControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(result ->
                         result.getResponse().getContentAsString().contains("You have successfully logged in!"));
+    }
 
+    @Test
+    void givenARegisteredCustomerAndAnEmptyEmail_whenLogin_thenReturnAnUnprocessableEntityStatus()
+            throws Exception {
+
+        saveCustomer();
+
+        LoginCommand command = new LoginCommand();
+        command.setEmail("");
+        command.setPassword("test1Password");
+
+        mockMvc.perform(post("/api/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(command)))
+                .andExpect(status().isUnprocessableEntity());
+    }
+
+    @Test
+    void givenARegisteredCustomerAndAnEmptyPassword_whenLogin_thenReturnAnUnprocessableEntityStatus()
+            throws Exception {
+
+        saveCustomer();
+
+        LoginCommand command = new LoginCommand();
+        command.setEmail("test@email.com");
+        command.setPassword("");
+
+        mockMvc.perform(post("/api/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(command)))
+                .andExpect(status().isUnprocessableEntity());
+    }
+
+    @Test
+    void givenARegisteredCustomerAndAWrongEmail_whenLogin_thenReturnNotFoundStatus() throws Exception {
+
+        saveCustomer();
+
+        LoginCommand command = new LoginCommand();
+        command.setEmail("tes@email.com");
+        command.setPassword("test1Password");
+
+        mockMvc.perform(post("/api/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(command)))
+                .andExpect(status().isNotFound())
+                .andExpect(result -> result.getResponse().getContentAsString().contains(
+                        "You have not registered yet!"));
+    }
+
+    @Test
+    void givenARegisteredCustomerAndAWrongPassword_whenLogin_thenReturnAnUnprocessableEntityStatus()
+            throws Exception {
+
+        saveCustomer();
+
+        LoginCommand command = new LoginCommand();
+        command.setEmail("test@email.com");
+        command.setPassword("testPassword");
+
+        mockMvc.perform(post("/api/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(command)))
+                .andExpect(status().isUnprocessableEntity())
+                .andExpect(result -> result.getResponse().getContentAsString().contains("Invalid password!"));
     }
 
     private void saveCustomer() {

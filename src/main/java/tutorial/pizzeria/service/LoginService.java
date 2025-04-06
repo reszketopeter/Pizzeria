@@ -36,10 +36,11 @@ public class LoginService {
             throw new CustomerNotFoundException("You have not registered yet!");
         }
         if (!passwordEncoder.matches(command.getPassword(), customer.getPassword())) {
-            throw new InvalidPasswordException("Invalid Password");
+            throw new InvalidPasswordException("Invalid password");
         }
 
-        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(command.getEmail(), command.getPassword());
+        UsernamePasswordAuthenticationToken authToken =
+                new UsernamePasswordAuthenticationToken(command.getEmail(), command.getPassword());
         Authentication authentication = authenticationManager.authenticate(authToken);
         SecurityContextHolder.getContext().setAuthentication(authentication);
 

@@ -11,6 +11,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import tutorial.pizzeria.dto.incoming.LoginCommand;
+import tutorial.pizzeria.exception.CustomerNotFoundException;
+import tutorial.pizzeria.exception.InvalidPasswordException;
 import tutorial.pizzeria.service.LoginService;
 
 @RestController
@@ -33,8 +35,12 @@ public class LoginController {
             HttpSession session = request.getSession();
             session.setAttribute("customerId", customerId);
             return new ResponseEntity<>("You have successfully logged in!", HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.UNAUTHORIZED);
+        } catch (CustomerNotFoundException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        } catch (InvalidPasswordException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.UNPROCESSABLE_ENTITY);
+//        } catch (Exception e) {
+//            return new ResponseEntity<>(e.getMessage(), HttpStatus.UNAUTHORIZED);
         }
     }
 
