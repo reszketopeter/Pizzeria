@@ -55,9 +55,10 @@ public class LoginController {
 
     @GetMapping("/debug/auth")
     public ResponseEntity<String> debugAuth(HttpSession session) {
+        log.info("Current Authentication: {}", SecurityContextHolder.getContext().getAuthentication());
         log.info("Debugging authentication");
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        StringBuilder response = new StringBuilder("User: " + authentication.getName() + "Authorities: ");
+        StringBuilder response = new StringBuilder("User: " + authentication.getName() + "\nAuthorities: ");
         authentication.getAuthorities().
                 forEach(auth -> response.append(auth.getAuthority()).append("\n"));
         response.append(session.getAttribute("customerId"));

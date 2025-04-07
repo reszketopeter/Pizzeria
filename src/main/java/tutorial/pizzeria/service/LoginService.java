@@ -1,5 +1,6 @@
 package tutorial.pizzeria.service;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -16,6 +17,7 @@ import tutorial.pizzeria.repository.CustomerRepository;
 
 @Service
 @Transactional
+@Slf4j
 public class LoginService {
 
     private final CustomerRepository customerRepository;
@@ -42,6 +44,7 @@ public class LoginService {
         UsernamePasswordAuthenticationToken authToken =
                 new UsernamePasswordAuthenticationToken(command.getEmail(), command.getPassword());
         Authentication authentication = authenticationManager.authenticate(authToken);
+        log.info("Current Authentication: {}", SecurityContextHolder.getContext().getAuthentication());
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         return customer.getId();
