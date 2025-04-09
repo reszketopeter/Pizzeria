@@ -31,7 +31,7 @@ public class LoginController {
     public ResponseEntity<String> login(@Valid @RequestBody LoginCommand command, HttpServletRequest request) {
         log.info("Post login customer with {}", command);
         try {
-            Long customerId = loginService.login(command);
+            Long customerId = loginService.login(command, request);
             HttpSession session = request.getSession();
             session.setAttribute("customerId", customerId);
             return new ResponseEntity<>("You have successfully logged in!", HttpStatus.OK);
@@ -39,8 +39,6 @@ public class LoginController {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         } catch (InvalidPasswordException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.UNPROCESSABLE_ENTITY);
-//        } catch (Exception e) {
-//            return new ResponseEntity<>(e.getMessage(), HttpStatus.UNAUTHORIZED);
         }
     }
 

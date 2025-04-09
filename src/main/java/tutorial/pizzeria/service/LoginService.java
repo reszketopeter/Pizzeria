@@ -1,5 +1,7 @@
 package tutorial.pizzeria.service;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -32,7 +34,7 @@ public class LoginService {
         this.authenticationManager = authenticationManager;
     }
 
-    public Long login(LoginCommand command) {
+    public Long login(LoginCommand command, HttpServletRequest request) {
         Customer customer = customerRepository.findByEmail(command.getEmail());
         if (customer == null) {
             throw new CustomerNotFoundException("You have not registered yet!");
@@ -46,6 +48,10 @@ public class LoginService {
         Authentication authentication = authenticationManager.authenticate(authToken);
         log.info("Current Authentication: {}", SecurityContextHolder.getContext().getAuthentication());
         SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        // Save SecurityContext to session
+        HttpSession session = request.getSession(true);
+        session.setAttribute("SPRING_SECURITY_CONTEXT", SecurityContextHolder.getContext());
 
         return customer.getId();
     }

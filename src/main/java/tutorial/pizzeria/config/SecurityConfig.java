@@ -37,7 +37,7 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .httpBasic(Customizer.withDefaults())
                 .authorizeHttpRequests(authorize -> authorize
-//                        .requestMatchers("/api/debug/auth").hasAuthority(ADMIN.name())
+                        .requestMatchers("/api/debug/auth").hasAuthority(ADMIN.name())
                         .anyRequest().permitAll()
 
                 )
@@ -59,6 +59,12 @@ public class SecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
                 );
         return http.build();
+    }
+
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration)
+            throws Exception {
+        return authenticationConfiguration.getAuthenticationManager();
     }
 
 
