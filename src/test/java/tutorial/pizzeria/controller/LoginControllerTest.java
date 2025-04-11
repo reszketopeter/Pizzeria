@@ -125,12 +125,45 @@ public class LoginControllerTest {
                 .andExpect(result -> result.getResponse().getContentAsString().contains("Invalid password!"));
     }
 
+    @Test
+    void givenAnAdminWhoAreLoggedIn_whenDebugAuth_thenReturnTheAuthenticationAndAuthoritiesAndTheCustomerId()
+            throws Exception {
+
+        saveAdmin();
+
+        LoginCommand command = new LoginCommand();
+        command.setEmail("test2@email.com");
+        command.setPassword("test2Password");
+
+        mockMvc.perform(post("/api/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(command)))
+                .andExpect(status().isOk())
+                .andExpect(result ->
+                        result.getResponse().getContentAsString().contains("You have successfully logged in!"));
+
+        mockMvc.perform(get("/api/debug/auth")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(result -> result.getResponse().getContentAsString().contains("2"));
+    }
+
     private void saveCustomer() {
         String hashedPassword = passwordEncoder.encode("test1Password");
         entityManager.createNativeQuery("INSERT INTO customer" +
                         "(id, name, password, email, phone, postal_code, city, address, role)" +
                         "VALUES (1, 'Test Elek', :password, 'test@email.com','+36123456',1234," +
                         "'Test city','Test street 22','GUEST')")
+                .setParameter("password", hashedPassword)
+                .executeUpdate();
+    }
+
+    private void saveAdmin() {
+        String hashedPassword = passwordEncoder.encode("test2Password");
+        entityManager.createNativeQuery("INSERT INTO customer" +
+                        "(id, name, password, email, phone, postal_code, city, address, role)" +
+                        "VALUES (2, 'Test Admin', :password, 'test2@email.com','+36123457',1234," +
+                        "'Test city','Test street 23','ADMIN')")
                 .setParameter("password", hashedPassword)
                 .executeUpdate();
     }
