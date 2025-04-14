@@ -17,6 +17,7 @@ import tutorial.pizzeria.dto.incoming.LoginCommand;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static tutorial.pizzeria.domain.UserRole.ADMIN;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -126,26 +127,27 @@ public class LoginControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "test2@email.com", authorities = "ADMIN")
     void givenAnAdminWhoAreLoggedIn_whenDebugAuth_thenReturnTheAuthenticationAndAuthoritiesAndTheCustomerId()
             throws Exception {
 
         saveAdmin();
 
-        LoginCommand command = new LoginCommand();
-        command.setEmail("test2@email.com");
-        command.setPassword("test2Password");
-
-        mockMvc.perform(post("/api/login")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(command)))
-                .andExpect(status().isOk())
-                .andExpect(result ->
-                        result.getResponse().getContentAsString().contains("You have successfully logged in!"));
-
         mockMvc.perform(get("/api/debug/auth")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(result -> result.getResponse().getContentAsString().contains("2"));
+    }
+
+    @Test
+    @WithMockUser(username = "test@email.com", authorities = "GUEST")
+    void givenACustomerWhorAreLoggedIn_whenDebugAuth_thenReturn403Status() throws Exception {
+
+        saveCustomer();
+
+        mockMvc.perform(get("/api/debug/auth")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isForbidden());
     }
 
     private void saveCustomer() {
