@@ -8,7 +8,7 @@ server:
 
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/pizzeria?createDatabaseIfNotExist=true&useUnicode=true&serverTimezone=UTC&characterEncoding=utf8&autoReconnect=true
+    url: jdbc:postgresql://localhost:5432/pizzeria
     username: postgres
     password: root
     driver-class-name: org.postgresql.Driver
@@ -16,14 +16,17 @@ spring:
       minimum-idle: 5
       maximum-pool-size: 10
       auto-commit: false
-      pool-name: HikariPool-1
+      transaction-isolation: TRANSACTION_READ_COMMITTED
+      pool-name: pizzeria
       idle-timeout: 30000
       max-lifetime: 600000
       connection-timeout: 30000
-
   jpa:
     hibernate:
       ddl-auto: update
-    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    open-in-view: false
+  thymeleaf:
+    check-template-location: false
+
 
 base-url: http://localhost:8080

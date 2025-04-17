@@ -150,6 +150,31 @@ public class LoginControllerTest {
                 .andExpect(status().isForbidden());
     }
 
+    @Test
+    void givenAnAdminWhoAreNotLoggedIn_whenDebugAuth_thenReturn401Status() throws Exception {
+
+        saveAdmin();
+
+        mockMvc.perform(get("/api/debug/auth")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isUnauthorized())
+                .andExpect(result -> result.getResponse().getContentAsString()
+                        .contains("Unauthorized access! Please register/login first!"));
+    }
+
+    @Test
+    @WithMockUser(username = "test@email.com", authorities = "GUEST")
+    void givenACustomerWhoAreLoggedIn_whenLogOut_thenReturnOkStatusAndTheResponse() throws Exception {
+
+        saveCustomer();
+
+        mockMvc.perform(post("/api/logout")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(result -> result.getResponse().getContentAsString()
+                        .contains("You have successfully logged out!"));
+    }
+
     private void saveCustomer() {
         String hashedPassword = passwordEncoder.encode("test1Password");
         entityManager.createNativeQuery("INSERT INTO customer" +

@@ -51,7 +51,7 @@ public class SecurityConfig {
                         .authenticationEntryPoint((request, response,
                                                    authException) -> {
                             response.setStatus(401);
-                            response.getWriter().write("Unauthorized access! Please register first! " +
+                            response.getWriter().write("Unauthorized access! Please register/login first! " +
                                     authException.getMessage());
                         })
                 )
