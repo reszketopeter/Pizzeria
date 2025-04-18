@@ -23,6 +23,6 @@ public class ProductCommand {
     @NotNull(message = "Price must be not null!")
     private Integer price;
 
-    @NotBlank(message = "Category must be not empty!")
-    private Category category;
+    @NotNull(message = "Category ID must be not null!")
+    private Long categoryID;
 }

@@ -24,7 +24,7 @@ public class ProductController {
         this.productService = productService;
     }
 
-    @PostMapping
+    @PostMapping("/create")
     public ResponseEntity<ProductDetails> createProduct(@Valid @RequestBody ProductCommand command) {
         log.info("Create New Product: {}", command);
         ProductDetails response = productService.createProduct(command);

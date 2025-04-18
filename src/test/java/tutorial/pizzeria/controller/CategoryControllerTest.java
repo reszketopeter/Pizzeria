@@ -15,6 +15,7 @@ import tutorial.pizzeria.dto.incoming.CategoryCommand;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
@@ -127,8 +128,9 @@ public class CategoryControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(command)))
                 .andExpect(status().isOk())
-                .andExpect(result ->
-                        result.getResponse().getContentAsString().contains("Very delicious pizza"));
+                .andExpect(content().string(org.hamcrest.Matchers.containsString("Very delicious pizza")));
+//                .andExpect(result ->
+//                        result.getResponse().getContentAsString().contains("Very delicious pizza"));
     }
 
     @Test
@@ -152,9 +154,11 @@ public class CategoryControllerTest {
 
         mockMvc.perform(delete("/api/category/{name}", "Pizza")
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(result -> result.getResponse().getContentAsString()
-                        .contains("You successfully deleted the category!"))
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andExpect(content().string(org.hamcrest.Matchers.containsString
+                        ("You successfully deleted the category!")));
+//                .andExpect(result -> result.getResponse().getContentAsString()
+//                        .contains("You successfully deleted the category!"));
     }
 
 

@@ -31,10 +31,8 @@ public class LoginControllerTest {
     @Autowired
     private EntityManager entityManager;
 
-    @Autowired
-    private PasswordEncoder encoder;
-
     private ObjectMapper objectMapper;
+
     @Autowired
     private PasswordEncoder passwordEncoder;
 
