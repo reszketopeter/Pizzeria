@@ -13,7 +13,7 @@ import tutorial.pizzeria.service.CategoryService;
 
 @RestController
 @Slf4j
-@RequestMapping("/api/category")
+@RequestMapping("/api/categories")
 public class CategoryController {
 
     private final CategoryService categoryService;

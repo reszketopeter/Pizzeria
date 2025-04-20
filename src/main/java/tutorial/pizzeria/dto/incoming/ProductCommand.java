@@ -2,6 +2,8 @@ package tutorial.pizzeria.dto.incoming;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,6 +23,7 @@ public class ProductCommand {
     private String description;
 
     @NotNull(message = "Price must be not null!")
+    @Positive(message = "Price must be positive!")
     private Integer price;
 
     @NotNull(message = "Category ID must be not null!")

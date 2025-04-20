@@ -56,7 +56,7 @@ public class ProductService {
     public ProductListItem getAllProducts() {
         List<Product> products = productRepository.findAll();
         if (products.isEmpty()) {
-            throw new ProductNotFoundException("Sorry, we didn't find any product in the database");
+            throw new ProductNotFoundException("Sorry, we didn't find any product in the database.");
         }
         return productMapper.entitiesToDto(products);
     }
