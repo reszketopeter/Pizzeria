@@ -56,6 +56,27 @@ public class ProductControllerTest {
     }
 
     @Test
+    void givenAValidProductCommandWithAnExistingProduct_whenCreateProduct_thenReturnConflictStatusAndResponse()
+            throws Exception {
+
+        saveCategory();
+        saveProduct();
+
+        ProductCommand command = new ProductCommand();
+        command.setName("Hawaii pizza");
+        command.setDescription("Pizza with tomato sauce, cheese, ham and pineapple");
+        command.setPrice(3490);
+        command.setCategoryID(1L);
+
+        mockMvc.perform(post("/api/products/create")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(command)))
+                .andExpect(status().isConflict())
+                .andExpect(content().string(org.hamcrest.Matchers.
+                        containsString("There is already a product with this name in the database!")));
+    }
+
+    @Test
     void givenAnInvalidProductCommandWithEmptyName_whenCreateProduct_thenReturnUnprocessableEntityStatus()
             throws Exception {
 

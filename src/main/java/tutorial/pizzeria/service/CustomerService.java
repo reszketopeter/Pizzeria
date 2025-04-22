@@ -60,7 +60,7 @@ public class CustomerService implements UserDetailsService {
     public CustomerDetails register(RegisterCommand command) {
         Customer existingCustomer = customerRepository.findByEmail(command.getEmail());
         if (existingCustomer != null) {
-            throw new EmailAlreadyExistsException("This email is already exist");
+            throw new EmailAlreadyExistsException("This email is already exist in the database.");
         }
         String hashedPassword = passwordEncoder.encode(command.getPassword());
         Customer newCustomer = customerMapper.dtoToEntity(command, hashedPassword);

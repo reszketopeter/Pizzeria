@@ -17,6 +17,7 @@ import tutorial.pizzeria.dto.incoming.RegisterCommand;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -57,6 +58,29 @@ public class CustomerControllerTest {
                         "You have successfully registered!",
                         result.getResponse().getContentAsString()))
                 .andExpect(status().isCreated());
+    }
+
+    @Test
+    public void givenValidRegisterCommandWithAnExistingEmail_whenRegister_thenReturnsConflictStatusAndResponse()
+            throws Exception {
+
+        saveCustomer();
+
+        RegisterCommand command = new RegisterCommand();
+        command.setName("Test Thomas");
+        command.setPassword("Test3password");
+        command.setEmail("test@email.com");
+        command.setPhone("+363456689");
+        command.setPostalCode(1238);
+        command.setCity("Test City");
+        command.setAddress("Test Address");
+
+        mockMvc.perform(post("/api/customers/register")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(command)))
+                .andExpect(status().isConflict())
+                .andExpect(content().string(org.hamcrest.Matchers.
+                        containsString("This email is already exist in the database.")));
     }
 
     @Test

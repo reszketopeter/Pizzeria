@@ -45,7 +45,7 @@ public class CategoryControllerTest {
         command.setName("Pizza");
         command.setDescription("Delicious pizza");
 
-        mockMvc.perform(post("/api/category/create")
+        mockMvc.perform(post("/api/categories/create")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(command)))
                 .andExpect(result -> assertEquals("You have successfully created a new category",
@@ -60,7 +60,7 @@ public class CategoryControllerTest {
         command.setName("");
         command.setDescription("Delicious pizza");
 
-        mockMvc.perform(post("/api/category/create")
+        mockMvc.perform(post("/api/categories/create")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(command)))
                 .andExpect(status().isUnprocessableEntity());
@@ -73,7 +73,7 @@ public class CategoryControllerTest {
         command.setName("Pizza");
         command.setDescription("");
 
-        mockMvc.perform(post("/api/category/create")
+        mockMvc.perform(post("/api/categories/create")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(command)))
                 .andExpect(status().isUnprocessableEntity());
@@ -89,7 +89,7 @@ public class CategoryControllerTest {
         command.setName("Pizza");
         command.setDescription("Delicious pizza");
 
-        mockMvc.perform(post("/api/category/create")
+        mockMvc.perform(post("/api/categories/create")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(command)))
                 .andExpect(status().isConflict());
@@ -100,7 +100,7 @@ public class CategoryControllerTest {
 
         saveCategory();
 
-        mockMvc.perform(get("/api/category/{name}", "Pizza")
+        mockMvc.perform(get("/api/categories/{name}", "Pizza")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(result -> result.getResponse().getContentAsString().contains("delicious pizza"));
@@ -109,7 +109,7 @@ public class CategoryControllerTest {
     @Test
     void givenANonExistingCategoryName_whenGetCategory_thenReturnNotFoundStatus() throws Exception {
 
-        mockMvc.perform(get("/api/category/{name}", "Pizza")
+        mockMvc.perform(get("/api/categories/{name}", "Pizza")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
     }
@@ -124,13 +124,11 @@ public class CategoryControllerTest {
         command.setName("Pizza");
         command.setDescription("Very delicious pizza");
 
-        mockMvc.perform(put("/api/category/{id}", 1)
+        mockMvc.perform(put("/api/categories/{id}", 1)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(command)))
                 .andExpect(status().isOk())
                 .andExpect(content().string(org.hamcrest.Matchers.containsString("Very delicious pizza")));
-//                .andExpect(result ->
-//                        result.getResponse().getContentAsString().contains("Very delicious pizza"));
     }
 
     @Test
@@ -141,7 +139,7 @@ public class CategoryControllerTest {
         command.setName("Pizza");
         command.setDescription("Very delicious pizza");
 
-        mockMvc.perform(put("/api/category/{id}", 1)
+        mockMvc.perform(put("/api/categories/{id}", 1)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(command)))
                 .andExpect(status().isNotFound());
@@ -152,13 +150,11 @@ public class CategoryControllerTest {
 
         saveCategory();
 
-        mockMvc.perform(delete("/api/category/{name}", "Pizza")
+        mockMvc.perform(delete("/api/categories/{name}", "Pizza")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().string(org.hamcrest.Matchers.containsString
                         ("You successfully deleted the category!")));
-//                .andExpect(result -> result.getResponse().getContentAsString()
-//                        .contains("You successfully deleted the category!"));
     }
 
 
