@@ -16,5 +16,4 @@ public class ReviewListItemWithTime {
     private String content;
 
     private LocalDateTime timestamp;
-
 }
