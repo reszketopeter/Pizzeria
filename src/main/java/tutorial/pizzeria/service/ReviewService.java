@@ -49,11 +49,12 @@ public class ReviewService {
         }
     }
 
-//    public List<ReviewListItemWithTime> getReviewsWithTime(LocalDateTime timestamp, LocalDateTime timestamp2) {
-//        List<Review> reviews = reviewRepository.findAll();
-//        reviews.stream()
-//                .map(Review::getTimestamp)
-//                .toList();
-//
-//    }
+    public List<ReviewListItemWithTime> getReviewsByChronological() {
+        List<ReviewListItemWithTime> reviews = reviewRepository.findAllByReviewByTimestampDesc();
+        if (reviews.isEmpty()) {
+            throw new ReviewNotFoundException("Sorry, we didn't find any reviews!");
+        }
+        return reviews;
+    }
+
 }

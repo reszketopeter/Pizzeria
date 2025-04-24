@@ -1,5 +1,6 @@
 package tutorial.pizzeria.controller;
 
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -8,8 +9,10 @@ import org.springframework.web.bind.annotation.*;
 import tutorial.pizzeria.dto.incoming.ReviewCommand;
 import tutorial.pizzeria.dto.outgoing.ReviewDetails;
 import tutorial.pizzeria.dto.outgoing.ReviewListItem;
+import tutorial.pizzeria.dto.outgoing.ReviewListItemWithTime;
 import tutorial.pizzeria.service.ReviewService;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Slf4j
@@ -25,7 +28,7 @@ public class ReviewController {
     }
 
     @PostMapping
-    public ResponseEntity<ReviewDetails> createReview(@RequestBody ReviewCommand command) {
+    public ResponseEntity<ReviewDetails> createReview(@Valid @RequestBody ReviewCommand command) {
         log.info("Create New Review");
         ReviewDetails response = reviewService.createReview(command);
         return new ResponseEntity<>(response, HttpStatus.OK);
@@ -40,12 +43,12 @@ public class ReviewController {
     }
 
     //Get method Timestamp
-//    @GetMapping("{timestamp},{timestamp}")
-//    public ResponseEntity<List<ReviewListItemWithTime>> getReviewsWithTime (@PathVariable LocalDateTime timestamp,
-//                                                                            LocalDateTime timestamp2) {
-//        log.info("Get reviews By Timestamp");
-//        reviewService.getReviewsWithTime(timestamp,timestamp2);
-//    }
+    @GetMapping("/chronological")
+    public ResponseEntity<List<ReviewListItemWithTime>> getReviewsWithTime() {
+        log.info("Get reviews By Timestamp");
+        List<ReviewListItemWithTime> response = reviewService.getReviewsByChronological();
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteReview(@PathVariable Long id) {

@@ -14,8 +14,6 @@ import java.time.LocalDateTime;
 @Setter
 public class ReviewListItemWithTime {
 
-    private Customer customer;
-
     private String content;
 
     private LocalDateTime timestamp;
