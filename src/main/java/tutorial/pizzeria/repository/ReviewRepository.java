@@ -17,7 +17,7 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
             "FROM Review r WHERE r.isRecommend = :isRecommend")
     List<ReviewListItem> findReviewsByIsRecommend(@Param("isRecommend") Boolean isRecommend);
 
-    @Query("SELECT new tutorial.pizzeria.dto.outgoing.ReviewListItemWithTime (r.customer, r.content, r.timestamp)" +
+    @Query("SELECT new tutorial.pizzeria.dto.outgoing.ReviewListItemWithTime (r.content, r.timestamp)" +
             "FROM Review r ORDER BY r.timestamp DESC")
     List<ReviewListItemWithTime> findAllByReviewByTimestampDesc();
 }
