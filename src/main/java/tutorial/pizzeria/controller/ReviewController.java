@@ -26,14 +26,14 @@ public class ReviewController {
         this.reviewService = reviewService;
     }
 
-    @PostMapping
-    public ResponseEntity<ReviewDetails> createReview(@Valid @RequestBody ReviewCommand command) {
+    @PostMapping("/{productId}")
+    public ResponseEntity<ReviewDetails> createReview(@Valid @RequestBody ReviewCommand command,
+                                                      @PathVariable Long productId) {
         log.info("Create New Review");
-        ReviewDetails response = reviewService.createReview(command);
+        ReviewDetails response = reviewService.createReview(command, productId);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    // Get method isRecommend Yes/NO
     @GetMapping("/{isRecommend}")
     public ResponseEntity<List<ReviewListItem>> getReviews(@PathVariable Boolean isRecommend) {
         log.info("Get Reviews: {}", isRecommend);

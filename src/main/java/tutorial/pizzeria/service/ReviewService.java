@@ -9,10 +9,11 @@ import tutorial.pizzeria.dto.mapper.ReviewMapper;
 import tutorial.pizzeria.dto.outgoing.ReviewDetails;
 import tutorial.pizzeria.dto.outgoing.ReviewListItem;
 import tutorial.pizzeria.dto.outgoing.ReviewListItemWithTime;
+import tutorial.pizzeria.exception.ProductNotFoundException;
 import tutorial.pizzeria.exception.ReviewNotFoundException;
+import tutorial.pizzeria.repository.ProductRepository;
 import tutorial.pizzeria.repository.ReviewRepository;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -21,14 +22,18 @@ public class ReviewService {
 
     private final ReviewRepository reviewRepository;
     private final ReviewMapper reviewMapper;
+    private final ProductRepository productRepository;
 
     @Autowired
-    public ReviewService(ReviewRepository reviewRepository, ReviewMapper reviewMapper) {
+    public ReviewService(ReviewRepository reviewRepository, ReviewMapper reviewMapper, ProductRepository productRepository) {
         this.reviewRepository = reviewRepository;
         this.reviewMapper = reviewMapper;
+        this.productRepository = productRepository;
     }
 
-    public ReviewDetails createReview(ReviewCommand command) {
+    public ReviewDetails createReview(ReviewCommand command, Long productId) {
+        productRepository.findById(productId)
+                .orElseThrow(() -> new ProductNotFoundException("No product with this id in the database!"));
         Review review = reviewMapper.dtoToEntity(command);
         reviewRepository.save(review);
         return reviewMapper.entityToDto(review);
