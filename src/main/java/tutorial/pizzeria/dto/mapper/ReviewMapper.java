@@ -22,7 +22,7 @@ public class ReviewMapper {
         review.setIsRecommend(command.getIsRecommend());
         review.setTimestamp(LocalDateTime.now());
 
-        return new Review();
+        return review;
     }
 
     public ReviewDetails entityToDto(Review review) {
@@ -33,6 +33,6 @@ public class ReviewMapper {
         reviewDetails.setIsRecommend(review.getIsRecommend());
         reviewDetails.setTimeStamp(review.getTimestamp().toString());
 
-        return new ReviewDetails();
+        return reviewDetails;
     }
 }

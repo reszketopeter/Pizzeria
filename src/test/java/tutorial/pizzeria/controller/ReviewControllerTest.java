@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
@@ -64,9 +65,9 @@ public class ReviewControllerTest {
 
     private void saveCustomer() {
         entityManager.createNativeQuery("INSERT INTO customer" +
-                        "(id, name, password, email, phone, postal_code, city, address)" +
+                        "(id, name, password, email, phone, postal_code, city, address, role)" +
                         "VALUES (1, 'Test Elek', 'test1Password', 'test@email.com','+36123456',1234," +
-                        "'Test city','Test street 22')")
+                        "'Test city','Test street 22', 'GUEST')")
                 .executeUpdate();
     }
 
