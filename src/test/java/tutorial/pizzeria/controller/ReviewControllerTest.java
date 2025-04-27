@@ -63,6 +63,48 @@ public class ReviewControllerTest {
                         containsString("Very delicious pizza")));
     }
 
+    @Test
+    void givenInvalidReviewCommand_whenCreateReview_thenReturnUnprocessableEntityStatus() throws Exception {
+
+        saveCustomer();
+        saveCategory();
+        saveProduct();
+
+        Customer customer = (Customer) entityManager.createQuery("SELECT c FROM Customer c WHERE c.id = 1")
+                .getSingleResult();
+
+        ReviewCommand command = new ReviewCommand();
+        command.setCustomer(customer);
+        command.setContent("Very delicious pizza");
+        command.setIsRecommend(null);
+
+        mockMvc.perform(post("/api/reviews/{productId}", 1L)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(command)))
+                .andExpect(status().isUnprocessableEntity());
+    }
+
+    @Test
+    void givenAValidReviewCommandAndANonExistingProductId_whenCreateReview_thenReturnNotFoundStatus() throws Exception {
+
+        saveCustomer();
+        saveCategory();
+        saveCategory();
+
+        Customer customer = (Customer) entityManager.createQuery("SELECT c FROM Customer c WHERE c.id = 1")
+                .getSingleResult();
+
+        ReviewCommand command = new ReviewCommand();
+        command.setCustomer(customer);
+        command.setContent("Very delicious pizza");
+        command.setIsRecommend(Recommendation.YES);
+
+        mockMvc.perform(post("/api/reviews/{productId}", 2L)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(command)))
+                .andExpect(status().isNotFound());
+    }
+
     private void saveCustomer() {
         entityManager.createNativeQuery("INSERT INTO customer" +
                         "(id, name, password, email, phone, postal_code, city, address, role)" +
@@ -86,4 +128,12 @@ public class ReviewControllerTest {
                         "VALUES (1, 'Pizza with tomato sauce', 'Pizza with tomato sauce')")
                 .executeUpdate();
     }
+
+//    private void saveReview() {
+//
+//        entityManager.createNativeQuery("INSERT INTO review" +
+//                        "(id,content,is_recommend,timestamp,customer_id)" +
+//                        "VALUES (1, 'very good','YES',2025.04.27.,1)")
+//                .executeUpdate();
+//    }
 }
