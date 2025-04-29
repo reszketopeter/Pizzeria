@@ -29,4 +29,8 @@ public class Review {
     @JoinColumn(name = "customer_id")
     private Customer customer;
 
+    public LocalDateTime getTimestamp() {
+        return LocalDateTime.now();
+    }
+
 }

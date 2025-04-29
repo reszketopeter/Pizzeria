@@ -7,6 +7,7 @@ import tutorial.pizzeria.dto.outgoing.ReviewDetails;
 import tutorial.pizzeria.dto.outgoing.ReviewListItem;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -20,7 +21,8 @@ public class ReviewMapper {
         review.setCustomer(command.getCustomer());
         review.setContent(command.getContent());
         review.setIsRecommend(command.getIsRecommend());
-        review.setTimestamp(LocalDateTime.now());
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        review.setTimestamp(LocalDateTime.parse(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))));
 
         return review;
     }

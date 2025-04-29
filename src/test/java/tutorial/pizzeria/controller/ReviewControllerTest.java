@@ -2,14 +2,12 @@ package tutorial.pizzeria.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.EntityManager;
-import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +15,8 @@ import tutorial.pizzeria.domain.Customer;
 import tutorial.pizzeria.domain.Recommendation;
 import tutorial.pizzeria.dto.incoming.ReviewCommand;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -105,6 +105,27 @@ public class ReviewControllerTest {
                 .andExpect(status().isNotFound());
     }
 
+    @Test
+    void givenReviewsInTheDatabase_whenGetReviewsByRecommendStatus_thenReturnReviewListItemAndOkStatus()
+            throws Exception {
+
+        saveCustomer();
+        saveCategory();
+        saveProduct();
+        saveReview();
+        saveAnotherReview();
+
+        mockMvc.perform(get("/api/reviews/{isRecommend}", "YES")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(result -> {
+                    String responseContent = result.getResponse().getContentAsString();
+                    assertTrue(responseContent.contains("very good"));
+                    assertTrue(responseContent.contains("2025-04-23"));
+                });
+
+    }
+
     private void saveCustomer() {
         entityManager.createNativeQuery("INSERT INTO customer" +
                         "(id, name, password, email, phone, postal_code, city, address, role)" +
@@ -129,11 +150,19 @@ public class ReviewControllerTest {
                 .executeUpdate();
     }
 
-//    private void saveReview() {
-//
-//        entityManager.createNativeQuery("INSERT INTO review" +
-//                        "(id,content,is_recommend,timestamp,customer_id)" +
-//                        "VALUES (1, 'very good','YES',2025.04.27.,1)")
-//                .executeUpdate();
-//    }
+    private void saveReview() {
+
+        entityManager.createNativeQuery("INSERT INTO review" +
+                        "(id,content,is_recommend,timestamp,customer_id)" +
+                        "VALUES (1, 'very good','YES',2025-04-27,1)")
+                .executeUpdate();
+    }
+
+    private void saveAnotherReview() {
+
+        entityManager.createNativeQuery("INSERT INTO review" +
+                        "(id,content,is_recommend,timestamp,customer_id)" +
+                        "VALUES (2, 'good','YES',2025-04-23,1)")
+                .executeUpdate();
+    }
 }
