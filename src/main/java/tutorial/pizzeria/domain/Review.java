@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 @Data
 @Entity
@@ -29,8 +28,4 @@ public class Review {
     @ManyToOne
     @JoinColumn(name = "customer_id")
     private Customer customer;
-
-    public LocalDateTime getTimestamp() {
-        return LocalDateTime.now();
-    }
 }

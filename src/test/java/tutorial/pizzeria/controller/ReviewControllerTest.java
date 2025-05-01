@@ -89,7 +89,7 @@ public class ReviewControllerTest {
 
         saveCustomer();
         saveCategory();
-        saveCategory();
+        saveProduct();
 
         Customer customer = (Customer) entityManager.createQuery("SELECT c FROM Customer c WHERE c.id = 1")
                 .getSingleResult();
@@ -115,7 +115,7 @@ public class ReviewControllerTest {
         saveReview();
         saveAnotherReview();
 
-        mockMvc.perform(get("/api/reviews/{isRecommend}", "YES")
+        mockMvc.perform(get("/api/reviews/{isRecommend}", Recommendation.YES.name())
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(result -> {
@@ -154,7 +154,7 @@ public class ReviewControllerTest {
 
         entityManager.createNativeQuery("INSERT INTO review" +
                         "(id,content,is_recommend,timestamp,customer_id)" +
-                        "VALUES (1, 'very good','YES',2025-04-27,1)")
+                        "VALUES (1, 'very good','Yes','2025-04-27 12:00:00',1)")
                 .executeUpdate();
     }
 
@@ -162,7 +162,7 @@ public class ReviewControllerTest {
 
         entityManager.createNativeQuery("INSERT INTO review" +
                         "(id,content,is_recommend,timestamp,customer_id)" +
-                        "VALUES (2, 'good','YES',2025-04-23,1)")
+                        "VALUES (2, 'good','Yes','2025-04-23 15:32:05',1)")
                 .executeUpdate();
     }
 }

@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import tutorial.pizzeria.domain.Recommendation;
 import tutorial.pizzeria.dto.incoming.ReviewCommand;
 import tutorial.pizzeria.dto.outgoing.ReviewDetails;
 import tutorial.pizzeria.dto.outgoing.ReviewListItem;
@@ -35,7 +36,7 @@ public class ReviewController {
     }
 
     @GetMapping("/{isRecommend}")
-    public ResponseEntity<List<ReviewListItem>> getReviews(@PathVariable Boolean isRecommend) {
+    public ResponseEntity<List<ReviewListItem>> getReviews(@PathVariable Recommendation isRecommend) {
         log.info("Get Reviews: {}", isRecommend);
         List<ReviewListItem> reviews = reviewService.getReviews(isRecommend);
         return new ResponseEntity<>(reviews, HttpStatus.OK);

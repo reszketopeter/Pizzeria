@@ -3,6 +3,7 @@ package tutorial.pizzeria.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import tutorial.pizzeria.domain.Recommendation;
 import tutorial.pizzeria.domain.Review;
 import tutorial.pizzeria.dto.incoming.ReviewCommand;
 import tutorial.pizzeria.dto.mapper.ReviewMapper;
@@ -45,12 +46,12 @@ public class ReviewService {
         reviewRepository.delete(review);
     }
 
-    public List<ReviewListItem> getReviews(Boolean isRecommend) {
+    public List<ReviewListItem> getReviews(Recommendation isRecommend) {
         List<ReviewListItem> reviews = reviewRepository.findReviewsByIsRecommend(isRecommend);
         if (reviews.isEmpty()) {
             throw new ReviewNotFoundException("Not found any review with this condition: " + isRecommend);
         } else {
-            return reviews;
+            return reviewMapper.entitiesToDto(reviews);
         }
     }
 

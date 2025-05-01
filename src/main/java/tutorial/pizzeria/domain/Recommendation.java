@@ -1,5 +1,8 @@
 package tutorial.pizzeria.domain;
 
+import lombok.Getter;
+
+@Getter
 public enum Recommendation {
 
     YES("Yes"),
@@ -11,7 +14,4 @@ public enum Recommendation {
         this.displayName = displayName;
     }
 
-    public String getDisplayName() {
-        return displayName;
-    }
 }

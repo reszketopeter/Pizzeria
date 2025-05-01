@@ -4,7 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import tutorial.pizzeria.domain.Customer;
+
+import java.time.LocalDateTime;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -12,7 +13,9 @@ import tutorial.pizzeria.domain.Customer;
 @Getter
 public class ReviewListItem {
 
-    private Customer customer;
+    private String customerName;
 
     private String content;
+
+    private LocalDateTime timeStamp;
 }

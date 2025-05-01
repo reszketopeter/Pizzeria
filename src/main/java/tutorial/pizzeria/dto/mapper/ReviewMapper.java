@@ -21,7 +21,7 @@ public class ReviewMapper {
         review.setCustomer(command.getCustomer());
         review.setContent(command.getContent());
         review.setIsRecommend(command.getIsRecommend());
-        review.setTimestamp(LocalDateTime.parse(review.getTimestamp().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))));
+        review.setTimestamp(LocalDateTime.now());
 
         return review;
     }
@@ -32,8 +32,33 @@ public class ReviewMapper {
 
         reviewDetails.setContent(review.getContent());
         reviewDetails.setIsRecommend(review.getIsRecommend());
-        reviewDetails.setTimeStamp(review.getTimestamp().toString());
+        reviewDetails.setTimeStamp(review.getTimestamp().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
 
         return reviewDetails;
+    }
+
+//    public ReviewListItem entitiesToDto(List<ReviewListItem> reviews) {
+//
+//        ReviewListItem reviewListItem = new ReviewListItem();
+//
+//        reviewListItem.setCustomerName(reviews.stream()
+//                .map();
+//        reviewListItem.setContent(review.getContent());
+//        reviewListItem.setTimeStamp(review.getTimestamp());
+//
+//        return reviewListItem;
+//    }
+
+    public List<ReviewListItem> entitiesToDto(List<ReviewListItem> reviews) {
+
+        return reviews.stream()
+                .map(review -> {
+                    ReviewListItem reviewListItem = new ReviewListItem();
+                    reviewListItem.setCustomerName(review.getCustomerName());
+                    reviewListItem.setContent(review.getContent());
+                    reviewListItem.setTimeStamp(review.getTimeStamp());
+                    return reviewListItem;
+                })
+                .collect(Collectors.toList());
     }
 }
