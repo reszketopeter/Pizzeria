@@ -21,8 +21,7 @@ public class ReviewMapper {
         review.setCustomer(command.getCustomer());
         review.setContent(command.getContent());
         review.setIsRecommend(command.getIsRecommend());
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        review.setTimestamp(LocalDateTime.parse(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))));
+        review.setTimestamp(LocalDateTime.parse(review.getTimestamp().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))));
 
         return review;
     }
