@@ -42,7 +42,7 @@ public class ReviewService {
 
     public void deleteReview(Long id) {
         Review review = reviewRepository.findById(id)
-                .orElseThrow(() -> new ReviewNotFoundException("Sorry, the review with this id " + id + "does not exist."));
+                .orElseThrow(() -> new ReviewNotFoundException("Sorry, the review with this id " + id + " does not exist."));
         reviewRepository.delete(review);
     }
 

@@ -16,8 +16,7 @@ import tutorial.pizzeria.domain.Recommendation;
 import tutorial.pizzeria.dto.incoming.ReviewCommand;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -123,8 +122,56 @@ public class ReviewControllerTest {
                     assertTrue(responseContent.contains("very good"));
                     assertTrue(responseContent.contains("2025-04-23"));
                 });
-
     }
+
+    @Test
+    void givenJustNonRecommendedReviewsInTheDatabase_whenGetReviewsByRecommendStatus_thenReturnTheResponseAndNotFoundStatus()
+            throws Exception {
+
+        saveCustomer();
+        saveCategory();
+        saveProduct();
+        saveReview();
+        saveAnotherReview();
+
+        mockMvc.perform(get("/api/reviews/{isRecommend}", Recommendation.NO.name())
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                .andExpect(content().string(org.hamcrest.Matchers
+                        .containsString("Not found any review with this condition: NO")));
+    }
+
+    @Test
+    void givenAnExistingReviewId_whenDeleteReview_thenReturnTheResponseAndOkStatus() throws Exception {
+
+        saveCustomer();
+        saveCategory();
+        saveProduct();
+        saveReview();
+
+        mockMvc.perform(delete("/api/reviews/{id}", 1L)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().string(org.hamcrest.Matchers.
+                        containsString("You successfully deleted the review!")));
+    }
+
+    @Test
+    void givenANonExistingReviewId_whenDeleteReview_thenReturnTheResponseAndNotFoundStatus() throws Exception {
+
+        saveCustomer();
+        saveCategory();
+        saveProduct();
+        saveReview();
+        saveAnotherReview();
+
+        mockMvc.perform(delete("/api/reviews/{id}", 3L)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                .andExpect(content().string(org.hamcrest.Matchers.
+                        containsString("Sorry, the review with this id " + 3 + " does not exist.")));
+    }
+
 
     private void saveCustomer() {
         entityManager.createNativeQuery("INSERT INTO customer" +

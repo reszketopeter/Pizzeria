@@ -37,18 +37,6 @@ public class ReviewMapper {
         return reviewDetails;
     }
 
-//    public ReviewListItem entitiesToDto(List<ReviewListItem> reviews) {
-//
-//        ReviewListItem reviewListItem = new ReviewListItem();
-//
-//        reviewListItem.setCustomerName(reviews.stream()
-//                .map();
-//        reviewListItem.setContent(review.getContent());
-//        reviewListItem.setTimeStamp(review.getTimestamp());
-//
-//        return reviewListItem;
-//    }
-
     public List<ReviewListItem> entitiesToDto(List<ReviewListItem> reviews) {
 
         return reviews.stream()
