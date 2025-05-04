@@ -141,6 +141,21 @@ public class ReviewControllerTest {
                         .containsString("Not found any review with this condition: NO")));
     }
 
+    // How should I test the chronological order?
+    @Test
+    void givenMoreReviews_whenGetReviewsByChronologicalDesc_thenReturnTheResponseAndOkStatus() throws Exception {
+
+        saveCustomer();
+        saveCategory();
+        saveProduct();
+        saveReview();
+        saveAnotherReview();
+
+        mockMvc.perform(get("/api/reviews/chronological")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+    }
+
     @Test
     void givenAnExistingReviewId_whenDeleteReview_thenReturnTheResponseAndOkStatus() throws Exception {
 
