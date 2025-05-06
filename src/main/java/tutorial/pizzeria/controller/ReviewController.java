@@ -42,7 +42,6 @@ public class ReviewController {
         return new ResponseEntity<>(reviews, HttpStatus.OK);
     }
 
-    //Get method Timestamp
     @GetMapping("/chronological")
     public ResponseEntity<List<ReviewListItemWithTime>> getReviewsWithTime() {
         log.info("Get reviews By Timestamp");
