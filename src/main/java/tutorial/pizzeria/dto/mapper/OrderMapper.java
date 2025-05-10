@@ -6,6 +6,7 @@ import tutorial.pizzeria.domain.Customer;
 import tutorial.pizzeria.domain.Order;
 import tutorial.pizzeria.domain.OrderStatus;
 import tutorial.pizzeria.domain.Product;
+import tutorial.pizzeria.dto.outgoing.DeliverDetails;
 import tutorial.pizzeria.dto.outgoing.OrderDetails;
 import tutorial.pizzeria.dto.outgoing.ProductDetails;
 
@@ -37,13 +38,6 @@ public class OrderMapper {
     }
 
 
-//    private List<ProductDetails> makeProductDetailsList(List<Product> products) {
-//        return products.stream()
-//                .map(productMapper::entitiesToDto)
-//                .toList();
-//
-//    }
-
 
     public Order makeOrder(Customer customer) {
         Order order = new Order();
@@ -53,6 +47,18 @@ public class OrderMapper {
         order.setOrderStatus(OrderStatus.PENDING);
         order.setProducts(new ArrayList<>());
         return order;
+    }
+
+    public DeliverDetails makeDeliverDetails(Order order) {
+
+        DeliverDetails deliverDetails = new DeliverDetails();
+
+        deliverDetails.setOrderId(order.getId());
+        // Address is not the best like this.
+        deliverDetails.setAddress(order.getCustomer().getAddress());
+        deliverDetails.setCustomerName(order.getCustomer().getName());
+
+        return deliverDetails;
     }
 }
 

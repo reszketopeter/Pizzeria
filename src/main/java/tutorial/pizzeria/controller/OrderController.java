@@ -1,12 +1,15 @@
 package tutorial.pizzeria.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import tutorial.pizzeria.dto.incoming.DeliverCommand;
 import tutorial.pizzeria.dto.incoming.OrderCommand;
+import tutorial.pizzeria.dto.outgoing.DeliverDetails;
 import tutorial.pizzeria.dto.outgoing.OrderDetails;
 import tutorial.pizzeria.service.OrderService;
 
@@ -23,11 +26,19 @@ public class OrderController {
     }
 
     @PostMapping("product/{productId}")
-    public ResponseEntity<OrderDetails> createNewOrder(@RequestBody OrderCommand command, @PathVariable Long productId,
-                                                       HttpServletRequest request) {
+    public ResponseEntity<OrderDetails> createNewOrder(@RequestBody @Valid OrderCommand command,
+                                                       @PathVariable Long productId, HttpServletRequest request) {
         log.info("Create New Order");
         OrderDetails response = orderService.createNewOrder(command, productId, request);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
+    }
+
+    @PutMapping("/deliver")
+    public ResponseEntity<DeliverDetails> deliverOrder(@RequestBody @Valid DeliverCommand command) {
+        log.info("Delivering to user id: {} order id: {}", command.getCustomerId(), command.getOrderId());
+        DeliverDetails details = orderService.updateToDelivered(command);
+        log.debug("Delivering was successful: {}", details);
+        return new ResponseEntity<>(details, HttpStatus.OK);
     }
 
     @PutMapping("/cancel")

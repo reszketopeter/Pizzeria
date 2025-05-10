@@ -2,6 +2,7 @@ package tutorial.pizzeria.service;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -9,8 +10,10 @@ import tutorial.pizzeria.domain.Customer;
 import tutorial.pizzeria.domain.Order;
 import tutorial.pizzeria.domain.OrderStatus;
 import tutorial.pizzeria.domain.Product;
+import tutorial.pizzeria.dto.incoming.DeliverCommand;
 import tutorial.pizzeria.dto.incoming.OrderCommand;
 import tutorial.pizzeria.dto.mapper.OrderMapper;
+import tutorial.pizzeria.dto.outgoing.DeliverDetails;
 import tutorial.pizzeria.dto.outgoing.OrderDetails;
 import tutorial.pizzeria.exception.CustomerIdIsNullException;
 import tutorial.pizzeria.exception.OrderNotFoundException;
@@ -18,7 +21,9 @@ import tutorial.pizzeria.exception.ProductNotFoundException;
 import tutorial.pizzeria.repository.OrderRepository;
 import tutorial.pizzeria.repository.ProductRepository;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -94,5 +99,14 @@ public class OrderService {
         }
         order.setOrderStatus(OrderStatus.CANCELLED);
         return "Your order has cancelled";
+    }
+
+    public DeliverDetails updateToDelivered(@Valid DeliverCommand command) {
+        Order order = orderRepository.getOrderById(command.getOrderId())
+                .orElseThrow(() -> new OrderNotFoundException("Sorry, we didn't find any order with this id "
+                        + command.getOrderId() + "in the system"));
+        order.setOrderStatus(OrderStatus.DELIVERED);
+        order.setTimeStamp(LocalDateTime.now());
+        return orderMapper.makeDeliverDetails(order);
     }
 }
