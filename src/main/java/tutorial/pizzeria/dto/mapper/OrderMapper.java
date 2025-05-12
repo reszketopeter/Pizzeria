@@ -38,14 +38,16 @@ public class OrderMapper {
     }
 
 
-
     public Order makeOrder(Customer customer) {
+
         Order order = new Order();
+
         order.setCustomer(customer);
         order.setTimeStamp(LocalDateTime.now());
         order.setCity(customer.getCity());
         order.setOrderStatus(OrderStatus.PENDING);
         order.setProducts(new ArrayList<>());
+
         return order;
     }
 
