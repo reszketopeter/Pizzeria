@@ -6,6 +6,7 @@ import tutorial.pizzeria.domain.Customer;
 import tutorial.pizzeria.domain.Order;
 import tutorial.pizzeria.domain.OrderStatus;
 import tutorial.pizzeria.domain.Product;
+import tutorial.pizzeria.dto.incoming.OrderCommand;
 import tutorial.pizzeria.dto.outgoing.DeliverDetails;
 import tutorial.pizzeria.dto.outgoing.OrderDetails;
 import tutorial.pizzeria.dto.outgoing.ProductDetails;
@@ -36,6 +37,12 @@ public class OrderMapper {
 
         return orderDetails;
     }
+
+    // It is too complicated.
+//    public Order dtoToEntity (OrderCommand command) {
+//
+//        Order order = new Order();
+//    }
 
 
     public Order makeOrder(Customer customer) {
