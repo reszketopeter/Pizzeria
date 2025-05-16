@@ -29,14 +29,34 @@ public class OrderMapper {
 
         OrderDetails orderDetails = new OrderDetails();
 
+        orderDetails.setCustomerId(order.getCustomer().getId());
+        orderDetails.setOrderId(order.getId());
         orderDetails.setTimeStamp(order.getTimeStamp());
         orderDetails.setTotalPrice(order.getTotalPrice());
         orderDetails.setCustomerId(order.getCustomer().getId());
-        orderDetails.setOrderId(order.getId());
-//        orderDetails.setProductDetails(makeProductDetailsList(products));
+        orderDetails.setProductDetails(makeProductDetailsList(products));
 
         return orderDetails;
     }
+
+    // OrderItem? Is it necessary?
+//    private List<ProductDetails> makeProductDetailsList(List<Product> products) {
+//
+//        return products.stream()
+//                .map(this::makeOrderDetails)
+//                .toList();
+//    }
+//
+//    public OrderDetails makeOrderItemDetails(OrderItem orderItem) {
+//
+//        OrderItemDetails orderItemDetails = new OrderItemDetails();
+//
+//        orderItemDetails.setProductName(orderItem.getProduct().getName());
+//        orderItemDetails.setQuantity(orderItem.getQuantity());
+//        orderItemDetails.setProductId(orderItem.getProduct().getId());
+//
+//        return orderItemDetails;
+//    }
 
     // It is too complicated.
 //    public Order dtoToEntity (OrderCommand command) {
