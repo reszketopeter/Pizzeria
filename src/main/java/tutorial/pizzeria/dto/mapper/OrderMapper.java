@@ -34,7 +34,7 @@ public class OrderMapper {
         orderDetails.setTimeStamp(order.getTimeStamp());
         orderDetails.setTotalPrice(order.getTotalPrice());
         orderDetails.setCustomerId(order.getCustomer().getId());
-        orderDetails.setProductDetails(makeProductDetailsList(products));
+//        orderDetails.setProductDetails(makeProductDetailsList(products));
 
         return orderDetails;
     }
