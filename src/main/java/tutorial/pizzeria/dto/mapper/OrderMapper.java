@@ -34,18 +34,17 @@ public class OrderMapper {
         orderDetails.setTimeStamp(order.getTimeStamp());
         orderDetails.setTotalPrice(order.getTotalPrice());
         orderDetails.setCustomerId(order.getCustomer().getId());
-//        orderDetails.setProductDetails(makeProductDetailsList(products));
+        orderDetails.setProductDetails(makeProductDetailsList(products));
 
         return orderDetails;
     }
 
-    // OrderItem? Is it necessary?
-//    private List<ProductDetails> makeProductDetailsList(List<Product> products) {
-//
-//        return products.stream()
-//                .map(this::makeOrderDetails)
-//                .toList();
-//    }
+    private List<ProductDetails> makeProductDetailsList(List<Product> products) {
+
+        return products.stream()
+                .map(productMapper::entityToDto)
+                .toList();
+    }
 //
 //    public OrderDetails makeOrderItemDetails(OrderItem orderItem) {
 //

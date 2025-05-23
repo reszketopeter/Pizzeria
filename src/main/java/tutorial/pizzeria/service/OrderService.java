@@ -49,6 +49,9 @@ public class OrderService {
             throw new CustomerIdIsNullException("The customer id is null you have to login first!");
         }
         Product product = findProductById(productId);
+        if (product == null) {
+            throw new ProductNotFoundException("Sorry, the product with this id " + productId + "doesn't exist!");
+        }
         Order order = orderGuard(session, customerId);
         List<Product> products = orderRepository.getProductsWithOrderId(order.getId());
         return orderMapper.entityToDto(order, products);
