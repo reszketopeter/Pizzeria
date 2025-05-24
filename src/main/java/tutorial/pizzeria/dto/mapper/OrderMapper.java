@@ -2,13 +2,10 @@ package tutorial.pizzeria.dto.mapper;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import tutorial.pizzeria.domain.Customer;
-import tutorial.pizzeria.domain.Order;
-import tutorial.pizzeria.domain.OrderStatus;
-import tutorial.pizzeria.domain.Product;
-import tutorial.pizzeria.dto.incoming.OrderCommand;
+import tutorial.pizzeria.domain.*;
 import tutorial.pizzeria.dto.outgoing.DeliverDetails;
 import tutorial.pizzeria.dto.outgoing.OrderDetails;
+import tutorial.pizzeria.dto.outgoing.OrderItemDetails;
 import tutorial.pizzeria.dto.outgoing.ProductDetails;
 
 import java.time.LocalDateTime;
@@ -25,43 +22,35 @@ public class OrderMapper {
         this.productMapper = productMapper;
     }
 
-    public OrderDetails entityToDto(Order order, List<Product> products) {
+    public OrderDetails entityToDto(Order order, List<OrderItem> orderItems) {
 
         OrderDetails orderDetails = new OrderDetails();
 
         orderDetails.setCustomerId(order.getCustomer().getId());
         orderDetails.setOrderId(order.getId());
-        orderDetails.setTimeStamp(order.getTimeStamp());
-        orderDetails.setTotalPrice(order.getTotalPrice());
         orderDetails.setCustomerId(order.getCustomer().getId());
-        orderDetails.setProductDetails(makeProductDetailsList(products));
+        orderDetails.setOrderItemDetails(makeOrderItemDetailsList(orderItems));
 
         return orderDetails;
     }
 
-    private List<ProductDetails> makeProductDetailsList(List<Product> products) {
+    private List<OrderItemDetails> makeOrderItemDetailsList(List<OrderItem> orderItems) {
 
-        return products.stream()
-                .map(productMapper::entityToDto)
+        return orderItems.stream()
+                .map(this::makeOrderItemDetails)
                 .toList();
     }
-//
-//    public OrderDetails makeOrderItemDetails(OrderItem orderItem) {
-//
-//        OrderItemDetails orderItemDetails = new OrderItemDetails();
-//
-//        orderItemDetails.setProductName(orderItem.getProduct().getName());
-//        orderItemDetails.setQuantity(orderItem.getQuantity());
-//        orderItemDetails.setProductId(orderItem.getProduct().getId());
-//
-//        return orderItemDetails;
-//    }
 
-    // It is too complicated.
-//    public Order dtoToEntity (OrderCommand command) {
-//
-//        Order order = new Order();
-//    }
+    public OrderItemDetails makeOrderItemDetails(OrderItem orderItem) {
+
+        OrderItemDetails orderItemDetails = new OrderItemDetails();
+
+        orderItemDetails.setProductName(orderItem.getProduct().getName());
+        orderItemDetails.setQuantity(orderItem.getQuantity());
+        orderItemDetails.setProductId(orderItem.getProduct().getId());
+
+        return orderItemDetails;
+    }
 
 
     public Order makeOrder(Customer customer) {

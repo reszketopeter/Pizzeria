@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import tutorial.pizzeria.domain.Order;
+import tutorial.pizzeria.domain.OrderItem;
 import tutorial.pizzeria.domain.Product;
 
 import java.util.List;
@@ -22,4 +23,7 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
 
     @Query("SELECT p FROM purchase p WHERE p.id=:id")
     Optional<Order> getOrderById(@Param("id") Long orderId);
+
+    @Query("SELECT oi FROM order_item oi WHERE oi.order.id=:id AND oi.order.orderStatus = 'PENDING'")
+    List<OrderItem> getOrderItemsWithOrderId(@Param("id") Long id);
 }

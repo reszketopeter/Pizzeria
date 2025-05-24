@@ -6,15 +6,13 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import tutorial.pizzeria.domain.Customer;
-import tutorial.pizzeria.domain.Order;
-import tutorial.pizzeria.domain.OrderStatus;
-import tutorial.pizzeria.domain.Product;
+import tutorial.pizzeria.domain.*;
 import tutorial.pizzeria.dto.incoming.DeliverCommand;
 import tutorial.pizzeria.dto.incoming.OrderCommand;
 import tutorial.pizzeria.dto.mapper.OrderMapper;
 import tutorial.pizzeria.dto.outgoing.DeliverDetails;
 import tutorial.pizzeria.dto.outgoing.OrderDetails;
+import tutorial.pizzeria.dto.outgoing.OrderItemDetails;
 import tutorial.pizzeria.exception.CustomerIdIsNullException;
 import tutorial.pizzeria.exception.OrderNotFoundException;
 import tutorial.pizzeria.exception.ProductNotFoundException;
@@ -23,7 +21,6 @@ import tutorial.pizzeria.repository.ProductRepository;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Transactional
@@ -53,8 +50,8 @@ public class OrderService {
             throw new ProductNotFoundException("Sorry, the product with this id " + productId + "doesn't exist!");
         }
         Order order = orderGuard(session, customerId);
-        List<Product> products = orderRepository.getProductsWithOrderId(order.getId());
-        return orderMapper.entityToDto(order, products);
+        List<OrderItem> orderItems = orderRepository.getOrderItemsWithOrderId(order.getId());
+        return orderMapper.entityToDto(order, orderItems);
     }
 
     protected Order orderGuard(HttpSession session, Long customerId) {
@@ -83,8 +80,8 @@ public class OrderService {
     public OrderDetails getOrderById(Long id) {
         Order order = orderRepository.findById(id)
                 .orElseThrow(() -> new OrderNotFoundException("Sorry, there is not any Order with this id: " + id));
-        List<Product> products = orderRepository.getProductsWithOrderId(order.getId());
-        return orderMapper.entityToDto(order, products);
+        List<OrderItem> orderItems = orderRepository.getOrderItemsWithOrderId(order.getId());
+        return orderMapper.entityToDto(order, orderItems);
     }
 
     public void deleteOrderById(Long id) {

@@ -4,7 +4,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -16,10 +15,7 @@ public class OrderDetails {
 
     private Long customerId;
 
-    private LocalDateTime timeStamp;
+    private String orderPriceFT;
 
-    private Integer totalPrice;
-
-    List<ProductDetails> productDetails;
-
+    List<OrderItemDetails> orderItemDetails;
 }
