@@ -12,7 +12,6 @@ import tutorial.pizzeria.dto.incoming.OrderCommand;
 import tutorial.pizzeria.dto.mapper.OrderMapper;
 import tutorial.pizzeria.dto.outgoing.DeliverDetails;
 import tutorial.pizzeria.dto.outgoing.OrderDetails;
-import tutorial.pizzeria.dto.outgoing.OrderItemDetails;
 import tutorial.pizzeria.exception.CustomerIdIsNullException;
 import tutorial.pizzeria.exception.OrderNotFoundException;
 import tutorial.pizzeria.exception.ProductNotFoundException;

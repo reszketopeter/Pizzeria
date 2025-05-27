@@ -2,11 +2,13 @@ package tutorial.pizzeria.dto.mapper;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import tutorial.pizzeria.domain.*;
+import tutorial.pizzeria.domain.Customer;
+import tutorial.pizzeria.domain.Order;
+import tutorial.pizzeria.domain.OrderItem;
+import tutorial.pizzeria.domain.OrderStatus;
 import tutorial.pizzeria.dto.outgoing.DeliverDetails;
 import tutorial.pizzeria.dto.outgoing.OrderDetails;
 import tutorial.pizzeria.dto.outgoing.OrderItemDetails;
-import tutorial.pizzeria.dto.outgoing.ProductDetails;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
