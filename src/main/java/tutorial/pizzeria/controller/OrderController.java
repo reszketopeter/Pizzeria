@@ -25,7 +25,7 @@ public class OrderController {
         this.orderService = orderService;
     }
 
-    @PostMapping("product/{productId}")
+    @PostMapping("/{productId}")
     public ResponseEntity<OrderDetails> createNewOrder(@RequestBody @Valid OrderCommand command,
                                                        @PathVariable Long productId, HttpServletRequest request) {
         log.info("Create New Order");

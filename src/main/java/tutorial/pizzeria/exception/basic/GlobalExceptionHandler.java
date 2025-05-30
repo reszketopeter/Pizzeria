@@ -166,6 +166,12 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(apiExceptionMake(exception, status), HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(ProductIsCurrentlyNotAvailableException.class)
+    public ResponseEntity<ApiException> handleNotAvailableProduct(ProductIsCurrentlyNotAvailableException exception) {
+        HttpStatus status = HttpStatus.CONFLICT;
+        return new ResponseEntity<>(apiExceptionMake(exception, status), HttpStatus.CONFLICT);
+    }
+
 
     //Handle orders
     @ExceptionHandler(OrderNotFoundException.class)

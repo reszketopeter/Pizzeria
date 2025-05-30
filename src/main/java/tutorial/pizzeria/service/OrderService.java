@@ -14,6 +14,7 @@ import tutorial.pizzeria.dto.outgoing.DeliverDetails;
 import tutorial.pizzeria.dto.outgoing.OrderDetails;
 import tutorial.pizzeria.exception.CustomerIdIsNullException;
 import tutorial.pizzeria.exception.OrderNotFoundException;
+import tutorial.pizzeria.exception.ProductIsCurrentlyNotAvailableException;
 import tutorial.pizzeria.exception.ProductNotFoundException;
 import tutorial.pizzeria.repository.OrderRepository;
 import tutorial.pizzeria.repository.ProductRepository;
@@ -48,6 +49,8 @@ public class OrderService {
         if (product == null) {
             throw new ProductNotFoundException("Sorry, the product with this id " + productId + "doesn't exist!");
         }
+        if (!product.getAvailable())
+            throw new ProductIsCurrentlyNotAvailableException("Apologise, but this product is not available now.");
         Order order = orderGuard(session, customerId);
         List<OrderItem> orderItems = orderRepository.getOrderItemsWithOrderId(order.getId());
         return orderMapper.entityToDto(order, orderItems);

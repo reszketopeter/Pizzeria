@@ -24,6 +24,9 @@ public class Product {
     @Column(name = "price")
     private Integer price;
 
+    @Column(name = "available")
+    private Boolean isAvailable;
+
     @ManyToOne
     @JoinColumn(name = "order_id")
     private Order order;
@@ -31,4 +34,8 @@ public class Product {
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
+
+    public Boolean getAvailable() {
+        return isAvailable = true;
+    }
 }
