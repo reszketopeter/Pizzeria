@@ -34,8 +34,4 @@ public class Product {
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
-
-    public Boolean getAvailable() {
-        return isAvailable = true;
-    }
 }

@@ -32,6 +32,7 @@ public class ProductMapper {
         product.setName(command.getName());
         product.setDescription(command.getDescription());
         product.setPrice(command.getPrice());
+        product.setIsAvailable(true);
 
         return product;
 
