@@ -49,7 +49,7 @@ public class OrderService {
         if (product == null) {
             throw new ProductNotFoundException("Sorry, the product with this id " + productId + "doesn't exist!");
         }
-        if (!product.getAvailable())
+        if (!product.getIsAvailable())
             throw new ProductIsCurrentlyNotAvailableException("Apologise, but this product is not available now.");
         Order order = orderGuard(session, customerId);
         List<OrderItem> orderItems = orderRepository.getOrderItemsWithOrderId(order.getId());
