@@ -52,6 +52,7 @@ public class OrderService {
         if (!product.getIsAvailable())
             throw new ProductIsCurrentlyNotAvailableException("Apologise, but this product is not available now.");
         Order order = orderGuard(session, customerId);
+        OrderItem orderItem = orderMapper.makeOrderItem(order, productId, command);
         List<OrderItem> orderItems = orderRepository.getOrderItemsWithOrderId(order.getId());
         return orderMapper.entityToDto(order, orderItems);
     }
@@ -83,7 +84,7 @@ public class OrderService {
         Order order = orderRepository.findById(id)
                 .orElseThrow(() -> new OrderNotFoundException("Sorry, there is not any Order with this id: " + id));
         List<OrderItem> orderItems = orderRepository.getOrderItemsWithOrderId(order.getId());
-        return orderMapper.entityToDto(order, orderItems);
+        return orderMapper.entityToDto(order, orderItems, command);
     }
 
     public void deleteOrderById(Long id) {
