@@ -84,7 +84,7 @@ public class OrderService {
         Order order = orderRepository.findById(id)
                 .orElseThrow(() -> new OrderNotFoundException("Sorry, there is not any Order with this id: " + id));
         List<OrderItem> orderItems = orderRepository.getOrderItemsWithOrderId(order.getId());
-        return orderMapper.entityToDto(order, orderItems, command);
+        return orderMapper.entityToDto(order, orderItems);
     }
 
     public void deleteOrderById(Long id) {
