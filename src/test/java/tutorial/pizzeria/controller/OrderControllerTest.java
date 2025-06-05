@@ -30,4 +30,8 @@ public class OrderControllerTest {
         objectMapper = new ObjectMapper();
     }
 
+    @Test
+    void givenAnExistingProductId_whenCreateNewOrder_thenReturnTheResponseAndCreatedStatus() {
+
+    }
 }
