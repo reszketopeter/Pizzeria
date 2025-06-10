@@ -15,7 +15,7 @@ public class OrderDetails {
 
     private Long customerId;
 
-    private String orderPriceFT;
+    private Integer orderPriceFT;
 
     List<OrderItemDetails> orderItemDetails;
 }
