@@ -16,6 +16,7 @@ import tutorial.pizzeria.exception.CustomerIdIsNullException;
 import tutorial.pizzeria.exception.OrderNotFoundException;
 import tutorial.pizzeria.exception.ProductIsCurrentlyNotAvailableException;
 import tutorial.pizzeria.exception.ProductNotFoundException;
+import tutorial.pizzeria.repository.OrderItemRepository;
 import tutorial.pizzeria.repository.OrderRepository;
 import tutorial.pizzeria.repository.ProductRepository;
 
@@ -30,20 +31,22 @@ public class OrderService {
     private final OrderMapper orderMapper;
     private final ProductRepository productRepository;
     private final CustomerService customerService;
+    private final OrderItemRepository orderItemRepository;
 
     @Autowired
-    public OrderService(OrderRepository orderRepository, OrderMapper orderMapper, ProductRepository productRepository, CustomerService customerService) {
+    public OrderService(OrderRepository orderRepository, OrderMapper orderMapper, ProductRepository productRepository, CustomerService customerService, OrderItemRepository orderItemRepository) {
         this.orderRepository = orderRepository;
         this.orderMapper = orderMapper;
         this.productRepository = productRepository;
         this.customerService = customerService;
+        this.orderItemRepository = orderItemRepository;
     }
 
     public OrderDetails createNewOrder(OrderCommand command, Long productId, HttpServletRequest request) {
         HttpSession session = request.getSession();
         Long customerId = (Long) session.getAttribute("customerId");
         if (customerId == null) {
-            throw new CustomerIdIsNullException("The customer id is null you have to login first!");
+            throw new CustomerIdIsNullException("The customer id is null. You have to login!");
         }
         Product product = findProductById(productId);
         if (product == null) {
@@ -52,9 +55,14 @@ public class OrderService {
         if (!product.getIsAvailable())
             throw new ProductIsCurrentlyNotAvailableException("Apologise, but this product is not available now.");
         Order order = orderGuard(session, customerId);
-        OrderItem orderItem = orderMapper.makeOrderItem(order, productId, command);
+        makeOrderItem(command, productId, order);
         List<OrderItem> orderItems = orderRepository.getOrderItemsWithOrderId(order.getId());
         return orderMapper.entityToDto(order, orderItems);
+    }
+
+    private void makeOrderItem(OrderCommand command, Long productId, Order order) {
+        OrderItem orderItem = orderMapper.makeOrderItem(order, productId, command);
+        orderItemRepository.save(orderItem);
     }
 
     protected Order orderGuard(HttpSession session, Long customerId) {

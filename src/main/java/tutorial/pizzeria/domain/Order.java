@@ -27,6 +27,9 @@ public class Order {
     private String city;
 
     @OneToMany(mappedBy = "order")
+    private List<OrderItem> orderItems;
+
+    @OneToMany(mappedBy = "order")
     private List<Product> products;
 
     @ManyToOne
