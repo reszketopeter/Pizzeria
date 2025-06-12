@@ -2,12 +2,16 @@ package tutorial.pizzeria.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.EntityManager;
+import jakarta.servlet.http.HttpSession;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.mock.web.MockHttpSession;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,26 +34,35 @@ public class OrderControllerTest {
 
     private ObjectMapper objectMapper;
 
+    private MockHttpServletRequest request;
+
+    private HttpSession session;
+
     @BeforeEach
     void init() {
         objectMapper = new ObjectMapper();
+        request = new MockHttpServletRequest();
+        session = request.getSession();
     }
 
     @Test
+//    @WithMockUser(username = "test@email.com", password = "test1Password", authorities = "GUEST")
     void givenAnExistingProductId_whenCreateNewOrder_thenReturnTheResponseAndCreatedStatus() throws Exception {
 
-        // The customer should log in.
         saveCustomer();
         saveCategory();
         saveProduct();
+
+        MockHttpSession session = new MockHttpSession();
+        session.setAttribute("customerId", 1L);
 
         OrderCommand command = new OrderCommand();
         command.setQuantity(1);
 
         mockMvc.perform(post("/api/orders/{productId}", 1)
+                        .session(session)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(command))
-                        .sessionAttr("customerId", 1L))
+                        .content(objectMapper.writeValueAsString(command)))
                 .andExpect(status().isCreated());
     }
 
