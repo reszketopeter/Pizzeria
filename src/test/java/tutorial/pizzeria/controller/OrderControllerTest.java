@@ -46,7 +46,6 @@ public class OrderControllerTest {
     }
 
     @Test
-//    @WithMockUser(username = "test@email.com", password = "test1Password", authorities = "GUEST")
     void givenAnExistingProductId_whenCreateNewOrder_thenReturnTheResponseAndCreatedStatus() throws Exception {
 
         saveCustomer();

@@ -35,7 +35,7 @@ public class OrderMapper {
 
         orderDetails.setCustomerId(order.getCustomer().getId());
         orderDetails.setOrderId(order.getId());
-        orderDetails.setOrderPriceFT(3590);
+        orderDetails.setOrderPriceFT(order.getTotalPrice());
         orderDetails.setOrderItemDetails(makeOrderItemDetailsList(orderItems));
 
         return orderDetails;
