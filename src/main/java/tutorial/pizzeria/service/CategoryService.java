@@ -29,7 +29,7 @@ public class CategoryService {
     public CategoryDetails create(CategoryCommand command) {
         Optional<Category> category = categoryRepository.findByName(command.getName());
         if (category.isPresent()) {
-            throw new CategoryAlreadyExistsException("There is a category with this name in the system");
+            throw new CategoryAlreadyExistsException("There is a category with this name in the system.");
         }
         Category newCategory = categoryMapper.dtoToEntity(command);
         categoryRepository.save(newCategory);
@@ -39,20 +39,21 @@ public class CategoryService {
     public CategoryDetails getCategory(String name) {
         Category category = categoryRepository.findByName(name)
                 .orElseThrow(() -> new CategoryNotFoundException
-                        ("Sorry, the category with this name" + name + "does not exist"));
+                        ("Sorry, the category with this name" + name + "does not exist."));
         return categoryMapper.entityToDto(category);
     }
 
     public void deleteCategory(String name) {
         Category category = categoryRepository.findByName(name)
-                .orElseThrow(() -> new CategoryAlreadyExistsException("There is a category with this name in the system"));
+                .orElseThrow(() -> new CategoryAlreadyExistsException("There is a category with this name in the " +
+                        "system."));
         categoryRepository.delete(category);
     }
 
     public CategoryDetails changeCategory(Long id, CategoryCommand command) {
         Category category = categoryRepository.findById(id)
                 .orElseThrow(() -> new CategoryNotFoundException
-                        ("Sorry, the category with this id " + id + "does not exist"));
+                        ("Sorry, the category with this id " + id + "does not exist."));
         category.setName(command.getName());
         category.setDescription(command.getDescription());
         return categoryMapper.entityToDto(category);

@@ -2,10 +2,7 @@ package tutorial.pizzeria.dto.mapper;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import tutorial.pizzeria.domain.Customer;
-import tutorial.pizzeria.domain.Order;
-import tutorial.pizzeria.domain.OrderItem;
-import tutorial.pizzeria.domain.OrderStatus;
+import tutorial.pizzeria.domain.*;
 import tutorial.pizzeria.dto.incoming.OrderCommand;
 import tutorial.pizzeria.dto.outgoing.DeliverDetails;
 import tutorial.pizzeria.dto.outgoing.OrderDetails;
@@ -35,7 +32,9 @@ public class OrderMapper {
 
         orderDetails.setCustomerId(order.getCustomer().getId());
         orderDetails.setOrderId(order.getId());
-        orderDetails.setOrderPriceFT(order.getTotalPrice());
+        orderDetails.setOrderPriceFT(order.getOrderItems().stream()
+                .mapToDouble(item -> item.getQuantity() * item.getValue())
+                .sum());
         orderDetails.setOrderItemDetails(makeOrderItemDetailsList(orderItems));
 
         return orderDetails;
@@ -52,9 +51,9 @@ public class OrderMapper {
 
         OrderItemDetails orderItemDetails = new OrderItemDetails();
 
+        orderItemDetails.setProductId(orderItem.getProduct().getId());
         orderItemDetails.setProductName(orderItem.getProduct().getName());
         orderItemDetails.setQuantity(orderItem.getQuantity());
-        orderItemDetails.setProductId(orderItem.getProduct().getId());
 
         return orderItemDetails;
     }
@@ -68,7 +67,10 @@ public class OrderMapper {
         order.setTimeStamp(LocalDateTime.now());
         order.setCity(customer.getCity());
         order.setOrderStatus(OrderStatus.PENDING);
-        order.setProducts(new ArrayList<>());
+        order.setOrderItems(new ArrayList<>());
+//        order.setTotalPrice(order.getOrderItems().stream()
+//                .mapToDouble(item -> item.getQuantity() * item.getValue())
+//                .sum());
 
         return order;
     }
@@ -85,17 +87,15 @@ public class OrderMapper {
         return deliverDetails;
     }
 
-    public OrderItem makeOrderItem(Order order, Long productId, OrderCommand command) {
+    public OrderItem makeOrderItem(Order order, Product product, OrderCommand command) {
 
         OrderItem orderItem = new OrderItem();
 
-        orderItem.setProduct(order.getProducts().stream()
-                .filter(product -> product.getId().equals(productId))
-                .findFirst()
-                .orElseThrow(() -> new ProductNotFoundException("Product not found in order")));
-        orderItem.setOrder(order);
+        orderItem.setName(product.getName());
         orderItem.setQuantity(command.getQuantity());
-        orderItem.setValue((double) (orderItem.getProduct().getPrice() * command.getQuantity()));
+        orderItem.setValue(product.getPrice());
+        orderItem.setOrder(order);
+        orderItem.setProduct(product);
 
         return orderItem;
     }

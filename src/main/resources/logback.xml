@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true" scanPeriod="30 seconds">
+    <!-- Status Listener -->
+    <statusListener class="ch.qos.logback.core.status.OnConsoleStatusListener"/>
+
+    <!-- Define Properties -->
+    <property name="LOGS_DIR" value="${LOGS_DIR:-./logs}"/>
+    <property name="TEMP_LOGS_DIR" value="${TEMP_LOGS_DIR:-./temp-logs}"/>
+
+    <!-- Generate a unique restart ID for each app restart -->
+    <property name="APP_RESTART_ID" value="${PID:-${random(1000,9999)}}"/>
+
+    <!-- Console Appender -->
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- Rolling File Appender for General Logs -->
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!-- Specify the current log file -->
+        <file>${LOGS_DIR}/application/application-${APP_RESTART_ID}.log</file>
+
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- Ensure rotated logs include the date -->
+            <fileNamePattern>${LOGS_DIR}/application/application-%d{yyyy-MM-dd}-${APP_RESTART_ID}.log</fileNamePattern>
+            <maxHistory>30</maxHistory>
+            <totalSizeCap>500MB</totalSizeCap>
+        </rollingPolicy>
+
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- Rolling File Appender for Errors -->
+    <appender name="ERROR_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!-- Specify the current log file -->
+        <file>${LOGS_DIR}/error/error-${APP_RESTART_ID}.log</file>
+
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- Ensure rotated logs include the date -->
+            <fileNamePattern>${LOGS_DIR}/error/error-%d{yyyy-MM-dd}-${APP_RESTART_ID}.log</fileNamePattern>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- Root Logger -->
+    <root level="info">
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="FILE"/>
+    </root>
+
+    <!-- Logger for Errors -->
+    <logger name="tutorial.pizzeria.exception" level="debug" additivity="false">
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="FILE"/>
+    </logger>
+
+    <!--    &lt;!&ndash; Logger for Temporary Logs &ndash;&gt;-->
+    <!--    <logger name="tutorial.pizzaria.temp" level="error" additivity="false">-->
+    <!--        <appender-ref ref="ERROR_FILE"/>-->
+    <!--    </logger>-->
+</configuration>

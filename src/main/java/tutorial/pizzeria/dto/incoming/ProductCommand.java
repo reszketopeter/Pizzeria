@@ -24,7 +24,7 @@ public class ProductCommand {
 
     @NotNull(message = "Price must be not null!")
     @Positive(message = "Price must be positive!")
-    private Integer price;
+    private Double price;
 
     @NotNull(message = "Category ID must be not null!")
     private Long categoryID;

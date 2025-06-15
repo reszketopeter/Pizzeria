@@ -45,7 +45,7 @@ public class ProductControllerTest {
         ProductCommand command = new ProductCommand();
         command.setName("Hawaii pizza");
         command.setDescription("Pizza with tomato sauce, cheese, ham and pineapple");
-        command.setPrice(3490);
+        command.setPrice(3490.0);
         command.setCategoryID(1L);
 
         mockMvc.perform(post("/api/products/create")
@@ -65,7 +65,7 @@ public class ProductControllerTest {
         ProductCommand command = new ProductCommand();
         command.setName("Hawaii pizza");
         command.setDescription("Pizza with tomato sauce, cheese, ham and pineapple");
-        command.setPrice(3490);
+        command.setPrice(3490.0);
         command.setCategoryID(1L);
 
         mockMvc.perform(post("/api/products/create")
@@ -85,7 +85,7 @@ public class ProductControllerTest {
         ProductCommand command = new ProductCommand();
         command.setName(null);
         command.setDescription("Pizza with tomato sauce, cheese, ham and pineapple");
-        command.setPrice(3490);
+        command.setPrice(3490.0);
         command.setCategoryID(1L);
 
         mockMvc.perform(post("/api/products/create")
@@ -103,7 +103,7 @@ public class ProductControllerTest {
         ProductCommand command = new ProductCommand();
         command.setName("Hawaii pizza");
         command.setDescription(null);
-        command.setPrice(3490);
+        command.setPrice(3490.0);
         command.setCategoryID(1L);
 
         mockMvc.perform(post("/api/products/create")
@@ -139,7 +139,7 @@ public class ProductControllerTest {
         ProductCommand command = new ProductCommand();
         command.setName("Hawaii pizza");
         command.setDescription("Pizza with tomato sauce, cheese, ham and pineapple");
-        command.setPrice(-3690);
+        command.setPrice(-3690.0);
         command.setCategoryID(1L);
 
         mockMvc.perform(post("/api/products/create")
@@ -157,7 +157,7 @@ public class ProductControllerTest {
         ProductCommand command = new ProductCommand();
         command.setName("Hawaii pizza");
         command.setDescription("Pizza with tomato sauce, cheese, ham and pineapple");
-        command.setPrice(3690);
+        command.setPrice(3690.0);
         command.setCategoryID(null);
 
         mockMvc.perform(post("/api/products/create")
@@ -175,7 +175,7 @@ public class ProductControllerTest {
         ProductCommand command = new ProductCommand();
         command.setName("Hawaii pizza");
         command.setDescription("Pizza with tomato sauce, cheese, ham and pineapple");
-        command.setPrice(3690);
+        command.setPrice(3690.0);
         command.setCategoryID(2L);
 
         mockMvc.perform(post("/api/products/create")
@@ -237,7 +237,7 @@ public class ProductControllerTest {
         ProductModificationCommand command = new ProductModificationCommand();
         command.setName("Hawaii pizza");
         command.setDescription("Pizza with tomato sauce, cheese, ham, basil and pineapple");
-        command.setPrice(3490);
+        command.setPrice(3490.0);
 
         mockMvc.perform(put("/api/products/{name}", "Hawaii pizza")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -272,7 +272,7 @@ public class ProductControllerTest {
 
         entityManager.createNativeQuery("INSERT INTO product" +
                         "(id, name, description, price, category_id)" +
-                        "VALUES  (1, 'Hawaii pizza', 'Pizza with tomato sauce, cheese, ham and pineapple', 3490, 1)")
+                        "VALUES  (1, 'Hawaii pizza', 'Pizza with tomato sauce, cheese, ham and pineapple', 3490.0, 1)")
                 .executeUpdate();
     }
 
@@ -280,7 +280,7 @@ public class ProductControllerTest {
 
         entityManager.createNativeQuery("INSERT INTO product" +
                         "(id,name,description,price,category_id)" +
-                        "VALUES (2, 'Ham pizza', 'Pizza with tomato sauce, ham and cheese', 3390, 1)")
+                        "VALUES (2, 'Ham pizza', 'Pizza with tomato sauce, ham and cheese', 3390.0, 1)")
                 .executeUpdate();
     }
 }

@@ -3,6 +3,7 @@ package tutorial.pizzeria.service;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
+import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,6 +26,7 @@ import java.util.List;
 
 @Service
 @Transactional
+@Log
 public class OrderService {
 
     private final OrderRepository orderRepository;
@@ -55,14 +57,17 @@ public class OrderService {
         if (!product.getIsAvailable())
             throw new ProductIsCurrentlyNotAvailableException("Apologise, but this product is not available now.");
         Order order = orderGuard(session, customerId);
-        makeOrderItem(command, productId, order);
-        List<OrderItem> orderItems = orderRepository.getOrderItemsWithOrderId(order.getId());
-        return orderMapper.entityToDto(order, orderItems);
+        OrderItem orderItem = makeOrderItem(command, productId, order);
+        order.getOrderItems().add(orderItem);
+        orderRepository.save(order);
+        return orderMapper.entityToDto(order, order.getOrderItems());
     }
 
-    private void makeOrderItem(OrderCommand command, Long productId, Order order) {
-        OrderItem orderItem = orderMapper.makeOrderItem(order, productId, command);
+    private OrderItem makeOrderItem(OrderCommand command, Long productId, Order order) {
+        Product product = findProductById(productId);
+        OrderItem orderItem = orderMapper.makeOrderItem(order, product, command);
         orderItemRepository.save(orderItem);
+        return orderItem;
     }
 
     protected Order orderGuard(HttpSession session, Long customerId) {
@@ -91,7 +96,7 @@ public class OrderService {
     public OrderDetails getOrderById(Long id) {
         Order order = orderRepository.findById(id)
                 .orElseThrow(() -> new OrderNotFoundException("Sorry, there is not any Order with this id: " + id));
-        List<OrderItem> orderItems = orderRepository.getOrderItemsWithOrderId(order.getId());
+        List<OrderItem> orderItems = orderItemRepository.getOrderItemsWithOrderId(order.getId());
         return orderMapper.entityToDto(order, orderItems);
     }
 

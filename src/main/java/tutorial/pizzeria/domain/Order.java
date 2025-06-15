@@ -1,14 +1,12 @@
 package tutorial.pizzeria.domain;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Getter
-@Setter
+@Data
 @Entity(name = "purchase")
 public class Order {
 
@@ -21,16 +19,13 @@ public class Order {
     private LocalDateTime timeStamp;
 
     @Column(name = "total_price")
-    private Integer totalPrice;
+    private Double totalPrice;
 
     @Column(name = "city_of_order")
     private String city;
 
     @OneToMany(mappedBy = "order")
     private List<OrderItem> orderItems;
-
-    @OneToMany(mappedBy = "order")
-    private List<Product> products;
 
     @ManyToOne
     @JoinColumn(name = "customer_id")

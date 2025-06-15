@@ -1,11 +1,9 @@
 package tutorial.pizzeria.domain;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-@Getter
-@Setter
+@Data
 @Entity(name = "order_item")
 public class OrderItem {
 
@@ -14,9 +12,8 @@ public class OrderItem {
     @Column(name = "order_item_id")
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "product_id")
-    private Product product;
+    @Column(name = "order_item_name")
+    private String name;
 
     @ManyToOne
     @JoinColumn(name = "order_id")
@@ -28,15 +25,19 @@ public class OrderItem {
     @Column(name = "total_price")
     private Double value;
 
+    @OneToOne
+    @JoinColumn(name = "product_id")
+    private Product product;
+
     public OrderItem() {
     }
 
-    public OrderItem(Product product, Order order, Integer quantity) {
-        this.product = product;
-        this.order = order;
-        this.quantity = quantity;
-        this.value = (double) (product.getPrice() * quantity);
-    }
+//    public OrderItem(Product product, Order order, Integer quantity) {
+//        this.product = product;
+//        this.order = order;
+//        this.quantity = quantity;
+//        this.value = (double) (product.getPrice() * quantity);
+//    }
 
 }
 

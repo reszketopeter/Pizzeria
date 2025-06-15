@@ -22,14 +22,10 @@ public class Product {
     private String description;
 
     @Column(name = "price")
-    private Integer price;
+    private Double price;
 
     @Column(name = "available")
     private Boolean isAvailable;
-
-    @ManyToOne
-    @JoinColumn(name = "order_id")
-    private Order order;
 
     @ManyToOne
     @JoinColumn(name = "category_id")

@@ -20,5 +20,5 @@ public class ProductModificationCommand {
 
     @NotNull(message = "Price must be not null!")
     @Positive(message = "Price must be over zero!")
-    private Integer price;
+    private Double price;
 }

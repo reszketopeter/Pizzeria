@@ -18,7 +18,7 @@ public class ProductDetails {
 
     private String description;
 
-    private Integer price;
+    private Double price;
 
     private Category category;
 }

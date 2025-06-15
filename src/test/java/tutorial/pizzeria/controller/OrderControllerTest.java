@@ -45,7 +45,9 @@ public class OrderControllerTest {
         session = request.getSession();
     }
 
+    // In Postman it works, but here I get 500 error. Why? How should I log in first?
     @Test
+    @WithMockUser(username = "test@email.com", password = "test1Password", roles = "GUEST")
     void givenAnExistingProductId_whenCreateNewOrder_thenReturnTheResponseAndCreatedStatus() throws Exception {
 
         saveCustomer();
@@ -59,9 +61,9 @@ public class OrderControllerTest {
         command.setQuantity(1);
 
         mockMvc.perform(post("/api/orders/{productId}", 1)
-                        .session(session)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(command)))
+                        .content(objectMapper.writeValueAsString(command))
+                        .session(session))
                 .andExpect(status().isCreated());
     }
 
