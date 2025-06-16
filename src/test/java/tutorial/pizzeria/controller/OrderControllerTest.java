@@ -67,6 +67,82 @@ public class OrderControllerTest {
                 .andExpect(status().isCreated());
     }
 
+    @Test
+    void givenANonExistingCustomerId_whenCreateNewOrder_thenReturnExceptionAndNoContentStatus() throws Exception {
+
+        saveCustomer();
+        saveCategory();
+        saveProduct();
+
+        OrderCommand command = new OrderCommand();
+        command.setQuantity(1);
+
+        mockMvc.perform(post("/api/orders/{productId}", 1)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(command)))
+                .andExpect(status().isNoContent());
+    }
+
+    @Test
+    void givenAWrongCustomerId_whenCreateNewOrder_thenReturnExceptionAndNoContentStatus() throws Exception {
+
+        saveCustomer();
+        saveCategory();
+        saveProduct();
+
+        OrderCommand command = new OrderCommand();
+        command.setQuantity(1);
+
+        MockHttpSession session = new MockHttpSession();
+        session.setAttribute("customerId", 2L);
+
+
+        mockMvc.perform(post("/api/orders/{productId}", 1)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(command)))
+                .andExpect(status().isNoContent());
+    }
+
+    @Test
+    void givenANonExistingProductId_whenCreateNewOrder_thenReturnExceptionAndNotFoundStatus() throws Exception {
+
+        saveCustomer();
+        saveCategory();
+        saveProduct();
+
+        OrderCommand command = new OrderCommand();
+        command.setQuantity(1);
+
+        MockHttpSession session = new MockHttpSession();
+        session.setAttribute("customerId", 1L);
+
+        mockMvc.perform(post("/api/orders/{productId}", 2)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(command)))
+                .andExpect(status().isNoContent());
+    }
+
+    @Test
+    void givenAnExistingProductThatIsNotAvailable_whenCreateNewOrder_thenReturnExceptionAndConflictStatus()
+            throws Exception {
+
+        saveCustomer();
+        saveCategory();
+        saveAnotherProduct();
+
+        OrderCommand command = new OrderCommand();
+        command.setQuantity(1);
+
+        MockHttpSession session = new MockHttpSession();
+        session.setAttribute("customerId", 1L);
+
+        mockMvc.perform(post("/api/orders/{productId}", 2)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(command))
+                        .session(session))
+                .andExpect(status().isConflict());
+    }
+
     private void saveCategory() {
 
         entityManager.createNativeQuery("INSERT INTO category" +
@@ -80,6 +156,14 @@ public class OrderControllerTest {
         entityManager.createNativeQuery("INSERT INTO product" +
                         "(id, name, description, price, category_id)" +
                         "VALUES  (1, 'Hawaii pizza', 'Pizza with tomato sauce, cheese, ham and pineapple', 3490, 1)")
+                .executeUpdate();
+    }
+
+    private void saveAnotherProduct() {
+
+        entityManager.createNativeQuery("INSERT INTO product" +
+                        "(id, name, description, price, category_id, available)" +
+                        "VALUES  (2, 'Vegetarian pizza', 'Pizza with tomato sauce, broccoli and cheese', 3290, 1, false)")
                 .executeUpdate();
     }
 
