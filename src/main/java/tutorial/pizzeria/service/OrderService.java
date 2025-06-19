@@ -48,12 +48,9 @@ public class OrderService {
         HttpSession session = request.getSession();
         Long customerId = (Long) session.getAttribute("customerId");
         if (customerId == null) {
-            throw new CustomerIdIsNullException("The customer id is null. You have to login!");
+            throw new CustomerIdIsNullException("The customer id is null. First of all you have to login!");
         }
         Product product = findProductById(productId);
-        if (product == null) {
-            throw new ProductNotFoundException("Sorry, the product with this id " + productId + "doesn't exist!");
-        }
         if (!product.getIsAvailable())
             throw new ProductIsCurrentlyNotAvailableException("Apologise, but this product is not available now.");
         Order order = orderGuard(session, customerId);

@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import tutorial.pizzeria.dto.incoming.OrderCommand;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -80,7 +81,9 @@ public class OrderControllerTest {
         mockMvc.perform(post("/api/orders/{productId}", 1)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(command)))
-                .andExpect(status().isNoContent());
+                .andExpect(status().isNoContent())
+                .andExpect(content().string(org.hamcrest.Matchers.
+                        containsString("The customer id is null. First of all you have to login!")));
     }
 
     @Test
@@ -100,7 +103,9 @@ public class OrderControllerTest {
         mockMvc.perform(post("/api/orders/{productId}", 1)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(command)))
-                .andExpect(status().isNoContent());
+                .andExpect(status().isNoContent())
+                .andExpect(content().string(org.hamcrest.Matchers.
+                        containsString("The customer id is null. First of all you have to login!")));
     }
 
     @Test
@@ -118,8 +123,11 @@ public class OrderControllerTest {
 
         mockMvc.perform(post("/api/orders/{productId}", 2)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(command)))
-                .andExpect(status().isNoContent());
+                        .content(objectMapper.writeValueAsString(command))
+                        .session(session))
+                .andExpect(status().isNotFound())
+                .andExpect(content().string(org.hamcrest.Matchers.
+                        containsString("No product with this id in the database!")));
     }
 
     @Test
@@ -140,7 +148,9 @@ public class OrderControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(command))
                         .session(session))
-                .andExpect(status().isConflict());
+                .andExpect(status().isConflict())
+                .andExpect(content().string(org.hamcrest.Matchers.
+                        containsString("Apologise, but this product is not available now.")));
     }
 
     private void saveCategory() {
