@@ -1,0 +1,6 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://pizzeria-db:5432/pizzeria
+    username: postgres
+    password: root
+    driver-class-name: org.postgresql.Driver
