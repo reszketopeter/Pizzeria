@@ -153,6 +153,11 @@ public class OrderControllerTest {
                         containsString("Apologise, but this product is not available now.")));
     }
 
+    @Test
+    void newTest() {
+
+    }
+
     private void saveCategory() {
 
         entityManager.createNativeQuery("INSERT INTO category" +
