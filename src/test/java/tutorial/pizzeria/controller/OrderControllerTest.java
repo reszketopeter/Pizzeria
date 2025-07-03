@@ -17,6 +17,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 import tutorial.pizzeria.dto.incoming.OrderCommand;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -154,9 +155,20 @@ public class OrderControllerTest {
     }
 
     @Test
-    void newTest() {
+    void givenAnExistingOrderId_whenDeleteOrderById_thenReturnTheResponseAndOkStatus() throws Exception {
+
+        saveCategory();
+        saveProduct();
+        saveOrder();
+
+        mockMvc.perform(delete("/api/orders/{id},"1))
 
     }
+
+//    private void saveOrder() {
+//
+//        entityManager.createNativeQuery("INSERT INTO )
+//    }
 
     private void saveCategory() {
 
