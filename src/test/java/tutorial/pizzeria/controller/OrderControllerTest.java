@@ -157,11 +157,18 @@ public class OrderControllerTest {
     @Test
     void givenAnExistingOrderId_whenDeleteOrderById_thenReturnTheResponseAndOkStatus() throws Exception {
 
+        saveCustomer();
         saveCategory();
         saveProduct();
-        saveOrder();
+//        saveOrder();
 
-        mockMvc.perform(delete("/api/orders/{id},"1))
+        MockHttpSession session = new MockHttpSession();
+        session.setAttribute("customerId", 1L);
+
+        mockMvc.perform(delete("/api/orders/{id}", 1)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .session(session))
+                .andExpect(status().isOk());
 
     }
 
