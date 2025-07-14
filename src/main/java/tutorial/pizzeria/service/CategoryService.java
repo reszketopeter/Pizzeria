@@ -45,7 +45,7 @@ public class CategoryService {
 
     public void deleteCategory(String name) {
         Category category = categoryRepository.findByName(name)
-                .orElseThrow(() -> new CategoryAlreadyExistsException("There is a category with this name in the " +
+                .orElseThrow(() -> new CategoryNotFoundException("There is no category with this name in the " +
                         "system."));
         categoryRepository.delete(category);
     }

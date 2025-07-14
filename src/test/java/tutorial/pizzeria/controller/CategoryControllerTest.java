@@ -157,6 +157,17 @@ public class CategoryControllerTest {
                         ("You successfully deleted the category!")));
     }
 
+    @Test
+    void givenANonExistingCategoryName_whenDeleteCategory_thenReturnTheExceptionAndNotFoundStatus() throws Exception {
+
+        saveCategory();
+
+        mockMvc.perform(delete("/api/categories/{name}", "Soup")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                .andExpect(content().string(org.hamcrest.Matchers.containsString
+                        ("There is no category with this name in the system.")));
+    }
 
     private void saveCategory() {
 
