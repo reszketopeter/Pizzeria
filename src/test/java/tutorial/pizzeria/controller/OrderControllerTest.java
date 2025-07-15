@@ -160,7 +160,7 @@ public class OrderControllerTest {
         saveCustomer();
         saveCategory();
         saveProduct();
-//        saveOrder();
+        saveOrder();
 
         MockHttpSession session = new MockHttpSession();
         session.setAttribute("customerId", 1L);
@@ -172,10 +172,13 @@ public class OrderControllerTest {
 
     }
 
-//    private void saveOrder() {
-//
-//        entityManager.createNativeQuery("INSERT INTO )
-//    }
+    private void saveOrder() {
+
+        entityManager.createNativeQuery("INSERT INTO purchase" +
+                        "(id, time_stamp, total_price, city_of_order, customer_id, order_status)" +
+                        "VALUES (1,2025-07-15., 2490, 'Budapest', 1, 'PENDING')")
+                .executeUpdate();
+    }
 
     private void saveCategory() {
 
