@@ -11,8 +11,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpSession;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 import tutorial.pizzeria.dto.incoming.OrderCommand;
@@ -26,6 +26,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 @Transactional
 @AutoConfigureMockMvc
+@ActiveProfiles("test")
 public class OrderControllerTest {
 
     @Autowired
@@ -47,9 +48,9 @@ public class OrderControllerTest {
         session = request.getSession();
     }
 
-    // In Postman it works, but here I get 500 error. Why? How should I log in first?
+    // In PostMan it works, but here I get 500 error. Why? How should I log in first?
     @Test
-    @WithMockUser(username = "test@email.com", password = "test1Password", roles = "GUEST")
+//    @WithMockUser(username = "test@email.com", password = "test1Password", roles = "GUEST")
     void givenAnExistingProductId_whenCreateNewOrder_thenReturnTheResponseAndCreatedStatus() throws Exception {
 
         saveCustomer();
@@ -62,11 +63,14 @@ public class OrderControllerTest {
         OrderCommand command = new OrderCommand();
         command.setQuantity(1);
 
+
         mockMvc.perform(post("/api/orders/{productId}", 1)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(command))
                         .session(session))
                 .andExpect(status().isCreated());
+
+
     }
 
     @Test
@@ -79,7 +83,7 @@ public class OrderControllerTest {
         OrderCommand command = new OrderCommand();
         command.setQuantity(1);
 
-        mockMvc.perform(post("/api/orders/{productId}", 1)
+        mockMvc.perform(post("/api/orders/{productId}", 1L)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(command)))
                 .andExpect(status().isNoContent())
@@ -172,11 +176,32 @@ public class OrderControllerTest {
 
     }
 
+    @Test
+    void givenANonExistingOrderId_whenDeleteOrderById_thenReturnTheResponseAndNotFoundStatus() throws Exception {
+
+        saveCustomer();
+        saveCategory();
+        saveProduct();
+        saveOrder();
+
+        MockHttpSession session = new MockHttpSession();
+        session.setAttribute("customerId", 1L);
+
+        mockMvc.perform(delete("/api/orders/{id}", 2)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .session(session))
+                .andExpect(status().isNotFound())
+                .andExpect(content().string(org.hamcrest.Matchers.
+                        containsString("Sorry, there is not any Order with this id: 2")));
+
+    }
+
+
     private void saveOrder() {
 
         entityManager.createNativeQuery("INSERT INTO purchase" +
                         "(id, time_stamp, total_price, city_of_order, customer_id, order_status)" +
-                        "VALUES (1,2025-07-15., 2490, 'Budapest', 1, 'PENDING')")
+                        "VALUES (1,'2025-07-15', 2490, 'Budapest', 1, 'PENDING')")
                 .executeUpdate();
     }
 

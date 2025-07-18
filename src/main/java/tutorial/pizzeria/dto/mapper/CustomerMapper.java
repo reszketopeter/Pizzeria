@@ -2,6 +2,7 @@ package tutorial.pizzeria.dto.mapper;
 
 import org.springframework.stereotype.Component;
 import tutorial.pizzeria.domain.Customer;
+import tutorial.pizzeria.domain.UserRole;
 import tutorial.pizzeria.dto.incoming.RegisterCommand;
 import tutorial.pizzeria.dto.outgoing.CustomerDetails;
 import tutorial.pizzeria.dto.outgoing.CustomerListItem;
@@ -20,6 +21,7 @@ public class CustomerMapper {
         customer.setPostalCode(command.getPostalCode());
         customer.setCity(command.getCity());
         customer.setAddress(command.getAddress());
+        customer.setUserRole(UserRole.GUEST);
 
         return customer;
     }

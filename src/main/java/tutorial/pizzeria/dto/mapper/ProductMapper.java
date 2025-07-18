@@ -1,6 +1,7 @@
 package tutorial.pizzeria.dto.mapper;
 
 import org.springframework.stereotype.Component;
+import tutorial.pizzeria.domain.Category;
 import tutorial.pizzeria.domain.Product;
 import tutorial.pizzeria.dto.incoming.ProductCommand;
 import tutorial.pizzeria.dto.outgoing.ProductDetails;
@@ -16,16 +17,16 @@ public class ProductMapper {
 
         ProductDetails productDetails = new ProductDetails();
 
-        productDetails.setProductId(productDetails.getProductId());
+        productDetails.setProductId(product.getId());
         productDetails.setName(product.getName());
         productDetails.setDescription(product.getDescription());
         productDetails.setPrice(product.getPrice());
-        productDetails.setCategory(product.getCategory());
+        productDetails.setCategoryName(product.getCategory().getName());
 
         return productDetails;
     }
 
-    public Product dtoToEntity(ProductCommand command) {
+    public Product dtoToEntity(ProductCommand command, Category category) {
 
         Product product = new Product();
 
@@ -33,6 +34,7 @@ public class ProductMapper {
         product.setDescription(command.getDescription());
         product.setPrice(command.getPrice());
         product.setIsAvailable(true);
+        product.setCategory(category);
 
         return product;
 

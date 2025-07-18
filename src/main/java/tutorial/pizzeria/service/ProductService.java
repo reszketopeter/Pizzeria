@@ -38,10 +38,10 @@ public class ProductService {
             throw new ProductAlreadyExistException
                     ("There is already a product with this name in the database!");
         }
-        Category category = categoryRepository.findById(command.getCategoryID())
+        Category category = categoryRepository.findById(command.getCategoryId())
                 .orElseThrow(() -> new CategoryNotFoundException
-                        ("Sorry, the category with this id" + command.getCategoryID() + "does not exist"));
-        Product newProduct = productMapper.dtoToEntity(command);
+                        ("Sorry, the category with this id" + command.getCategoryId() + "does not exist"));
+        Product newProduct = productMapper.dtoToEntity(command, category);
         newProduct.setCategory(category);
         productRepository.save(newProduct);
         return productMapper.entityToDto(newProduct);

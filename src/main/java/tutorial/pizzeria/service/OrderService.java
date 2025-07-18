@@ -21,7 +21,7 @@ import tutorial.pizzeria.repository.OrderItemRepository;
 import tutorial.pizzeria.repository.OrderRepository;
 import tutorial.pizzeria.repository.ProductRepository;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -54,9 +54,9 @@ public class OrderService {
         if (!product.getIsAvailable())
             throw new ProductIsCurrentlyNotAvailableException("Apologise, but this product is not available now.");
         Order order = orderGuard(session, customerId);
+        orderRepository.save(order);
         OrderItem orderItem = makeOrderItem(command, productId, order);
         order.getOrderItems().add(orderItem);
-        orderRepository.save(order);
         return orderMapper.entityToDto(order, order.getOrderItems());
     }
 
@@ -119,7 +119,7 @@ public class OrderService {
                 .orElseThrow(() -> new OrderNotFoundException("Sorry, we didn't find any order with this id "
                         + command.getOrderId() + "in the system"));
         order.setOrderStatus(OrderStatus.DELIVERED);
-        order.setTimeStamp(LocalDateTime.now());
+        order.setTimeStamp(LocalDate.now());
         return orderMapper.makeDeliverDetails(order);
     }
 }

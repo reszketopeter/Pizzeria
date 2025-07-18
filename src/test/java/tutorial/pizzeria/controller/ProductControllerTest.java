@@ -2,6 +2,7 @@ package tutorial.pizzeria.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.EntityManager;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,13 +47,13 @@ public class ProductControllerTest {
         command.setName("Hawaii pizza");
         command.setDescription("Pizza with tomato sauce, cheese, ham and pineapple");
         command.setPrice(3490.0);
-        command.setCategoryID(1L);
+        command.setCategoryId(1L);
 
         mockMvc.perform(post("/api/products/create")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(command)))
                 .andExpect(status().isCreated())
-                .andExpect(content().string(org.hamcrest.Matchers.containsString("Hawaii pizza")));
+                .andExpect(content().string(Matchers.containsString("Hawaii pizza")));
     }
 
     @Test
@@ -66,7 +67,7 @@ public class ProductControllerTest {
         command.setName("Hawaii pizza");
         command.setDescription("Pizza with tomato sauce, cheese, ham and pineapple");
         command.setPrice(3490.0);
-        command.setCategoryID(1L);
+        command.setCategoryId(1L);
 
         mockMvc.perform(post("/api/products/create")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -86,7 +87,7 @@ public class ProductControllerTest {
         command.setName(null);
         command.setDescription("Pizza with tomato sauce, cheese, ham and pineapple");
         command.setPrice(3490.0);
-        command.setCategoryID(1L);
+        command.setCategoryId(1L);
 
         mockMvc.perform(post("/api/products/create")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -104,7 +105,7 @@ public class ProductControllerTest {
         command.setName("Hawaii pizza");
         command.setDescription(null);
         command.setPrice(3490.0);
-        command.setCategoryID(1L);
+        command.setCategoryId(1L);
 
         mockMvc.perform(post("/api/products/create")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -122,7 +123,7 @@ public class ProductControllerTest {
         command.setName("Hawaii pizza");
         command.setDescription("Pizza with tomato sauce, cheese, ham and pineapple");
         command.setPrice(null);
-        command.setCategoryID(1L);
+        command.setCategoryId(1L);
 
         mockMvc.perform(post("/api/products/create")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -140,7 +141,7 @@ public class ProductControllerTest {
         command.setName("Hawaii pizza");
         command.setDescription("Pizza with tomato sauce, cheese, ham and pineapple");
         command.setPrice(-3690.0);
-        command.setCategoryID(1L);
+        command.setCategoryId(1L);
 
         mockMvc.perform(post("/api/products/create")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -158,7 +159,7 @@ public class ProductControllerTest {
         command.setName("Hawaii pizza");
         command.setDescription("Pizza with tomato sauce, cheese, ham and pineapple");
         command.setPrice(3690.0);
-        command.setCategoryID(null);
+        command.setCategoryId(null);
 
         mockMvc.perform(post("/api/products/create")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -176,7 +177,7 @@ public class ProductControllerTest {
         command.setName("Hawaii pizza");
         command.setDescription("Pizza with tomato sauce, cheese, ham and pineapple");
         command.setPrice(3690.0);
-        command.setCategoryID(2L);
+        command.setCategoryId(2L);
 
         mockMvc.perform(post("/api/products/create")
                         .contentType(MediaType.APPLICATION_JSON)

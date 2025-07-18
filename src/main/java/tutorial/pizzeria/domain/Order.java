@@ -1,9 +1,10 @@
 package tutorial.pizzeria.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
 @Data
@@ -16,7 +17,8 @@ public class Order {
     private Long id;
 
     @Column(name = "time_stamp")
-    private LocalDateTime timeStamp;
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private LocalDate timeStamp;
 
     @Column(name = "total_price")
     private Double totalPrice;

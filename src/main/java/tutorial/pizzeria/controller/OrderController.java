@@ -26,7 +26,7 @@ public class OrderController {
     }
 
     @PostMapping("/{productId}")
-    public ResponseEntity<OrderDetails> createNewOrder(@RequestBody @Valid OrderCommand command,
+    public ResponseEntity<OrderDetails> createNewOrder(@Valid @RequestBody OrderCommand command,
                                                        @PathVariable Long productId, HttpServletRequest request) {
         log.info("Create New Order");
         OrderDetails response = orderService.createNewOrder(command, productId, request);
@@ -34,7 +34,7 @@ public class OrderController {
     }
 
     @PutMapping("/deliver")
-    public ResponseEntity<DeliverDetails> deliverOrder(@RequestBody @Valid DeliverCommand command) {
+    public ResponseEntity<DeliverDetails> deliverOrder(@Valid @RequestBody DeliverCommand command) {
         log.info("Delivering to user id: {} order id: {}", command.getCustomerId(), command.getOrderId());
         DeliverDetails details = orderService.updateToDelivered(command);
         log.debug("Delivering was successful: {}", details);

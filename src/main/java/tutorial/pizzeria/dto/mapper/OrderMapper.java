@@ -7,10 +7,9 @@ import tutorial.pizzeria.dto.incoming.OrderCommand;
 import tutorial.pizzeria.dto.outgoing.DeliverDetails;
 import tutorial.pizzeria.dto.outgoing.OrderDetails;
 import tutorial.pizzeria.dto.outgoing.OrderItemDetails;
-import tutorial.pizzeria.exception.ProductNotFoundException;
 import tutorial.pizzeria.repository.OrderRepository;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,6 +31,7 @@ public class OrderMapper {
 
         orderDetails.setCustomerId(order.getCustomer().getId());
         orderDetails.setOrderId(order.getId());
+        orderDetails.setTimeStamp(order.getTimeStamp());
         orderDetails.setOrderPriceFT(order.getOrderItems().stream()
                 .mapToDouble(item -> item.getQuantity() * item.getValue())
                 .sum());
@@ -64,13 +64,13 @@ public class OrderMapper {
         Order order = new Order();
 
         order.setCustomer(customer);
-        order.setTimeStamp(LocalDateTime.now());
+        order.setTimeStamp(LocalDate.now());
         order.setCity(customer.getCity());
         order.setOrderStatus(OrderStatus.PENDING);
         order.setOrderItems(new ArrayList<>());
-//        order.setTotalPrice(order.getOrderItems().stream()
-//                .mapToDouble(item -> item.getQuantity() * item.getValue())
-//                .sum());
+        order.setTotalPrice(order.getOrderItems().stream()
+                .mapToDouble(item -> item.getQuantity() * item.getValue())
+                .sum());
 
         return order;
     }

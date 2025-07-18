@@ -25,12 +25,10 @@ public class OrderItem {
     @Column(name = "total_price")
     private Double value;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "product_id")
     private Product product;
 
-    public OrderItem() {
-    }
 
 //    public OrderItem(Product product, Order order, Integer quantity) {
 //        this.product = product;

@@ -20,5 +20,5 @@ public class ProductDetails {
 
     private Double price;
 
-    private Category category;
+    private String categoryName;
 }
