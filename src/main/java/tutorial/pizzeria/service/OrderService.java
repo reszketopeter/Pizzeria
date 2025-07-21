@@ -54,9 +54,9 @@ public class OrderService {
         if (!product.getIsAvailable())
             throw new ProductIsCurrentlyNotAvailableException("Apologise, but this product is not available now.");
         Order order = orderGuard(session, customerId);
-        orderRepository.save(order);
         OrderItem orderItem = makeOrderItem(command, productId, order);
         order.getOrderItems().add(orderItem);
+        orderRepository.save(order);
         return orderMapper.entityToDto(order, order.getOrderItems());
     }
 

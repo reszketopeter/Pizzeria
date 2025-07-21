@@ -30,12 +30,5 @@ public class OrderItem {
     private Product product;
 
 
-//    public OrderItem(Product product, Order order, Integer quantity) {
-//        this.product = product;
-//        this.order = order;
-//        this.quantity = quantity;
-//        this.value = (double) (product.getPrice() * quantity);
-//    }
-
 }
 

@@ -48,9 +48,8 @@ public class OrderControllerTest {
         session = request.getSession();
     }
 
-    // In PostMan it works, but here I get 500 error. Why? How should I log in first?
+    // The problem is in the OrderService. The Order is created earlier, than the OrderItem is added to the Order.
     @Test
-//    @WithMockUser(username = "test@email.com", password = "test1Password", roles = "GUEST")
     void givenAnExistingProductId_whenCreateNewOrder_thenReturnTheResponseAndCreatedStatus() throws Exception {
 
         saveCustomer();
@@ -69,8 +68,6 @@ public class OrderControllerTest {
                         .content(objectMapper.writeValueAsString(command))
                         .session(session))
                 .andExpect(status().isCreated());
-
-
     }
 
     @Test

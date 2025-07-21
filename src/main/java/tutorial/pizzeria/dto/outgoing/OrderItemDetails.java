@@ -1,5 +1,6 @@
 package tutorial.pizzeria.dto.outgoing;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -7,6 +8,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 public class OrderItemDetails {
 
     private Long productId;

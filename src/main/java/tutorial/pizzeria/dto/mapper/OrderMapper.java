@@ -92,9 +92,9 @@ public class OrderMapper {
         OrderItem orderItem = new OrderItem();
 
         orderItem.setName(product.getName());
+//        orderItem.setOrder(order);
         orderItem.setQuantity(command.getQuantity());
         orderItem.setValue(product.getPrice());
-        orderItem.setOrder(order);
         orderItem.setProduct(product);
 
         return orderItem;
