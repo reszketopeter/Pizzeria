@@ -56,15 +56,14 @@ public class OrderService {
         Order order = orderGuard(session, customerId);
         OrderItem orderItem = makeOrderItem(command, productId, order);
         order.getOrderItems().add(orderItem);
-        orderRepository.save(order);
-        return orderMapper.entityToDto(order, order.getOrderItems());
+        Order orderWithPrice = orderMapper.calculateOrderPrice(order);
+        orderRepository.save(orderWithPrice);
+        return orderMapper.entityToDto(orderWithPrice, orderWithPrice.getOrderItems());
     }
 
     private OrderItem makeOrderItem(OrderCommand command, Long productId, Order order) {
         Product product = findProductById(productId);
-        OrderItem orderItem = orderMapper.makeOrderItem(order, product, command);
-        orderItemRepository.save(orderItem);
-        return orderItem;
+        return orderMapper.makeOrderItem(order, product, command);
     }
 
     protected Order orderGuard(HttpSession session, Long customerId) {
@@ -80,9 +79,7 @@ public class OrderService {
 
     private Order makeOrder(Long customerId) {
         Customer customer = customerService.findCustomerById(customerId);
-        Order order = orderMapper.makeOrder(customer);
-        orderRepository.save(order);
-        return order;
+        return orderMapper.makeOrder(customer);
     }
 
     protected Product findProductById(Long productId) {

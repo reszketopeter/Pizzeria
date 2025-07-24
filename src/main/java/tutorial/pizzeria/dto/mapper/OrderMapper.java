@@ -25,14 +25,14 @@ public class OrderMapper {
         this.orderRepository = orderRepository;
     }
 
-    public OrderDetails entityToDto(Order order, List<OrderItem> orderItems) {
+    public OrderDetails entityToDto(Order orderWithPrice, List<OrderItem> orderItems) {
 
         OrderDetails orderDetails = new OrderDetails();
 
-        orderDetails.setCustomerId(order.getCustomer().getId());
-        orderDetails.setOrderId(order.getId());
-        orderDetails.setTimeStamp(order.getTimeStamp());
-        orderDetails.setOrderPriceFT(order.getOrderItems().stream()
+        orderDetails.setCustomerId(orderWithPrice.getCustomer().getId());
+        orderDetails.setOrderId(orderWithPrice.getId());
+        orderDetails.setTimeStamp(orderWithPrice.getTimeStamp());
+        orderDetails.setOrderPriceFT(orderWithPrice.getOrderItems().stream()
                 .mapToDouble(item -> item.getQuantity() * item.getValue())
                 .sum());
         orderDetails.setOrderItemDetails(makeOrderItemDetailsList(orderItems));
@@ -68,9 +68,6 @@ public class OrderMapper {
         order.setCity(customer.getCity());
         order.setOrderStatus(OrderStatus.PENDING);
         order.setOrderItems(new ArrayList<>());
-        order.setTotalPrice(order.getOrderItems().stream()
-                .mapToDouble(item -> item.getQuantity() * item.getValue())
-                .sum());
 
         return order;
     }
@@ -92,12 +89,21 @@ public class OrderMapper {
         OrderItem orderItem = new OrderItem();
 
         orderItem.setName(product.getName());
-//        orderItem.setOrder(order);
+        orderItem.setOrder(order);
         orderItem.setQuantity(command.getQuantity());
         orderItem.setValue(product.getPrice());
         orderItem.setProduct(product);
 
         return orderItem;
+    }
+
+    public Order calculateOrderPrice(Order order) {
+
+        order.setTotalPrice(order.getOrderItems().stream()
+                .mapToDouble(item -> item.getQuantity() * item.getValue())
+                .sum());
+
+        return order;
     }
 }
 
