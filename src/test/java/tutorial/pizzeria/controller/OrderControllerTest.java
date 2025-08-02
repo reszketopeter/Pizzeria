@@ -71,6 +71,11 @@ public class OrderControllerTest {
     }
 
     @Test
+    void givenAnAlreadyExistingOrder_whenCreateOrder_thenFindThePreviousOrder() throws Exception {
+
+    }
+
+    @Test
     void givenANonExistingCustomerId_whenCreateNewOrder_thenReturnExceptionAndNoContentStatus() throws Exception {
 
         saveCustomer();
