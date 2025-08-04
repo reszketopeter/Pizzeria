@@ -73,6 +73,9 @@ public class OrderControllerTest {
     @Test
     void givenAnAlreadyExistingOrder_whenCreateOrder_thenFindThePreviousOrder() throws Exception {
 
+        saveOrder();
+        saveCategory();
+        saveProduct();
     }
 
     @Test
