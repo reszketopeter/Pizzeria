@@ -70,12 +70,47 @@ public class OrderControllerTest {
                 .andExpect(status().isCreated());
     }
 
+    // NullPointer. Why?
+    @Test
+    void givenANonExistingCustomerId_whenCreateNewOrder_thenReturnTheResponseAndNotFoundException() throws Exception {
+
+        saveCategory();
+        saveProduct();
+
+        MockHttpSession session = new MockHttpSession();
+        session.setAttribute("customerId", 1L);
+
+        OrderCommand command = new OrderCommand();
+        command.setQuantity(1);
+
+        mockMvc.perform(post("/api/orders/{productId}", 1)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(command))
+                        .session(session))
+                .andExpect(status().isNotFound())
+                .andExpect(content().string(org.hamcrest.Matchers
+                        .containsString("Customer not found with this id: 1L")));
+    }
+
     @Test
     void givenAnAlreadyExistingOrder_whenCreateOrder_thenFindThePreviousOrder() throws Exception {
 
-        saveOrder();
+        saveCustomer();
         saveCategory();
         saveProduct();
+        saveOrder();
+
+        MockHttpSession session = new MockHttpSession();
+        session.setAttribute("customerId", 1L);
+
+        OrderCommand command = new OrderCommand();
+        command.setQuantity(1);
+
+        mockMvc.perform(post("/api/orders/{productId}", 1)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(command))
+                        .session(session))
+                .andExpect(status().isCreated());
     }
 
     @Test

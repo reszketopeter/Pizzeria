@@ -61,7 +61,7 @@ public class OrderService {
         return orderMapper.entityToDto(orderWithPrice, orderWithPrice.getOrderItems());
     }
 
-    private OrderItem makeOrderItem(OrderCommand command, Long productId, Order order) {
+    protected OrderItem makeOrderItem(OrderCommand command, Long productId, Order order) {
         Product product = findProductById(productId);
         return orderMapper.makeOrderItem(order, product, command);
     }
@@ -71,13 +71,13 @@ public class OrderService {
         return orderToFind == null ? makeOrderAndSetSessionAttribute(session, customerId) : orderToFind;
     }
 
-    private Order makeOrderAndSetSessionAttribute(HttpSession session, Long customerId) {
+    protected Order makeOrderAndSetSessionAttribute(HttpSession session, Long customerId) {
         Order order = makeOrder(customerId);
         session.setAttribute("orderId", order.getId());
         return order;
     }
 
-    private Order makeOrder(Long customerId) {
+    protected Order makeOrder(Long customerId) {
         Customer customer = customerService.findCustomerById(customerId);
         return orderMapper.makeOrder(customer);
     }

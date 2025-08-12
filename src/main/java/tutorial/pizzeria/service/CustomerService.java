@@ -83,9 +83,8 @@ public class CustomerService implements UserDetailsService {
     }
 
     protected Customer findCustomerById(Long id) {
-        Customer customer = customerRepository.findById(id)
+        return customerRepository.findById(id)
                 .orElseThrow(() -> new CustomerNotFoundException("Customer not found with this id: " + id));
-        return customer;
     }
 
     public List<CustomerListItem> findAll() {
