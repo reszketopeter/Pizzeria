@@ -48,7 +48,6 @@ public class OrderControllerTest {
         session = request.getSession();
     }
 
-    // The problem is in the OrderService. The Order is created earlier, than the OrderItem is added to the Order.
     @Test
     void givenAnExistingProductId_whenCreateNewOrder_thenReturnTheResponseAndCreatedStatus() throws Exception {
 
@@ -70,15 +69,15 @@ public class OrderControllerTest {
                 .andExpect(status().isCreated());
     }
 
-    // NullPointer. Why?
     @Test
     void givenANonExistingCustomerId_whenCreateNewOrder_thenReturnTheResponseAndNotFoundException() throws Exception {
 
+        saveCustomer();
         saveCategory();
         saveProduct();
 
         MockHttpSession session = new MockHttpSession();
-        session.setAttribute("customerId", 1L);
+        session.setAttribute("customerId", 999L);
 
         OrderCommand command = new OrderCommand();
         command.setQuantity(1);
@@ -87,9 +86,9 @@ public class OrderControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(command))
                         .session(session))
-                .andExpect(status().isNotFound())
                 .andExpect(content().string(org.hamcrest.Matchers
-                        .containsString("Customer not found with this id: 1L")));
+                        .containsString("Customer not found with this id: 999")))
+                .andExpect(status().isNotFound());
     }
 
     @Test
@@ -119,6 +118,9 @@ public class OrderControllerTest {
         saveCustomer();
         saveCategory();
         saveProduct();
+
+        MockHttpSession session = new MockHttpSession();
+        session.setAttribute("customerId", null);
 
         OrderCommand command = new OrderCommand();
         command.setQuantity(1);
@@ -256,8 +258,8 @@ public class OrderControllerTest {
     private void saveProduct() {
 
         entityManager.createNativeQuery("INSERT INTO product" +
-                        "(id, name, description, price, category_id)" +
-                        "VALUES  (1, 'Hawaii pizza', 'Pizza with tomato sauce, cheese, ham and pineapple', 3490, 1)")
+                        "(id, name, description, price, category_id, available)" +
+                        "VALUES  (1, 'Hawaii pizza', 'Pizza with tomato sauce, cheese, ham and pineapple', 3490, 1, true)")
                 .executeUpdate();
     }
 

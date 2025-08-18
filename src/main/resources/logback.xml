@@ -54,12 +54,20 @@
     <root level="info">
         <appender-ref ref="STDOUT"/>
         <appender-ref ref="FILE"/>
+        <appender-ref ref="ERROR_FILE"/>
     </root>
 
-    <!-- Logger for Errors -->
-    <logger name="tutorial.pizzeria.exception" level="debug" additivity="false">
+    <!--    &lt;!&ndash; Logger for Errors &ndash;&gt;-->
+    <!--    <logger name="tutorial.pizzeria.exception" level="debug" additivity="false">-->
+    <!--        <appender-ref ref="STDOUT"/>-->
+    <!--        <appender-ref ref="FILE"/>-->
+    <!--        <appender-ref ref="ERROR_FILE"/>-->
+    <!--    </logger>-->
+
+    <logger name="tutorial.pizzeria.service" level="info" additivity="false">
         <appender-ref ref="STDOUT"/>
         <appender-ref ref="FILE"/>
+        <appender-ref ref="ERROR_FILE"/>
     </logger>
 
     <!--    &lt;!&ndash; Logger for Temporary Logs &ndash;&gt;-->

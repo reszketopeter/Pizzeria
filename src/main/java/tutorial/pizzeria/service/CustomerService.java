@@ -1,5 +1,6 @@
 package tutorial.pizzeria.service;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -25,6 +26,7 @@ import java.util.List;
 
 @Service
 @Transactional(isolation = Isolation.SERIALIZABLE)
+@Slf4j
 public class CustomerService implements UserDetailsService {
 
     private final CustomerRepository customerRepository;
@@ -83,6 +85,7 @@ public class CustomerService implements UserDetailsService {
     }
 
     protected Customer findCustomerById(Long id) {
+        log.info("Looking for customer with id: {}", id);
         return customerRepository.findById(id)
                 .orElseThrow(() -> new CustomerNotFoundException("Customer not found with this id: " + id));
     }
