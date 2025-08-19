@@ -1,6 +1,9 @@
 package tutorial.pizzeria.controller;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,7 +17,14 @@ import org.springframework.transaction.annotation.Transactional;
 import tutorial.pizzeria.domain.Customer;
 import tutorial.pizzeria.domain.Recommendation;
 import tutorial.pizzeria.dto.incoming.ReviewCommand;
+import tutorial.pizzeria.dto.outgoing.ReviewListItemWithTime;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -24,7 +34,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 @Transactional
 @AutoConfigureMockMvc
-public class ReviewControllerTest {
+public class ReviewTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -37,6 +47,8 @@ public class ReviewControllerTest {
     @BeforeEach
     void init() {
         objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule());
+        objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
     }
 
     @Test
@@ -141,7 +153,6 @@ public class ReviewControllerTest {
                         .containsString("Not found any review with this condition: NO")));
     }
 
-    // How should I test the chronological order?
     @Test
     void givenMoreReviews_whenGetReviewsByChronologicalDesc_thenReturnTheResponseAndOkStatus() throws Exception {
 
@@ -150,11 +161,41 @@ public class ReviewControllerTest {
         saveProduct();
         saveReview();
         saveAnotherReview();
+        saveThirdReview();
+
+        String responseContent = mockMvc.perform(get("/api/reviews/chronological")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+
+        List<ReviewListItemWithTime> reviews = objectMapper.readValue(responseContent, new TypeReference<>() {
+        });
+        List<LocalDateTime> timestamps = reviews.stream()
+                .map(ReviewListItemWithTime::getTimestamp)
+                .toList();
+
+        List<LocalDateTime> sorted = new ArrayList<>(timestamps);
+        sorted.sort(Comparator.reverseOrder());
+
+        assertEquals(sorted, timestamps, "The reviews are not in chronological order.");
+    }
+
+    @Test
+    void givenNoReviews_whenGetReviewsByChronologicalDesc_thenReturnTheResponseAndNotFoundStatus() throws Exception {
+
+        saveCustomer();
+        saveCategory();
+        saveProduct();
 
         mockMvc.perform(get("/api/reviews/chronological")
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk());
+                .andExpect(status().isNotFound())
+                .andExpect(content().string(org.hamcrest.Matchers.
+                        containsString("Sorry, we didn't find any reviews!")));
     }
+
 
     @Test
     void givenAnExistingReviewId_whenDeleteReview_thenReturnTheResponseAndOkStatus() throws Exception {
@@ -216,7 +257,7 @@ public class ReviewControllerTest {
 
         entityManager.createNativeQuery("INSERT INTO review" +
                         "(id,content,is_recommend,timestamp,customer_id)" +
-                        "VALUES (1, 'very good','Yes','2025-04-27 12:00:00',1)")
+                        "VALUES (1, 'very good','YES','2025-04-27 12:00:00',1)")
                 .executeUpdate();
     }
 
@@ -224,7 +265,15 @@ public class ReviewControllerTest {
 
         entityManager.createNativeQuery("INSERT INTO review" +
                         "(id,content,is_recommend,timestamp,customer_id)" +
-                        "VALUES (2, 'good','Yes','2025-04-23 15:32:05',1)")
+                        "VALUES (2, 'good', 'YES','2025-04-23 15:32:05',1)")
+                .executeUpdate();
+    }
+
+    private void saveThirdReview() {
+
+        entityManager.createNativeQuery("INSERT INTO review" +
+                        "(id,content,is_recommend,timestamp,customer_id)" +
+                        "VALUES (3, 'horrible', 'NO','2025-05-20 17:42:05',1)")
                 .executeUpdate();
     }
 

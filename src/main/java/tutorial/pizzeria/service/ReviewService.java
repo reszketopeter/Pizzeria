@@ -26,7 +26,8 @@ public class ReviewService {
     private final ProductRepository productRepository;
 
     @Autowired
-    public ReviewService(ReviewRepository reviewRepository, ReviewMapper reviewMapper, ProductRepository productRepository) {
+    public ReviewService(ReviewRepository reviewRepository, ReviewMapper reviewMapper,
+                         ProductRepository productRepository) {
         this.reviewRepository = reviewRepository;
         this.reviewMapper = reviewMapper;
         this.productRepository = productRepository;
@@ -42,7 +43,8 @@ public class ReviewService {
 
     public void deleteReview(Long id) {
         Review review = reviewRepository.findById(id)
-                .orElseThrow(() -> new ReviewNotFoundException("Sorry, the review with this id " + id + " does not exist."));
+                .orElseThrow(() ->
+                        new ReviewNotFoundException("Sorry, the review with this id " + id + " does not exist."));
         reviewRepository.delete(review);
     }
 

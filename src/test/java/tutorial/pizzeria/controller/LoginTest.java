@@ -17,13 +17,12 @@ import tutorial.pizzeria.dto.incoming.LoginCommand;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static tutorial.pizzeria.domain.UserRole.ADMIN;
 
 @SpringBootTest
 @AutoConfigureMockMvc
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 @Transactional
-public class LoginControllerTest {
+public class LoginTest {
 
     @Autowired
     private MockMvc mockMvc;

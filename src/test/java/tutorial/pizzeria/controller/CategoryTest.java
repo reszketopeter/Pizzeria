@@ -23,7 +23,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @Transactional
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
-public class CategoryControllerTest {
+public class CategoryTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -48,7 +48,7 @@ public class CategoryControllerTest {
         mockMvc.perform(post("/api/categories/create")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(command)))
-                .andExpect(result -> assertEquals("You have successfully created a new category",
+                .andExpect(result -> assertEquals("You have successfully created a new category!",
                         result.getResponse().getContentAsString()))
                 .andExpect(status().isCreated());
     }
