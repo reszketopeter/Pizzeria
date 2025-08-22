@@ -1,5 +1,9 @@
 package tutorial.pizzeria.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +18,7 @@ import tutorial.pizzeria.service.CustomerService;
 
 import java.util.List;
 
+@Tag(name = "Customer API", description = "Customer manager operations: registration, searching, modification, delete")
 @RestController
 @Slf4j
 @RequestMapping("/api/customers")
@@ -26,6 +31,12 @@ public class CustomerController {
         this.customerService = customerService;
     }
 
+    @Operation(summary = "New customer registration", description = "The new customer is registered based on the data.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Successful registration"),
+            @ApiResponse(responseCode = "400", description = "Wrong input"),
+            @ApiResponse(responseCode = "500", description = "Server failure")
+    })
     @PostMapping("/register")
     public ResponseEntity<String> register(@Valid @RequestBody RegisterCommand command) {
         log.info("Post register customer {}", command);
