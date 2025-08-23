@@ -1,5 +1,9 @@
 package tutorial.pizzeria.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +16,7 @@ import tutorial.pizzeria.dto.outgoing.ProductDetails;
 import tutorial.pizzeria.dto.outgoing.ProductListItem;
 import tutorial.pizzeria.service.ProductService;
 
+@Tag(name = "Product API", description = "Operations related to category creation, retrieval, update and deletion")
 @Slf4j
 @RestController
 @RequestMapping("/api/products")
@@ -24,6 +29,14 @@ public class ProductController {
         this.productService = productService;
     }
 
+    @Operation(
+            summary = "Create new product",
+            description = "Creates a new product based on the provided data.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Product successfully created"),
+            @ApiResponse(responseCode = "400", description = "Invalid input data"),
+            @ApiResponse(responseCode = "500", description = "Internal server error")
+    })
     @PostMapping("/create")
     public ResponseEntity<ProductDetails> createProduct(@Valid @RequestBody ProductCommand command) {
         log.info("Create New Product: {}", command);
@@ -31,6 +44,14 @@ public class ProductController {
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
+    @Operation(
+            summary = "Get product by name",
+            description = "Retrieves product details based on the category name.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Product found"),
+            @ApiResponse(responseCode = "404", description = "Product not found"),
+            @ApiResponse(responseCode = "500", description = "Internal server error")
+    })
     @GetMapping("/{name}")
     public ResponseEntity<ProductDetails> getProductByName(@PathVariable String name) {
         log.info("Get Product By Name: {}", name);
@@ -38,6 +59,13 @@ public class ProductController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @Operation(
+            summary = "Get all products",
+            description = "Returns a list of all registered products.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "List of products retrieved"),
+            @ApiResponse(responseCode = "500", description = "Internal server error")
+    })
     @GetMapping("/all")
     public ResponseEntity<ProductListItem> getAllProducts() {
         log.info("Get All Products");
@@ -45,6 +73,15 @@ public class ProductController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @Operation(
+            summary = "Update category",
+            description = "Updates category details based on the provided name and data.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Product successfully updated"),
+            @ApiResponse(responseCode = "400", description = "Invalid input data"),
+            @ApiResponse(responseCode = "404", description = "Product not found"),
+            @ApiResponse(responseCode = "500", description = "Internal server error")
+    })
     @PutMapping("/{name}")
     public ResponseEntity<ProductDetails> changeProductDetails(@PathVariable String name,
                                                                @Valid @RequestBody ProductModificationCommand command) {
@@ -53,6 +90,14 @@ public class ProductController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @Operation(
+            summary = "Delete product by ID",
+            description = "Deletes a product from the system based on their ID.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Product deleted"),
+            @ApiResponse(responseCode = "404", description = "Product not found"),
+            @ApiResponse(responseCode = "500", description = "Internal server error")
+    })
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteProductById(@PathVariable Long id) {
         log.info("Delete Product By Id: {}", id);

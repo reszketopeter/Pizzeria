@@ -32,7 +32,7 @@ public class ProductMapper {
 
         product.setName(command.getName());
         product.setDescription(command.getDescription());
-        product.setPrice(command.getPrice());
+        product.setPrice(Double.valueOf(command.getPrice() + " Ft"));
         product.setIsAvailable(true);
         product.setCategory(category);
 
@@ -40,7 +40,6 @@ public class ProductMapper {
 
     }
 
-    // Ezt kipróbálni, gyanús...
     public ProductListItem entitiesToDto(List<Product> products) {
 
         ProductListItem productListItem = new ProductListItem();
@@ -48,9 +47,9 @@ public class ProductMapper {
         productListItem.setName(products.stream()
                 .map(Product::getName)
                 .toList().toString());
-        productListItem.setPrice(products.stream()
+        productListItem.setPrice(Double.valueOf(products.stream()
                 .map(Product::getPrice)
-                .toList().toString());
+                .toList().toString()));
 
         return productListItem;
     }
