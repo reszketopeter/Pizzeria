@@ -21,6 +21,6 @@ public class LoginCommand {
 
     @NotBlank(message = "The email must be not empty!")
     @Schema(description = "The password with which the customer registered in the system.",
-            example = "test.peter@gmail.com")
+            example = "TestPassword1")
     private String password;
 }
