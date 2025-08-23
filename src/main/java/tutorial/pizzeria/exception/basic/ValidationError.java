@@ -9,7 +9,6 @@ import java.util.List;
 @Getter
 public class ValidationError {
 
-
     private final List<CustomFieldError> errors = new ArrayList<>();
 
     public void addingCustomFieldError(String field, String message) {

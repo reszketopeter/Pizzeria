@@ -1,5 +1,8 @@
 package tutorial.pizzeria.exception.basic;
 
+import lombok.Getter;
+
+@Getter
 public class CustomFieldError {
 
     private final String field;
@@ -9,14 +12,6 @@ public class CustomFieldError {
     public CustomFieldError(String field, String message) {
         this.field = field;
         this.message = message;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public String getField() {
-        return field;
     }
 
 }

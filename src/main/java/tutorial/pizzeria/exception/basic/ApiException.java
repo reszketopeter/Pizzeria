@@ -1,7 +1,9 @@
 package tutorial.pizzeria.exception.basic;
 
+import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
+@Getter
 public class ApiException {
 
     private final String message;
@@ -16,15 +18,4 @@ public class ApiException {
         this.timestamp = timestamp;
     }
 
-    public String getMessage() {
-        return message;
-    }
-
-    public HttpStatus getStatus() {
-        return status;
-    }
-
-    public String getTimestamp() {
-        return timestamp;
-    }
 }

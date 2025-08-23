@@ -5,9 +5,8 @@ import lombok.Data;
 
 import java.util.List;
 
-@Entity
 @Data
-@Table(name = "category")
+@Entity(name = "category")
 public class Category {
 
     @Id
@@ -24,3 +23,4 @@ public class Category {
     @OneToMany(mappedBy = "category", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Product> productList;
 }
+

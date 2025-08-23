@@ -29,12 +29,12 @@ public class GlobalExceptionHandler {
     }
 
     // Central method to log all exceptions
-//    @ExceptionHandler(Exception.class)
-//    public ResponseEntity<String> handleAllExceptions(HttpServletRequest request, Exception ex) {
-//        String requestId = MDC.get("requestId");
-//        return new ResponseEntity<>("Internal Server Error. Please try again later.",
-//                HttpStatus.INTERNAL_SERVER_ERROR);
-//    }
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<String> handleAllExceptions(HttpServletRequest request, Exception ex) {
+        String requestId = MDC.get("requestId");
+        return new ResponseEntity<>("Internal Server Error. Please try again later.",
+                HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 
     // Handle validation errors
     @ExceptionHandler(MethodArgumentNotValidException.class)

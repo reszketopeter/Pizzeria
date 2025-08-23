@@ -15,10 +15,10 @@ import java.util.List;
 public interface ReviewRepository extends JpaRepository<Review, Long> {
 
     @Query("SELECT new tutorial.pizzeria.dto.outgoing.ReviewListItem (r.customer.name, r.content, r.timestamp)" +
-            "FROM Review r WHERE r.isRecommend = :isRecommend")
+            "FROM review r WHERE r.isRecommend = :isRecommend")
     List<ReviewListItem> findReviewsByIsRecommend(@Param("isRecommend") Recommendation isRecommend);
 
     @Query("SELECT new tutorial.pizzeria.dto.outgoing.ReviewListItemWithTime (r.content, r.timestamp)" +
-            "FROM Review r ORDER BY r.timestamp DESC")
+            "FROM review r ORDER BY r.timestamp DESC")
     List<ReviewListItemWithTime> findAllByReviewByTimestampDesc();
 }

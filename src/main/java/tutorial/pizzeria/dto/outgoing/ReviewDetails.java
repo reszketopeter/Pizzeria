@@ -1,16 +1,12 @@
 package tutorial.pizzeria.dto.outgoing;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import tutorial.pizzeria.domain.Recommendation;
 
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter
-@Setter
+@Data
 public class ReviewDetails {
 
     @Schema(description = "A couple of words or sentences about the product",

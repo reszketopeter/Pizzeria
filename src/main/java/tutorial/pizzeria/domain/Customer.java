@@ -5,9 +5,8 @@ import lombok.Data;
 
 import java.util.List;
 
-@Entity
 @Data
-@Table(name = "customer")
+@Entity(name = "customer")
 public class Customer {
 
     @Id
@@ -27,7 +26,6 @@ public class Customer {
     @Column(name = "phone")
     private String phone;
 
-    // Address? Simpler method?
     @Column(name = "postal_code")
     private Integer postalCode;
 
