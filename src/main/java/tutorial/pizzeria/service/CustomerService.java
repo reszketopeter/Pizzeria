@@ -24,6 +24,8 @@ import tutorial.pizzeria.repository.CustomerRepository;
 
 import java.util.List;
 
+import static tutorial.pizzeria.domain.UserRole.GUEST;
+
 @Service
 @Transactional(isolation = Isolation.SERIALIZABLE)
 @Slf4j
@@ -48,8 +50,8 @@ public class CustomerService implements UserDetailsService {
             throw new CustomerNotFoundException("User not found with email: " + username);
         }
 
-        String role = user.getUserRole().getRole();
-        List<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority(role));
+        UserRole role = user.getUserRole();
+        List<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority(role.name()));
 
 
         return User
@@ -66,7 +68,7 @@ public class CustomerService implements UserDetailsService {
         }
         String hashedPassword = passwordEncoder.encode(command.getPassword());
         Customer newCustomer = customerMapper.dtoToEntity(command, hashedPassword);
-        newCustomer.setUserRole(UserRole.GUEST);
+        newCustomer.setUserRole(GUEST);
         customerRepository.save(newCustomer);
         return customerMapper.entityToDto(newCustomer);
     }

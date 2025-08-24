@@ -17,7 +17,7 @@ public class Order {
     private Long id;
 
     @Column(name = "time_stamp")
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd-hh-mm")
     private LocalDate timeStamp;
 
     @Column(name = "total_price")

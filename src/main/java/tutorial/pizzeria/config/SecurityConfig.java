@@ -12,6 +12,7 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import tutorial.pizzeria.domain.UserRole;
 import tutorial.pizzeria.service.CustomerService;
 
 import static tutorial.pizzeria.domain.UserRole.ADMIN;
@@ -36,7 +37,7 @@ public class SecurityConfig {
                 .httpBasic(Customizer.withDefaults())
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
-                        .requestMatchers("/api/debug/auth").hasAuthority(ADMIN.name())
+                        .requestMatchers("/api/debug/auth").hasAuthority(String.valueOf(ADMIN))
                         .anyRequest().permitAll()
 
                 )
