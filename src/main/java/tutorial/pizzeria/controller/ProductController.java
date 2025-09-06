@@ -16,6 +16,8 @@ import tutorial.pizzeria.dto.outgoing.ProductDetails;
 import tutorial.pizzeria.dto.outgoing.ProductListItem;
 import tutorial.pizzeria.service.ProductService;
 
+import java.util.List;
+
 @Tag(name = "Product API", description = "Operations related to category creation, retrieval, update and deletion")
 @Slf4j
 @RestController
@@ -41,6 +43,13 @@ public class ProductController {
     public ResponseEntity<ProductDetails> createProduct(@Valid @RequestBody ProductCommand command) {
         log.info("Create New Product: {}", command);
         ProductDetails response = productService.createProduct(command);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
+    }
+
+    @PostMapping("/create/bulk")
+    public ResponseEntity<List<ProductListItem>> createProduct(@RequestBody List<ProductCommand> commands) {
+        log.info("Create New Products: {}", commands);
+        List<ProductListItem> response = productService.createBulkProduct(commands);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 

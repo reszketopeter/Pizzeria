@@ -76,4 +76,16 @@ public class ProductService {
                 .orElseThrow(() -> new ProductNotFoundException("No product with this id in the database!"));
         productRepository.delete(product);
     }
+
+    public List<ProductListItem> createBulkProduct(List<ProductCommand> commands) {
+        List<String> productNames = commands.stream()
+                .map(ProductCommand::getName)
+                .toList();
+
+        if (productRepository.findByNames(productNames).isPresent()) {
+            throw new ProductAlreadyExistException
+                    ("There is already product(s) with this/these name(s) in the database! " + productNames);
+        }
+        return null;
+    }
 }

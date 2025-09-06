@@ -58,28 +58,28 @@ public class OrderService {
         return orderMapper.entityToDto(orderWithPrice, orderWithPrice.getOrderItems());
     }
 
-    protected OrderItem makeOrderItem(OrderCommand command, Long productId, Order order) {
+    private OrderItem makeOrderItem(OrderCommand command, Long productId, Order order) {
         Product product = findProductById(productId);
         return orderMapper.makeOrderItem(order, product, command);
     }
 
-    protected Order orderGuard(HttpSession session, Long customerId) {
+    private Order orderGuard(HttpSession session, Long customerId) {
         Order orderToFind = orderRepository.findByCustomerId(customerId);
         return orderToFind == null ? makeOrderAndSetSessionAttribute(session, customerId) : orderToFind;
     }
 
-    protected Order makeOrderAndSetSessionAttribute(HttpSession session, Long customerId) {
+    private Order makeOrderAndSetSessionAttribute(HttpSession session, Long customerId) {
         Order order = makeOrder(customerId);
         session.setAttribute("orderId", order.getId());
         return order;
     }
 
-    protected Order makeOrder(Long customerId) {
+    private Order makeOrder(Long customerId) {
         Customer customer = customerService.findCustomerById(customerId);
         return orderMapper.makeOrder(customer);
     }
 
-    protected Product findProductById(Long productId) {
+    private Product findProductById(Long productId) {
         return productRepository.findById(productId)
                 .orElseThrow(() -> new ProductNotFoundException("No product with this id in the database!"));
     }

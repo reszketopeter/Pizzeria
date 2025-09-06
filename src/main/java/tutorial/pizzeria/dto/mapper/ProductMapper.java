@@ -32,7 +32,7 @@ public class ProductMapper {
 
         product.setName(command.getName());
         product.setDescription(command.getDescription());
-        product.setPrice(Double.valueOf(command.getPrice() + " Ft"));
+        product.setPrice(command.getPrice());
         product.setIsAvailable(true);
         product.setCategory(category);
 

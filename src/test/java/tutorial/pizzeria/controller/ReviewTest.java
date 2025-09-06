@@ -58,7 +58,7 @@ public class ReviewTest {
         saveCategory();
         saveProduct();
 
-        Customer customer = (Customer) entityManager.createQuery("SELECT c FROM Customer c WHERE c.id = 1")
+        Customer customer = (Customer) entityManager.createQuery("SELECT c FROM customer c WHERE c.id = 1")
                 .getSingleResult();
 
         ReviewCommand command = new ReviewCommand();
@@ -81,7 +81,7 @@ public class ReviewTest {
         saveCategory();
         saveProduct();
 
-        Customer customer = (Customer) entityManager.createQuery("SELECT c FROM Customer c WHERE c.id = 1")
+        Customer customer = (Customer) entityManager.createQuery("SELECT c FROM customer c WHERE c.id = 1")
                 .getSingleResult();
 
         ReviewCommand command = new ReviewCommand();
@@ -102,7 +102,7 @@ public class ReviewTest {
         saveCategory();
         saveProduct();
 
-        Customer customer = (Customer) entityManager.createQuery("SELECT c FROM Customer c WHERE c.id = 1")
+        Customer customer = (Customer) entityManager.createQuery("SELECT c FROM customer c WHERE c.id = 1")
                 .getSingleResult();
 
         ReviewCommand command = new ReviewCommand();
