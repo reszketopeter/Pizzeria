@@ -76,9 +76,9 @@ public class ProductController {
             @ApiResponse(responseCode = "500", description = "Internal server error")
     })
     @GetMapping("/all")
-    public ResponseEntity<ProductListItem> getAllProducts() {
+    public ResponseEntity<List<ProductListItem>> getAllProducts() {
         log.info("Get All Products");
-        ProductListItem response = productService.getAllProducts();
+        List<ProductListItem> response = productService.getAllProducts();
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 

@@ -6,6 +6,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import tutorial.pizzeria.domain.Category;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -13,4 +14,7 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
 
     @Query("SELECT c FROM category c WHERE c.name = :name")
     Optional<Category> findByName(@Param("name") String name);
+
+    @Query("SELECT c FROM category c WHERE c.id IN :id")
+    List<Category> findByProductCategoryId(@Param("id") List<Long> productCategoryId);
 }

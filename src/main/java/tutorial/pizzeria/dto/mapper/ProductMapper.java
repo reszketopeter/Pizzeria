@@ -7,7 +7,10 @@ import tutorial.pizzeria.dto.incoming.ProductCommand;
 import tutorial.pizzeria.dto.outgoing.ProductDetails;
 import tutorial.pizzeria.dto.outgoing.ProductListItem;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Component
 public class ProductMapper {
@@ -40,17 +43,40 @@ public class ProductMapper {
 
     }
 
-    public ProductListItem entitiesToDto(List<Product> products) {
+    public List<ProductListItem> entitiesToDto(List<Product> products) {
 
-        ProductListItem productListItem = new ProductListItem();
+        return products.stream()
+                .map(product -> {
+                    ProductListItem dto = new ProductListItem();
+                    dto.setName(product.getName());
+                    dto.setPrice(product.getPrice());
+                    return dto;
+                })
+                .toList();
+    }
 
-        productListItem.setName(products.stream()
-                .map(Product::getName)
-                .toList().toString());
-        productListItem.setPrice(Double.valueOf(products.stream()
-                .map(Product::getPrice)
-                .toList().toString()));
+    public List<Product> dtoToEntities(List<ProductCommand> commands, List<Category> categories) {
 
-        return productListItem;
+        Map<Long, Category> categoryMap = categories.stream()
+                .collect(Collectors.toMap(Category::getId, category -> category));
+
+        List<Product> products = new ArrayList<>();
+
+        for (ProductCommand command : commands) {
+
+            Category category = categoryMap.get(command.getCategoryId());
+
+            Product product = new Product();
+
+            product.setName(command.getName());
+            product.setPrice(command.getPrice());
+            product.setDescription(command.getDescription());
+            product.setIsAvailable(true);
+            product.setCategory(category);
+
+            products.add(product);
+        }
+
+        return products;
     }
 }

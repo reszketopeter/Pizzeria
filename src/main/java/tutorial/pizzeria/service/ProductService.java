@@ -17,6 +17,7 @@ import tutorial.pizzeria.repository.CategoryRepository;
 import tutorial.pizzeria.repository.ProductRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -42,9 +43,33 @@ public class ProductService {
                 .orElseThrow(() -> new CategoryNotFoundException
                         ("Sorry, the category with this id" + command.getCategoryId() + "does not exist"));
         Product newProduct = productMapper.dtoToEntity(command, category);
-        newProduct.setCategory(category);
+//        newProduct.setCategory(category);
         productRepository.save(newProduct);
         return productMapper.entityToDto(newProduct);
+    }
+
+    public List<ProductListItem> createBulkProduct(List<ProductCommand> commands) {
+        List<String> productNames = commands.stream()
+                .map(ProductCommand::getName)
+                .toList();
+
+        if (productRepository.findByNames(productNames).isPresent()) {
+            throw new ProductAlreadyExistException
+                    ("There is already product(s) with this/these name(s) in the database! " + productNames);
+        }
+        List<Long> productCategoryId = commands.stream()
+                .map(ProductCommand::getCategoryId)
+                .distinct()
+                .toList();
+
+        List<Category> categories = categoryRepository.findByProductCategoryId(productCategoryId);
+        if (categories.isEmpty()) {
+            throw new CategoryNotFoundException
+                    ("Sorry, one or more categories with these IDs do not exist: " + productCategoryId);
+        }
+        List<Product> products = productMapper.dtoToEntities(commands, categories);
+        List<Product> savedProducts = productRepository.saveAll(products);
+        return productMapper.entitiesToDto(savedProducts);
     }
 
     public ProductDetails getProductByName(String name) {
@@ -53,7 +78,7 @@ public class ProductService {
         return productMapper.entityToDto(product);
     }
 
-    public ProductListItem getAllProducts() {
+    public List<ProductListItem> getAllProducts() {
         List<Product> products = productRepository.findAll();
         if (products.isEmpty()) {
             throw new ProductNotFoundException("Sorry, we didn't find any product in the database.");
@@ -75,17 +100,5 @@ public class ProductService {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new ProductNotFoundException("No product with this id in the database!"));
         productRepository.delete(product);
-    }
-
-    public List<ProductListItem> createBulkProduct(List<ProductCommand> commands) {
-        List<String> productNames = commands.stream()
-                .map(ProductCommand::getName)
-                .toList();
-
-        if (productRepository.findByNames(productNames).isPresent()) {
-            throw new ProductAlreadyExistException
-                    ("There is already product(s) with this/these name(s) in the database! " + productNames);
-        }
-        return null;
     }
 }
