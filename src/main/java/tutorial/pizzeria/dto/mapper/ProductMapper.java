@@ -48,6 +48,7 @@ public class ProductMapper {
         return products.stream()
                 .map(product -> {
                     ProductListItem dto = new ProductListItem();
+                    dto.setProductId(product.getId());
                     dto.setName(product.getName());
                     dto.setPrice(product.getPrice());
                     return dto;
@@ -55,14 +56,14 @@ public class ProductMapper {
                 .toList();
     }
 
-    public List<Product> dtoToEntities(List<ProductCommand> commands, List<Category> categories) {
+    public List<Product> dtoToEntities(List<ProductCommand> validCommands, List<Category> categories) {
 
         Map<Long, Category> categoryMap = categories.stream()
                 .collect(Collectors.toMap(Category::getId, category -> category));
 
         List<Product> products = new ArrayList<>();
 
-        for (ProductCommand command : commands) {
+        for (ProductCommand command : validCommands) {
 
             Category category = categoryMap.get(command.getCategoryId());
 

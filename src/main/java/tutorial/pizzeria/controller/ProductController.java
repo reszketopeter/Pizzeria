@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import tutorial.pizzeria.dto.incoming.ProductCommand;
 import tutorial.pizzeria.dto.incoming.ProductModificationCommand;
+import tutorial.pizzeria.dto.outgoing.BulkProductResponse;
 import tutorial.pizzeria.dto.outgoing.ProductDetails;
 import tutorial.pizzeria.dto.outgoing.ProductListItem;
 import tutorial.pizzeria.service.ProductService;
@@ -46,10 +47,19 @@ public class ProductController {
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
+    @Operation(
+            summary = "Create new products",
+            description = "Creates new products based on the provided data.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Products successfully created"),
+            @ApiResponse(responseCode = "400", description = "Invalid input data"),
+            @ApiResponse(responseCode = "404", description = "Category not found"),
+            @ApiResponse(responseCode = "500", description = "Internal server error")
+    })
     @PostMapping("/create/bulk")
-    public ResponseEntity<List<ProductListItem>> createProduct(@RequestBody List<ProductCommand> commands) {
+    public ResponseEntity<BulkProductResponse> createProduct(@RequestBody List<ProductCommand> commands) {
         log.info("Create New Products: {}", commands);
-        List<ProductListItem> response = productService.createBulkProduct(commands);
+        BulkProductResponse response = productService.createBulkProduct(commands);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 

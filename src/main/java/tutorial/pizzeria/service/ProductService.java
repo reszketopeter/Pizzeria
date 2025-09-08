@@ -8,6 +8,7 @@ import tutorial.pizzeria.domain.Product;
 import tutorial.pizzeria.dto.incoming.ProductCommand;
 import tutorial.pizzeria.dto.incoming.ProductModificationCommand;
 import tutorial.pizzeria.dto.mapper.ProductMapper;
+import tutorial.pizzeria.dto.outgoing.BulkProductResponse;
 import tutorial.pizzeria.dto.outgoing.ProductDetails;
 import tutorial.pizzeria.dto.outgoing.ProductListItem;
 import tutorial.pizzeria.exception.CategoryNotFoundException;
@@ -17,7 +18,6 @@ import tutorial.pizzeria.repository.CategoryRepository;
 import tutorial.pizzeria.repository.ProductRepository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Transactional
@@ -43,21 +43,23 @@ public class ProductService {
                 .orElseThrow(() -> new CategoryNotFoundException
                         ("Sorry, the category with this id" + command.getCategoryId() + "does not exist"));
         Product newProduct = productMapper.dtoToEntity(command, category);
-//        newProduct.setCategory(category);
         productRepository.save(newProduct);
         return productMapper.entityToDto(newProduct);
     }
 
-    public List<ProductListItem> createBulkProduct(List<ProductCommand> commands) {
+    public BulkProductResponse createBulkProduct(List<ProductCommand> commands) {
+
         List<String> productNames = commands.stream()
                 .map(ProductCommand::getName)
                 .toList();
 
-        if (productRepository.findByNames(productNames).isPresent()) {
-            throw new ProductAlreadyExistException
-                    ("There is already product(s) with this/these name(s) in the database! " + productNames);
-        }
-        List<Long> productCategoryId = commands.stream()
+        List<String> alreadyExistingProductsNames = productRepository.findByNames(productNames);
+
+        List<ProductCommand> validCommands = commands.stream()
+                .filter(cmd -> !alreadyExistingProductsNames.contains(cmd.getName()))
+                .toList();
+
+        List<Long> productCategoryId = validCommands.stream()
                 .map(ProductCommand::getCategoryId)
                 .distinct()
                 .toList();
@@ -67,9 +69,15 @@ public class ProductService {
             throw new CategoryNotFoundException
                     ("Sorry, one or more categories with these IDs do not exist: " + productCategoryId);
         }
-        List<Product> products = productMapper.dtoToEntities(commands, categories);
+        List<Product> products = productMapper.dtoToEntities(validCommands, categories);
         List<Product> savedProducts = productRepository.saveAll(products);
-        return productMapper.entitiesToDto(savedProducts);
+        List<ProductListItem> productsDto = productMapper.entitiesToDto(savedProducts);
+
+        String message = alreadyExistingProductsNames.isEmpty()
+                ? "All products were saved successfully."
+                : "These product names are already in the database. Do you want to update them?";
+
+        return new BulkProductResponse(productsDto, message, alreadyExistingProductsNames);
     }
 
     public ProductDetails getProductByName(String name) {
