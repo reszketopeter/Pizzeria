@@ -16,8 +16,12 @@ import lombok.Setter;
 public class ProductModificationCommand {
 
     @NotBlank(message = "Name must be not empty!")
-    @Schema(description = "Product's name", example = "Hawaii pizza")
-    private String name;
+    @Schema(description = "Product's original name", example = "Hawaii pizza")
+    private String originalName;
+
+    @NotBlank(message = "Name must be not empty!")
+    @Schema(description = "Product's new name", example = "Pizza with pineapple")
+    private String newName;
 
     @NotBlank(message = "Description must be not empty!")
     @Schema(description = "A description about the product",

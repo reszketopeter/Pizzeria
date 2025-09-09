@@ -11,12 +11,14 @@ import tutorial.pizzeria.dto.mapper.ProductMapper;
 import tutorial.pizzeria.dto.outgoing.BulkProductResponse;
 import tutorial.pizzeria.dto.outgoing.ProductDetails;
 import tutorial.pizzeria.dto.outgoing.ProductListItem;
+import tutorial.pizzeria.dto.outgoing.UpdateProductResponse;
 import tutorial.pizzeria.exception.CategoryNotFoundException;
 import tutorial.pizzeria.exception.ProductAlreadyExistException;
 import tutorial.pizzeria.exception.ProductNotFoundException;
 import tutorial.pizzeria.repository.CategoryRepository;
 import tutorial.pizzeria.repository.ProductRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -48,7 +50,6 @@ public class ProductService {
     }
 
     public BulkProductResponse createBulkProduct(List<ProductCommand> commands) {
-
         List<String> productNames = commands.stream()
                 .map(ProductCommand::getName)
                 .toList();
@@ -97,11 +98,40 @@ public class ProductService {
     public ProductDetails changeProductDetails(String name, ProductModificationCommand command) {
         Product product = productRepository.findByName(name)
                 .orElseThrow(() -> new ProductNotFoundException("Sorry, we didn't find any product in the database"));
-        product.setName(command.getName());
-        product.setDescription(command.getDescription());
-        product.setPrice(command.getPrice());
-        productRepository.save(product);
-        return productMapper.entityToDto(product);
+        Product updatedProduct = productMapper.changeEntity(product, command);
+        productRepository.save(updatedProduct);
+        return productMapper.entityToDto(updatedProduct);
+    }
+
+    public UpdateProductResponse updateProducts(List<ProductModificationCommand> commands) {
+        List<String> productNames = commands.stream()
+                .map(ProductModificationCommand::getOriginalName)
+                .toList();
+
+        List<String> existingNames = productRepository.findByNames(productNames);
+        List<String> notFoundNames = new ArrayList<>();
+        List<Product> productsToUpdate = new ArrayList<>();
+
+        for (ProductModificationCommand command : commands) {
+            if (existingNames.contains(command.getOriginalName())) {
+                Product product = productRepository.findByName(command.getOriginalName())
+                        .orElseThrow(() ->
+                                new ProductNotFoundException("Sorry, we didn't find any product in the database"));
+                Product updatedProduct = productMapper.changeEntity(product, command);
+                productsToUpdate.add(updatedProduct);
+            } else {
+                notFoundNames.add(command.getOriginalName());
+            }
+        }
+
+        List<Product> savedProducts = productRepository.saveAll(productsToUpdate);
+        List<ProductListItem> productsDto = productMapper.entitiesToDto(savedProducts);
+
+        String message = notFoundNames.isEmpty()
+                ? "All products were updated successfully."
+                : "Some products were updated. The following names were not found: " + notFoundNames;
+
+        return new UpdateProductResponse(productsDto, notFoundNames, message);
     }
 
     public void deleteProductById(Long id) {

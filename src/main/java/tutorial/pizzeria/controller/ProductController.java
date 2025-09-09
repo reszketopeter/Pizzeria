@@ -15,6 +15,7 @@ import tutorial.pizzeria.dto.incoming.ProductModificationCommand;
 import tutorial.pizzeria.dto.outgoing.BulkProductResponse;
 import tutorial.pizzeria.dto.outgoing.ProductDetails;
 import tutorial.pizzeria.dto.outgoing.ProductListItem;
+import tutorial.pizzeria.dto.outgoing.UpdateProductResponse;
 import tutorial.pizzeria.service.ProductService;
 
 import java.util.List;
@@ -38,6 +39,7 @@ public class ProductController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Product successfully created"),
             @ApiResponse(responseCode = "400", description = "Invalid input data"),
+            @ApiResponse(responseCode = "404", description = "Category not found"),
             @ApiResponse(responseCode = "500", description = "Internal server error")
     })
     @PostMapping("/create")
@@ -57,7 +59,7 @@ public class ProductController {
             @ApiResponse(responseCode = "500", description = "Internal server error")
     })
     @PostMapping("/create/bulk")
-    public ResponseEntity<BulkProductResponse> createProduct(@RequestBody List<ProductCommand> commands) {
+    public ResponseEntity<BulkProductResponse> createProducts(@Valid @RequestBody List<ProductCommand> commands) {
         log.info("Create New Products: {}", commands);
         BulkProductResponse response = productService.createBulkProduct(commands);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
@@ -93,8 +95,8 @@ public class ProductController {
     }
 
     @Operation(
-            summary = "Update category",
-            description = "Updates category details based on the provided name and data.")
+            summary = "Update product",
+            description = "Updates product details based on the provided name and data.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Product successfully updated"),
             @ApiResponse(responseCode = "400", description = "Invalid input data"),
@@ -107,6 +109,14 @@ public class ProductController {
         log.info("Change ProductDetails By Name: {}", name);
         ProductDetails response = productService.changeProductDetails(name, command);
         return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @PutMapping("/updates")
+    public ResponseEntity<UpdateProductResponse> updateProducts
+            (@Valid @RequestBody List<ProductModificationCommand> commands) {
+        log.info("Change ProductDetails By Data");
+        UpdateProductResponse updateProductResponse = productService.updateProducts(commands);
+        return new ResponseEntity<>(updateProductResponse, HttpStatus.OK);
     }
 
     @Operation(

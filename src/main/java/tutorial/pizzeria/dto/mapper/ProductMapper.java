@@ -1,9 +1,11 @@
 package tutorial.pizzeria.dto.mapper;
 
+import jakarta.validation.Valid;
 import org.springframework.stereotype.Component;
 import tutorial.pizzeria.domain.Category;
 import tutorial.pizzeria.domain.Product;
 import tutorial.pizzeria.dto.incoming.ProductCommand;
+import tutorial.pizzeria.dto.incoming.ProductModificationCommand;
 import tutorial.pizzeria.dto.outgoing.ProductDetails;
 import tutorial.pizzeria.dto.outgoing.ProductListItem;
 
@@ -79,5 +81,14 @@ public class ProductMapper {
         }
 
         return products;
+    }
+
+    public Product changeEntity(Product product, ProductModificationCommand command) {
+
+        product.setName(command.getNewName());
+        product.setDescription(command.getDescription());
+        product.setPrice(command.getPrice());
+
+        return product;
     }
 }
