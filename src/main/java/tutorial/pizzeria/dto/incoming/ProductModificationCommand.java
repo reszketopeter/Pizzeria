@@ -19,7 +19,7 @@ public class ProductModificationCommand {
     @Schema(description = "Product's original name", example = "Hawaii pizza")
     private String originalName;
 
-    @NotBlank(message = "Name must be not empty!")
+    //    @NotBlank(message = "Name must be not empty!")
     @Schema(description = "Product's new name", example = "Pizza with pineapple")
     private String newName;
 

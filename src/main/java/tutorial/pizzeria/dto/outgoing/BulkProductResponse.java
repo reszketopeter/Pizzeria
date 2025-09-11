@@ -13,8 +13,11 @@ public class BulkProductResponse {
 
     private List<ProductListItem> savedProducts;
 
+    private List<String> skippedNames;
+
     private String message;
 
-    private List<String> skippedNames;
+    private String updateEndpoint;
+
 
 }

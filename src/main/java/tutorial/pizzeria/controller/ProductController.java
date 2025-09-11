@@ -111,6 +111,14 @@ public class ProductController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @Operation(
+            summary = "Update products",
+            description = "Updates products details based on the provided data.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Products successfully updated"),
+            @ApiResponse(responseCode = "400", description = "Invalid input data"),
+            @ApiResponse(responseCode = "500", description = "Internal server error")
+    })
     @PutMapping("/updates")
     public ResponseEntity<UpdateProductResponse> updateProducts
             (@Valid @RequestBody List<ProductModificationCommand> commands) {

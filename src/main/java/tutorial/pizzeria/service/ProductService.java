@@ -76,9 +76,10 @@ public class ProductService {
 
         String message = alreadyExistingProductsNames.isEmpty()
                 ? "All products were saved successfully."
-                : "These product names are already in the database. Do you want to update them?";
+                : "Some product names are already in the database. You can update them using the bulk update endpoint.";
 
-        return new BulkProductResponse(productsDto, message, alreadyExistingProductsNames);
+        return new BulkProductResponse(productsDto, alreadyExistingProductsNames, message,
+                "/api/products/updates");
     }
 
     public ProductDetails getProductByName(String name) {

@@ -236,7 +236,7 @@ public class ProductTest {
         saveProduct();
 
         ProductModificationCommand command = new ProductModificationCommand();
-        command.setName("Hawaii pizza");
+        command.setOriginalName("Hawaii pizza");
         command.setDescription("Pizza with tomato sauce, cheese, ham, basil and pineapple");
         command.setPrice(3490.0);
 
