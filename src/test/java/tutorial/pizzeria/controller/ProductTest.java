@@ -15,9 +15,10 @@ import org.springframework.transaction.annotation.Transactional;
 import tutorial.pizzeria.dto.incoming.ProductCommand;
 import tutorial.pizzeria.dto.incoming.ProductModificationCommand;
 
+import java.util.List;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -186,6 +187,55 @@ public class ProductTest {
     }
 
     @Test
+    void givenAValidProductCommandList_whenCreateBulk_thenReturnTheResponseAndOkStatus() throws Exception {
+
+        saveCategory();
+        saveAnotherCategory();
+
+        List<ProductCommand> commands = List.of(
+                new ProductCommand("Margherita pizza", "Classic tomato & cheese",
+                        2890.0, 1L),
+                new ProductCommand("Hawaii pizza", "Pineapple & ham", 3190.0, 1L),
+                new ProductCommand("Tiramisu", "Classic tiramisu", 1890.0, 2L),
+                new ProductCommand("Pancakes", "3 pancake mit marmalade", 1690.0, 2L),
+                new ProductCommand("Salami pizza", "Salami & cheese", 3190.0, 1L)
+        );
+
+        String json = objectMapper.writeValueAsString(commands);
+
+        mockMvc.perform(post("/api/products/create/bulk")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.savedProducts").isArray());
+
+    }
+
+    @Test
+    void givenAnInvalidProductCommandListWithANonExistingCategoryId_whenCreateBulk_thenReturnNotFoundStatus()
+            throws Exception {
+
+        saveCategory();
+
+        List<ProductCommand> commands = List.of(
+                new ProductCommand("Margherita pizza", "Classic tomato & cheese",
+                        2890.0, 1L),
+                new ProductCommand("Hawaii pizza", "Pineapple & ham", 3190.0, 1L),
+                new ProductCommand("Tiramisu", "Classic tiramisu", 1890.0, 2L),
+                new ProductCommand("Pancakes", "3 pancake mit marmalade", 1690.0, 2L),
+                new ProductCommand("Salami pizza", "Salami & cheese", 3190.0, 1L)
+        );
+
+        String json = objectMapper.writeValueAsString(commands);
+
+        mockMvc.perform(post("/api/products/create/bulk")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json))
+                .andExpect(status().isNotFound());
+
+    }
+
+    @Test
     void givenAnExistingProduct_whenGetProductByName_thenReturnProductDetails() throws Exception {
 
         saveCategory();
@@ -266,6 +316,14 @@ public class ProductTest {
         entityManager.createNativeQuery("INSERT INTO category" +
                         "(id, name, description)" +
                         "VALUES (1, 'Pizza with tomato sauce', 'Pizza with tomato sauce')")
+                .executeUpdate();
+    }
+
+    private void saveAnotherCategory() {
+
+        entityManager.createNativeQuery("INSERT INTO category" +
+                        "(id, name, description)" +
+                        "VALUES (2, 'Desserts', 'Different types of desserts')")
                 .executeUpdate();
     }
 

@@ -19,6 +19,7 @@ import tutorial.pizzeria.repository.CategoryRepository;
 import tutorial.pizzeria.repository.ProductRepository;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 @Service
@@ -66,7 +67,12 @@ public class ProductService {
                 .toList();
 
         List<Category> categories = categoryRepository.findByProductCategoryId(productCategoryId);
-        if (categories.isEmpty()) {
+        List<Long> categoryIds = categories.stream()
+                .map(Category::getId)
+                .distinct()
+                .toList();
+
+        if (!new HashSet<>(productCategoryId).equals(new HashSet<>(categoryIds))) {
             throw new CategoryNotFoundException
                     ("Sorry, one or more categories with these IDs do not exist: " + productCategoryId);
         }
