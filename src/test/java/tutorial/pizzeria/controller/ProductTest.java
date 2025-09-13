@@ -231,7 +231,10 @@ public class ProductTest {
         mockMvc.perform(post("/api/products/create/bulk")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json))
-                .andExpect(status().isNotFound());
+                .andExpect(status().isNotFound())
+                .andExpect(content().string(org.hamcrest.Matchers
+                        .containsString
+                                ("Sorry, one or more categories with these IDs do not exist: [2]")));
 
     }
 
