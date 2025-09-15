@@ -232,9 +232,9 @@ public class ProductTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json))
                 .andExpect(status().isNotFound())
-                .andExpect(content().string(org.hamcrest.Matchers
-                        .containsString
-                                ("Sorry, one or more categories with these IDs do not exist: [2]")));
+                .andExpect(jsonPath("$.message")
+                        .value("Sorry, one or more categories with these IDs do not exist: [2]"));
+
 
     }
 

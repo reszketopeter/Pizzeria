@@ -21,6 +21,7 @@ import tutorial.pizzeria.repository.ProductRepository;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 @Transactional
@@ -72,9 +73,15 @@ public class ProductService {
                 .distinct()
                 .toList();
 
-        if (!new HashSet<>(productCategoryId).equals(new HashSet<>(categoryIds))) {
-            throw new CategoryNotFoundException
-                    ("Sorry, one or more categories with these IDs do not exist: " + productCategoryId);
+        Set<Long> requestedIds = new HashSet<>(productCategoryId);
+        Set<Long> existingIds = new HashSet<>(categoryIds);
+
+        requestedIds.removeAll(existingIds);
+
+        if (!requestedIds.isEmpty()) {
+            throw new CategoryNotFoundException(
+                    "Sorry, one or more categories with these IDs do not exist: " + requestedIds
+            );
         }
         List<Product> products = productMapper.dtoToEntities(validCommands, categories);
         List<Product> savedProducts = productRepository.saveAll(products);
