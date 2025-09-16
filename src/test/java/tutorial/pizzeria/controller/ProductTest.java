@@ -207,7 +207,8 @@ public class ProductTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.savedProducts").isArray());
+                .andExpect(jsonPath("$.savedProducts").isArray())
+                .andExpect(jsonPath("$.message").value("All products were saved successfully."));
 
     }
 
@@ -234,7 +235,37 @@ public class ProductTest {
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.message")
                         .value("Sorry, one or more categories with these IDs do not exist: [2]"));
+    }
 
+    @Test
+    void givenAValidProductCommandListWithAlreadyExistingProductNames_whenCreateBulk_thenReturnTheResponseAndOkStatus()
+            throws Exception {
+
+        saveCategory();
+        saveAnotherCategory();
+        saveProduct();
+
+        List<ProductCommand> commands = List.of(
+                new ProductCommand("Margherita pizza", "Classic tomato & cheese",
+                        2890.0, 1L),
+                new ProductCommand("Hawaii pizza", "Pineapple & ham", 3190.0, 1L),
+                new ProductCommand("Tiramisu", "Classic tiramisu", 1890.0, 2L),
+                new ProductCommand("Pancakes", "3 pancake mit marmalade", 1690.0, 2L),
+                new ProductCommand("Salami pizza", "Salami & cheese", 3190.0, 1L)
+        );
+
+        String json = objectMapper.writeValueAsString(commands);
+
+        mockMvc.perform(post("/api/products/create/bulk")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.savedProducts").isArray())
+                .andExpect(jsonPath("$.skippedNames").value("Hawaii pizza"))
+                .andExpect(jsonPath("$.message")
+                        .value("Some product names are already in the database. " +
+                                "You can update them using the bulk update endpoint."))
+                .andExpect(jsonPath("$.updateEndpoint").value("/api/products/updates"));
 
     }
 
