@@ -130,7 +130,8 @@ public class ProductService {
             if (existingNames.contains(command.getOriginalName())) {
                 Product product = productRepository.findByName(command.getOriginalName())
                         .orElseThrow(() ->
-                                new ProductNotFoundException("Sorry, we didn't find any product in the database"));
+                                new ProductNotFoundException("Sorry, we didn't find this product in the database: " +
+                                        command.getOriginalName()));
                 Product updatedProduct = productMapper.changeEntity(product, command);
                 productsToUpdate.add(updatedProduct);
             } else {

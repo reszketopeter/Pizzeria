@@ -296,6 +296,34 @@ public class ProductTest {
     }
 
     @Test
+    void
+    givenProductModificationCommandListWithANonExistingProductName_whenUpdateProducts_thenReturnTheResponseAndOkStatus()
+            throws Exception {
+
+        saveCategory();
+        saveProduct();
+
+        List<ProductModificationCommand> commands = List.of(
+                new ProductModificationCommand("Hawaii pizza", "Pizza with pineapple",
+                        "A delicious pizza with tomato sauce,ham, cheese and pineapple", 3590.0),
+                new ProductModificationCommand("Ham pizza", "Pizza with ham",
+                        "A delicious pizza with tomato sauce, ham, cheese and corn", 3590.0)
+        );
+
+        String json = objectMapper.writeValueAsString(commands);
+
+        mockMvc.perform(put("/api/products/updates")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.updatedProducts").isArray())
+                .andExpect(jsonPath("$.notFoundNames").value("Ham pizza"))
+                .andExpect(jsonPath("$.message")
+                        .value("Some products were updated. " +
+                                "The following names were not found: [Ham pizza]"));
+    }
+
+    @Test
     void givenAnExistingProduct_whenGetProductByName_thenReturnProductDetails() throws Exception {
 
         saveCategory();
