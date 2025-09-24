@@ -17,10 +17,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 import tutorial.pizzeria.dto.incoming.OrderCommand;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
@@ -198,6 +196,22 @@ public class OrderTest {
                 .andExpect(status().isConflict())
                 .andExpect(content().string(org.hamcrest.Matchers.
                         containsString("Apologise, but this product is not available now.")));
+    }
+
+    @Test
+    void givenAnExistingOrderId_whenGetOrderById_thenReturnTheResponseAndOkStatus() throws Exception {
+
+        saveCustomer();
+        saveOrder();
+
+        MockHttpSession session = new MockHttpSession();
+        session.setAttribute("customerId", 1L);
+
+        mockMvc.perform(get("/api/orders/{id}", 1)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .session(session))
+                .andExpect(jsonPath("$.orderPriceFT").value(2490.0))
+                .andExpect(status().isOk());
     }
 
     @Test
