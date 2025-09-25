@@ -215,6 +215,23 @@ public class OrderTest {
     }
 
     @Test
+    void givenANonExistingOrderId_whenGetOrderById_thenReturnTheResponseAndNotFoundStatus() throws Exception {
+
+        saveCustomer();
+        saveOrder();
+
+        MockHttpSession session = new MockHttpSession();
+        session.setAttribute("customerId", 1L);
+
+        mockMvc.perform(get("/api/orders/{id}", 2)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .session(session))
+                .andExpect(content().string(org.hamcrest.Matchers
+                        .containsString("Sorry, there is not any Order with this id: 2")))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
     void givenAnExistingOrderId_whenDeleteOrderById_thenReturnTheResponseAndOkStatus() throws Exception {
 
         saveCustomer();
