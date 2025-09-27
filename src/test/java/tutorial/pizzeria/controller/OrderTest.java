@@ -201,8 +201,11 @@ public class OrderTest {
     @Test
     void givenAnExistingOrderId_whenGetOrderById_thenReturnTheResponseAndOkStatus() throws Exception {
 
+        saveCategory();
+        saveProduct();
         saveCustomer();
         saveOrder();
+        saveOrderItems();
 
         MockHttpSession session = new MockHttpSession();
         session.setAttribute("customerId", 1L);
@@ -307,6 +310,13 @@ public class OrderTest {
                         "(id, name, password, email, phone, postal_code, city, address, role)" +
                         "VALUES (1, 'Test Elek', 'test1Password', 'test@email.com','+36123456',1234," +
                         "'Test city','Test street 22', 'GUEST')")
+                .executeUpdate();
+    }
+
+    private void saveOrderItems() {
+        entityManager.createNativeQuery("INSERT INTO order_item" +
+                        "(order_item_id, order_item_name, quantity, total_price, product_id, order_id) " +
+                        "VALUES (1, 'Margherita pizza', 1, 2490, 1, 1)")
                 .executeUpdate();
     }
 
