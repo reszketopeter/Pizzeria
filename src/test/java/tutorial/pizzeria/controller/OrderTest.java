@@ -199,6 +199,11 @@ public class OrderTest {
     }
 
     @Test
+    void givenAnExistingOrderId_whenCancelOrder_thenReturnTheResponseAndOkStatus() throws Exception {
+
+    }
+
+    @Test
     void givenAnExistingOrderId_whenGetOrderById_thenReturnTheResponseAndOkStatus() throws Exception {
 
         saveCategory();

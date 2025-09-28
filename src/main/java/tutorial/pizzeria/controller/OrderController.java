@@ -76,7 +76,6 @@ public class OrderController {
     public ResponseEntity<String> cancelOrder(HttpServletRequest req) {
         log.info("Cancel order from customer with id: {}", req.getSession().getAttribute("customerId"));
         String response = orderService.cancelingOrder(req);
-        log.debug("Order was canceled: {}", response);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
