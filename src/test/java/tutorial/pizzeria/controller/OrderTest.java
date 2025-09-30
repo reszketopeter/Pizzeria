@@ -15,6 +15,7 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
+import tutorial.pizzeria.dto.incoming.DeliverCommand;
 import tutorial.pizzeria.dto.incoming.OrderCommand;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -176,6 +177,32 @@ public class OrderTest {
     }
 
     @Test
+    void givenAValidDeliverCommand_whenDeliverOrder_thenReturnTheResponseAndOkStatus() throws Exception {
+
+        saveCustomer();
+        saveCategory();
+        saveProduct();
+        saveOrder();
+
+        MockHttpSession session = new MockHttpSession();
+        session.setAttribute("customerId", 1L);
+
+        DeliverCommand command = new DeliverCommand();
+        command.setOrderId(1L);
+        command.setCustomerId(1L);
+
+        mockMvc.perform(put("/api/orders/deliver")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(command))
+                        .session(session))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.orderId").value("1"))
+                .andExpect(jsonPath("$.customerName").value("Test Elek"))
+                .andExpect(jsonPath("$.address").value("Test street 22"));
+    }
+
+
+    @Test
     void givenAnExistingProductThatIsNotAvailable_whenCreateNewOrder_thenReturnExceptionAndConflictStatus()
             throws Exception {
 
@@ -201,6 +228,38 @@ public class OrderTest {
     @Test
     void givenAnExistingOrderId_whenCancelOrder_thenReturnTheResponseAndOkStatus() throws Exception {
 
+        saveCategory();
+        saveProduct();
+        saveCustomer();
+        saveOrder();
+
+        MockHttpSession session = new MockHttpSession();
+        session.setAttribute("customerId", 1L);
+
+        mockMvc.perform(put("/api/orders/cancel")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .session(session))
+                .andExpect(status().isOk())
+                .andExpect(content().string(org.hamcrest.Matchers
+                        .containsString("Your order has cancelled.")));
+    }
+
+    @Test
+    void givenANonExistingOrderId_whenCancelOrder_thenReturnTheResponseAndNotFoundStatus() throws Exception {
+
+        saveCategory();
+        saveProduct();
+        saveCustomer();
+
+        MockHttpSession session = new MockHttpSession();
+        session.setAttribute("customerId", 1L);
+
+        mockMvc.perform(put("/api/orders/cancel")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .session(session))
+                .andExpect(status().isNotFound())
+                .andExpect(content().string(org.hamcrest.Matchers
+                        .containsString("1")));
     }
 
     @Test

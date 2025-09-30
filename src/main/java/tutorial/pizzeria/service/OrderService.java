@@ -105,7 +105,7 @@ public class OrderService {
             throw new OrderNotFoundException(customerId);
         }
         order.setOrderStatus(OrderStatus.CANCELLED);
-        return "Your order has cancelled";
+        return "Your order has cancelled.";
     }
 
     public DeliverDetails updateToDelivered(@Valid DeliverCommand command) {

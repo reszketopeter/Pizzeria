@@ -60,7 +60,6 @@ public class OrderController {
     public ResponseEntity<DeliverDetails> deliverOrder(@Valid @RequestBody DeliverCommand command) {
         log.info("Delivering to user id: {} order id: {}", command.getCustomerId(), command.getOrderId());
         DeliverDetails details = orderService.updateToDelivered(command);
-        log.debug("Delivering was successful: {}", details);
         return new ResponseEntity<>(details, HttpStatus.OK);
     }
 
