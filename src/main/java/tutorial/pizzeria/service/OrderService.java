@@ -111,7 +111,7 @@ public class OrderService {
     public DeliverDetails updateToDelivered(@Valid DeliverCommand command) {
         Order order = orderRepository.getOrderById(command.getOrderId())
                 .orElseThrow(() -> new OrderNotFoundException("Sorry, we didn't find any order with this id "
-                        + command.getOrderId() + "in the system"));
+                        + command.getOrderId() + " in the system"));
         order.setOrderStatus(OrderStatus.DELIVERED);
         order.setTimeStamp(LocalDate.now());
         return orderMapper.makeDeliverDetails(order);

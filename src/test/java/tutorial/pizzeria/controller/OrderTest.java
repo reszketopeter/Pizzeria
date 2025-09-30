@@ -201,6 +201,75 @@ public class OrderTest {
                 .andExpect(jsonPath("$.address").value("Test street 22"));
     }
 
+    @Test
+    void givenAnInValidDeliverCommandWithNullOrderId_whenDeliverOrder_thenReturnTheResponse() throws Exception {
+
+        saveCustomer();
+        saveCategory();
+        saveProduct();
+        saveOrder();
+
+        MockHttpSession session = new MockHttpSession();
+        session.setAttribute("customerId", 1L);
+
+        DeliverCommand command = new DeliverCommand();
+        command.setOrderId(null);
+        command.setCustomerId(1L);
+
+        mockMvc.perform(put("/api/orders/deliver")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(command))
+                        .session(session))
+                .andExpect(status().isUnprocessableEntity());
+    }
+
+    @Test
+    void givenAnInValidDeliverCommandWithNullCustomerId_whenDeliverOrder_thenReturnTheResponse() throws Exception {
+
+        saveCustomer();
+        saveCategory();
+        saveProduct();
+        saveOrder();
+
+        MockHttpSession session = new MockHttpSession();
+        session.setAttribute("customerId", 1L);
+
+        DeliverCommand command = new DeliverCommand();
+        command.setOrderId(1L);
+        command.setCustomerId(null);
+
+        mockMvc.perform(put("/api/orders/deliver")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(command))
+                        .session(session))
+                .andExpect(status().isUnprocessableEntity());
+    }
+
+    @Test
+    void givenANonExistingOrderId_whenDeliverOrder_thenReturnTheResponseAndNotFoundStatus() throws Exception {
+
+        saveCustomer();
+        saveCategory();
+        saveProduct();
+        saveOrder();
+
+        MockHttpSession session = new MockHttpSession();
+        session.setAttribute("customerId", 1L);
+
+        DeliverCommand command = new DeliverCommand();
+        command.setOrderId(2L);
+        command.setCustomerId(1L);
+
+        mockMvc.perform(put("/api/orders/deliver")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(command))
+                        .session(session))
+                .andExpect(status().isNotFound())
+                .andExpect(content().string(org.hamcrest.Matchers
+                        .containsString("Sorry, we didn't find any order with this id "
+                                + 2L + " in the system")));
+    }
+
 
     @Test
     void givenAnExistingProductThatIsNotAvailable_whenCreateNewOrder_thenReturnExceptionAndConflictStatus()
