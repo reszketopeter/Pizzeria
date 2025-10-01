@@ -154,4 +154,5 @@ public class ProductService {
                 .orElseThrow(() -> new ProductNotFoundException("No product with this id in the database!"));
         productRepository.delete(product);
     }
+
 }

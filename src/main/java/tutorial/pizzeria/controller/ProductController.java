@@ -141,4 +141,11 @@ public class ProductController {
         productService.deleteProductById(id);
         return new ResponseEntity<>("You have successfully deleted a product.", HttpStatus.OK);
     }
+
+    // Image uploading
+    /*
+    1. User uploads an image through the frontend.
+    2. The backend receives the image and transfers it to the file storage server instead of keeping it locally.
+    3. The backend stores only the file path or URL in the database.
+    4. When needed, the application retrieves the image from the file storage.*/
 }
