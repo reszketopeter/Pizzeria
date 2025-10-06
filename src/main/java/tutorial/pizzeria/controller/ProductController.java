@@ -147,5 +147,7 @@ public class ProductController {
     1. User uploads an image through the frontend.
     2. The backend receives the image and transfers it to the file storage server instead of keeping it locally.
     3. The backend stores only the file path or URL in the database.
-    4. When needed, the application retrieves the image from the file storage.*/
+    4. When needed, the application retrieves the image from the file storage.
+
+    https://cloudinary.com/documentation/java_image_and_video_upload */
 }
