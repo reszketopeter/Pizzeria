@@ -1,0 +1,15 @@
+2025-09-27 17:59:27 [main] INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [tutorial.pizzeria.controller.OrderTest]: OrderTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2025-09-27 17:59:27 [main] INFO  o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration tutorial.pizzeria.PizzeriaApplication for test class tutorial.pizzeria.controller.OrderTest
+2025-09-27 17:59:27 [main] INFO  o.s.b.d.r.RestartApplicationListener - Restart disabled due to context in which it is running
+2025-09-27 18:07:53 [main] INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [tutorial.pizzeria.controller.OrderTest]: OrderTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2025-09-27 18:07:53 [main] INFO  o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration tutorial.pizzeria.PizzeriaApplication for test class tutorial.pizzeria.controller.OrderTest
+2025-09-27 18:07:54 [main] INFO  o.s.b.d.r.RestartApplicationListener - Restart disabled due to context in which it is running
+2025-09-27 18:08:21 [main] INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [tutorial.pizzeria.controller.OrderTest]: OrderTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2025-09-27 18:08:21 [main] INFO  o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration tutorial.pizzeria.PizzeriaApplication for test class tutorial.pizzeria.controller.OrderTest
+2025-09-27 18:08:22 [main] INFO  o.s.b.d.r.RestartApplicationListener - Restart disabled due to context in which it is running
+2025-09-27 18:11:06 [main] INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [tutorial.pizzeria.controller.OrderTest]: OrderTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2025-09-27 18:11:07 [main] INFO  o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration tutorial.pizzeria.PizzeriaApplication for test class tutorial.pizzeria.controller.OrderTest
+2025-09-27 18:11:07 [main] INFO  o.s.b.d.r.RestartApplicationListener - Restart disabled due to context in which it is running
+2025-09-27 18:11:25 [main] INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [tutorial.pizzeria.controller.OrderTest]: OrderTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2025-09-27 18:11:25 [main] INFO  o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration tutorial.pizzeria.PizzeriaApplication for test class tutorial.pizzeria.controller.OrderTest
+2025-09-27 18:11:26 [main] INFO  o.s.b.d.r.RestartApplicationListener - Restart disabled due to context in which it is running
