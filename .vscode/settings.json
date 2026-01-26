@@ -8,9 +8,9 @@
             "port": 5432,
             "askForPassword": true,
             "driver": "PostgreSQL",
-            "database": "postgres",
+            "database": "pizzeria",
             "username": "postgres",
-            "name": "Local PostgreSQL"
+            "name": "localhost"
         }
     ]
 }
