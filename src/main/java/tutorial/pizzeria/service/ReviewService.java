@@ -1,6 +1,5 @@
 package tutorial.pizzeria.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tutorial.pizzeria.domain.Recommendation;
@@ -25,9 +24,8 @@ public class ReviewService {
     private final ReviewMapper reviewMapper;
     private final ProductRepository productRepository;
 
-    @Autowired
     public ReviewService(ReviewRepository reviewRepository, ReviewMapper reviewMapper,
-                         ProductRepository productRepository) {
+            ProductRepository productRepository) {
         this.reviewRepository = reviewRepository;
         this.reviewMapper = reviewMapper;
         this.productRepository = productRepository;
@@ -43,8 +41,8 @@ public class ReviewService {
 
     public void deleteReview(Long id) {
         Review review = reviewRepository.findById(id)
-                .orElseThrow(() ->
-                        new ReviewNotFoundException("Sorry, the review with this id " + id + " does not exist."));
+                .orElseThrow(
+                        () -> new ReviewNotFoundException("Sorry, the review with this id " + id + " does not exist."));
         reviewRepository.delete(review);
     }
 

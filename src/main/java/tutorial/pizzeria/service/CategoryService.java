@@ -1,6 +1,5 @@
 package tutorial.pizzeria.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tutorial.pizzeria.domain.Category;
@@ -20,7 +19,6 @@ public class CategoryService {
     private final CategoryRepository categoryRepository;
     private final CategoryMapper categoryMapper;
 
-    @Autowired
     public CategoryService(CategoryRepository categoryRepository, CategoryMapper categoryMapper) {
         this.categoryRepository = categoryRepository;
         this.categoryMapper = categoryMapper;
@@ -38,8 +36,8 @@ public class CategoryService {
 
     public CategoryDetails getCategory(String name) {
         Category category = categoryRepository.findByName(name)
-                .orElseThrow(() -> new CategoryNotFoundException
-                        ("Sorry, the category with this name" + name + "does not exist."));
+                .orElseThrow(() -> new CategoryNotFoundException(
+                        "Sorry, the category with this name" + name + "does not exist."));
         return categoryMapper.entityToDto(category);
     }
 
@@ -52,8 +50,8 @@ public class CategoryService {
 
     public CategoryDetails changeCategory(Long id, CategoryCommand command) {
         Category category = categoryRepository.findById(id)
-                .orElseThrow(() -> new CategoryNotFoundException
-                        ("Sorry, the category with this id " + id + "does not exist."));
+                .orElseThrow(() -> new CategoryNotFoundException(
+                        "Sorry, the category with this id " + id + "does not exist."));
         category.setName(command.getName());
         category.setDescription(command.getDescription());
         return categoryMapper.entityToDto(category);

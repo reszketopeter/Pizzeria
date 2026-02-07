@@ -35,9 +35,8 @@ public class CustomerService implements UserDetailsService {
     private final CustomerMapper customerMapper;
     private final PasswordEncoder passwordEncoder;
 
-    @Autowired
     public CustomerService(CustomerRepository customerRepository, CustomerMapper customerMapper,
-                           PasswordEncoder passwordEncoder) {
+            PasswordEncoder passwordEncoder) {
         this.customerRepository = customerRepository;
         this.customerMapper = customerMapper;
         this.passwordEncoder = passwordEncoder;
@@ -52,7 +51,6 @@ public class CustomerService implements UserDetailsService {
 
         UserRole role = user.getUserRole();
         List<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority(role.name()));
-
 
         return User
                 .withUsername(user.getEmail())

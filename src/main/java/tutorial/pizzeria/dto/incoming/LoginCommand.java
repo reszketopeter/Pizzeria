@@ -6,7 +6,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.beans.factory.annotation.Autowired;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -14,13 +13,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 @Setter
 public class LoginCommand {
 
-    @NotBlank(message = "The email must be not empty!")
-    @Schema(description = "The email with which the customer registered in the system.",
-            example = "test.peter@gmail.com")
-    private String email;
+        @NotBlank(message = "The email must be not empty!")
+        @Schema(description = "The email with which the customer registered in the system.", example = "test.peter@gmail.com")
+        private String email;
 
-    @NotBlank(message = "The email must be not empty!")
-    @Schema(description = "The password with which the customer registered in the system.",
-            example = "TestPassword1")
-    private String password;
+        @NotBlank(message = "The email must be not empty!")
+        @Schema(description = "The password with which the customer registered in the system.", example = "TestPassword1")
+        private String password;
 }

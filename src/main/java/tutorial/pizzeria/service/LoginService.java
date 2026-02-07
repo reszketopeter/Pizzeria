@@ -26,9 +26,8 @@ public class LoginService {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
 
-    @Autowired
     public LoginService(CustomerRepository customerRepository, PasswordEncoder passwordEncoder,
-                        AuthenticationManager authenticationManager) {
+            AuthenticationManager authenticationManager) {
         this.customerRepository = customerRepository;
         this.passwordEncoder = passwordEncoder;
         this.authenticationManager = authenticationManager;
@@ -43,8 +42,8 @@ public class LoginService {
             throw new InvalidPasswordException("Invalid password");
         }
 
-        UsernamePasswordAuthenticationToken authToken =
-                new UsernamePasswordAuthenticationToken(command.getEmail(), command.getPassword());
+        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(command.getEmail(),
+                command.getPassword());
         Authentication authentication = authenticationManager.authenticate(authToken);
         log.info("Current Authentication: {}", SecurityContextHolder.getContext().getAuthentication());
         SecurityContextHolder.getContext().setAuthentication(authentication);

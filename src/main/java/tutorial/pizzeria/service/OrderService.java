@@ -4,7 +4,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.extern.java.Log;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tutorial.pizzeria.domain.*;
@@ -13,7 +12,10 @@ import tutorial.pizzeria.dto.incoming.OrderCommand;
 import tutorial.pizzeria.dto.mapper.OrderMapper;
 import tutorial.pizzeria.dto.outgoing.DeliverDetails;
 import tutorial.pizzeria.dto.outgoing.OrderDetails;
-import tutorial.pizzeria.exception.*;
+import tutorial.pizzeria.exception.CustomerIdIsNullException;
+import tutorial.pizzeria.exception.OrderNotFoundException;
+import tutorial.pizzeria.exception.ProductIsCurrentlyNotAvailableException;
+import tutorial.pizzeria.exception.ProductNotFoundException;
 import tutorial.pizzeria.repository.OrderItemRepository;
 import tutorial.pizzeria.repository.OrderRepository;
 import tutorial.pizzeria.repository.ProductRepository;
@@ -32,8 +34,8 @@ public class OrderService {
     private final CustomerService customerService;
     private final OrderItemRepository orderItemRepository;
 
-    @Autowired
-    public OrderService(OrderRepository orderRepository, OrderMapper orderMapper, ProductRepository productRepository, CustomerService customerService, OrderItemRepository orderItemRepository) {
+    public OrderService(OrderRepository orderRepository, OrderMapper orderMapper, ProductRepository productRepository,
+            CustomerService customerService, OrderItemRepository orderItemRepository) {
         this.orderRepository = orderRepository;
         this.orderMapper = orderMapper;
         this.productRepository = productRepository;

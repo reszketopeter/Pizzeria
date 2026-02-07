@@ -1,7 +1,12 @@
 package tutorial.pizzeria.dto.mapper;
 
-import jakarta.validation.Valid;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 import org.springframework.stereotype.Component;
+
 import tutorial.pizzeria.domain.Category;
 import tutorial.pizzeria.domain.Product;
 import tutorial.pizzeria.dto.incoming.ProductCommand;
@@ -9,14 +14,8 @@ import tutorial.pizzeria.dto.incoming.ProductModificationCommand;
 import tutorial.pizzeria.dto.outgoing.ProductDetails;
 import tutorial.pizzeria.dto.outgoing.ProductListItem;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
 @Component
 public class ProductMapper {
-
 
     public ProductDetails entityToDto(Product product) {
 

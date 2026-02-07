@@ -1,6 +1,5 @@
 package tutorial.pizzeria.dto.mapper;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import tutorial.pizzeria.domain.*;
 import tutorial.pizzeria.dto.incoming.OrderCommand;
@@ -19,7 +18,6 @@ public class OrderMapper {
     private final ProductMapper productMapper;
     private final OrderRepository orderRepository;
 
-    @Autowired
     public OrderMapper(ProductMapper productMapper, OrderRepository orderRepository) {
         this.productMapper = productMapper;
         this.orderRepository = orderRepository;
@@ -57,7 +55,6 @@ public class OrderMapper {
 
         return orderItemDetails;
     }
-
 
     public Order makeOrder(Customer customer) {
 
@@ -106,4 +103,3 @@ public class OrderMapper {
         return order;
     }
 }
-

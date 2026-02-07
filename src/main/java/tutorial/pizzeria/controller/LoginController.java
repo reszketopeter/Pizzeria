@@ -8,7 +8,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -27,14 +26,11 @@ public class LoginController {
 
     private final LoginService loginService;
 
-    @Autowired
     public LoginController(LoginService loginService) {
         this.loginService = loginService;
     }
 
-    @Operation(
-            summary = "Customer login",
-            description = "Authenticates a customer using email and password. Stores customer ID in session upon success.")
+    @Operation(summary = "Customer login", description = "Authenticates a customer using email and password. Stores customer ID in session upon success.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Login successful"),
             @ApiResponse(responseCode = "404", description = "Customer not found"),
@@ -57,9 +53,7 @@ public class LoginController {
         }
     }
 
-    @Operation(
-            summary = "Customer logout",
-            description = "Invalidates the current session and clears the security context.")
+    @Operation(summary = "Customer logout", description = "Invalidates the current session and clears the security context.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Logout successful"),
             @ApiResponse(responseCode = "500", description = "Internal server error")
@@ -73,10 +67,9 @@ public class LoginController {
         return new ResponseEntity<>("You have successfully logged out!", HttpStatus.OK);
     }
 
-    @Operation(
-            summary = "Debug authentication",
-            description = "Returns current authentication details and session-bound customer ID. " +
-                    "For development use only.")
+    @Operation(summary = "Debug authentication", description = "Returns current authentication details and session-bound customer ID. "
+            +
+            "For development use only.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Authentication details retrieved"),
             @ApiResponse(responseCode = "500", description = "Internal server error")
@@ -87,8 +80,7 @@ public class LoginController {
         log.info("Debugging authentication");
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         StringBuilder response = new StringBuilder("User: " + authentication.getName() + "\nAuthorities: ");
-        authentication.getAuthorities().
-                forEach(auth -> response.append(auth.getAuthority()).append("\n"));
+        authentication.getAuthorities().forEach(auth -> response.append(auth.getAuthority()).append("\n"));
         response.append(session.getAttribute("customerId"));
         return ResponseEntity.ok(response.toString());
     }
